@@ -56,7 +56,7 @@ export default function AdminListings() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/trucks"] });
-      toast({ title: "空車掲載を更新しました" });
+      toast({ title: "空き車両掲載を更新しました" });
       setEditingTruck(null);
     },
     onError: () => {
@@ -84,7 +84,7 @@ export default function AdminListings() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/trucks"] });
-      toast({ title: "空車掲載を削除しました" });
+      toast({ title: "空き車両掲載を削除しました" });
       setDeleteTarget(null);
     },
     onError: () => {
@@ -160,7 +160,7 @@ export default function AdminListings() {
       <div className="px-4 sm:px-6 py-4 overflow-y-auto h-full">
         <div className="bg-primary rounded-md p-5 mb-5">
           <h1 className="text-xl font-bold text-primary-foreground text-shadow-lg" data-testid="text-page-title">掲載管理</h1>
-          <p className="text-sm text-primary-foreground/80 mt-1 text-shadow">荷物・空車掲載の管理</p>
+          <p className="text-sm text-primary-foreground/80 mt-1 text-shadow">荷物・空き車両掲載の管理</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
@@ -193,7 +193,7 @@ export default function AdminListings() {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-foreground" data-testid="text-trucks-count">{trucks?.length ?? 0}</p>
-                  <p className="text-xs text-muted-foreground">空車掲載</p>
+                  <p className="text-xs text-muted-foreground">空き車両掲載</p>
                 </div>
               </div>
             </CardContent>
@@ -311,7 +311,7 @@ export default function AdminListings() {
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-16">
                 <Truck className="w-10 h-10 text-muted-foreground/30 mb-2" />
-                <p className="text-sm text-muted-foreground">該当する空車掲載がありません</p>
+                <p className="text-sm text-muted-foreground">該当する空き車両掲載がありません</p>
               </CardContent>
             </Card>
           ) : (
@@ -438,7 +438,7 @@ export default function AdminListings() {
       <Dialog open={!!editingTruck} onOpenChange={(open) => { if (!open) setEditingTruck(null); }}>
         <DialogContent data-testid="dialog-edit-truck">
           <DialogHeader>
-            <DialogTitle>空車掲載を編集</DialogTitle>
+            <DialogTitle>空き車両掲載を編集</DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-2">
             <div>
@@ -467,7 +467,7 @@ export default function AdminListings() {
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-semibold text-muted-foreground mb-1 block">空車日</label>
+                <label className="text-xs font-semibold text-muted-foreground mb-1 block">空き日</label>
                 <Input value={truckForm.availableDate} onChange={(e) => setTruckForm({ ...truckForm, availableDate: e.target.value })} data-testid="input-edit-truck-date" />
               </div>
               <div>

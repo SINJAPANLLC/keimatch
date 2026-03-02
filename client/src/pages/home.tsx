@@ -91,7 +91,7 @@ function TruckCard({ listing }: { listing: TruckListing }) {
           </div>
           <div className="flex items-center gap-2 text-sm mb-2">
             <Clock className="w-4 h-4 shrink-0 text-primary" />
-            <span className="text-foreground">空車日 {listing.availableDate}</span>
+            <span className="text-foreground">空き日 {listing.availableDate}</span>
           </div>
           <div className="text-sm mb-2">
             <span className="text-muted-foreground">車種：</span>
@@ -333,10 +333,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground leading-tight text-shadow-lg" data-testid="text-hero-title">
-              AI求荷求車サービス
+              軽貨物案件マッチングサービス
             </h1>
             <div className="mt-6 flex justify-center">
-              <img src={logoImage} alt="KEI MATCH" className="h-14 sm:h-20 w-auto brightness-0 invert" />
+              <img src={logoImage} alt="軽貨物マッチ" className="h-14 sm:h-20 w-auto brightness-0 invert" />
             </div>
             <p className="mt-6 text-xl sm:text-2xl text-primary-foreground font-bold leading-relaxed text-shadow" data-testid="text-hero-subtitle">
               AIで軽貨物の案件や空き車両を簡単登録　簡単検索
@@ -403,7 +403,7 @@ export default function Home() {
       <section className="py-16 sm:py-20 bg-primary">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-center mb-12 text-shadow-lg" data-testid="text-reason-title">
-            KEI MATCHが選ばれる理由
+            軽貨物マッチが選ばれる理由
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
             <div className="text-center text-shadow">
@@ -464,7 +464,7 @@ export default function Home() {
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <Badge className="bg-yellow-400 text-yellow-900 font-bold text-sm px-4 py-1 no-default-hover-elevate no-default-active-elevate">おすすめ</Badge>
               </div>
-              <p className="text-lg font-bold text-primary mb-1">KEI MATCH</p>
+              <p className="text-lg font-bold text-primary mb-1">軽貨物マッチ</p>
               <div className="space-y-4 mt-6">
                 <div>
                   <p className="text-base text-primary mb-1">初期費用</p>
@@ -663,7 +663,7 @@ export default function Home() {
 
       <section className="py-16 sm:py-20 bg-primary">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg">KEI MATCHを使って<br className="sm:hidden" />業務をラクにしませんか？</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg">軽貨物マッチを使って<br className="sm:hidden" />業務をラクにしませんか？</h2>
           <p className="mt-4 text-primary-foreground text-lg text-shadow">
             無料で会員登録して、軽貨物の案件や空き車両の情報をAI掲載・AI検索できます。
           </p>

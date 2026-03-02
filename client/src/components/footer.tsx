@@ -8,10 +8,10 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:flex-1">
             <div className="flex items-center mb-4">
-              <img src={logoImage} alt="KEI MATCH" className="h-10 w-auto brightness-0 invert" />
+              <img src={logoImage} alt="軽貨物マッチ" className="h-10 w-auto brightness-0 invert" />
             </div>
             <p className="text-base text-primary-foreground leading-relaxed mb-4">
-              軽貨物会社をつなぐ、AI求荷求車サービス
+              軽貨物ドライバーをつなぐ、AI案件マッチングサービス
             </p>
             <div className="text-sm text-primary-foreground space-y-1">
               <p className="font-semibold">合同会社SIN JAPAN</p>

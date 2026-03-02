@@ -320,8 +320,8 @@ export default function CargoForm() {
       setExtractedFields(normalized);
       applyFieldsToForm(normalized);
       toast({
-        title: `次の荷物を入力しました（${currentItemIndex + 2}/${totalItems}件目）`,
-        description: remaining.length > 0 ? `残り${remaining.length}件` : "これが最後の荷物です",
+        title: `次の案件を入力しました（${currentItemIndex + 2}/${totalItems}件目）`,
+        description: remaining.length > 0 ? `残り${remaining.length}件` : "これが最後の案件です",
       });
     } else {
       setPendingItems([]);
@@ -375,13 +375,13 @@ export default function CargoForm() {
       }
       queryClient.invalidateQueries({ queryKey: ["/api/cargo"] });
       if (isEditMode) {
-        toast({ title: "荷物情報を更新しました" });
+        toast({ title: "案件情報を更新しました" });
         setLocation("/my-cargo");
       } else if (pendingItems.length > 0) {
-        toast({ title: "荷物情報を掲載しました", description: "次の荷物を読み込みます..." });
+        toast({ title: "案件情報を掲載しました", description: "次の案件を読み込みます..." });
         loadNextPendingItem();
       } else {
-        toast({ title: "荷物情報を掲載しました" });
+        toast({ title: "案件情報を掲載しました" });
         setTotalItems(0);
         setCurrentItemIndex(0);
         setLocation("/cargo");
@@ -472,8 +472,8 @@ export default function CargoForm() {
       if (!cleanMessage || cleanMessage.length < 5) {
         const itemCount = data.items?.length || 0;
         cleanMessage = itemCount > 1
-          ? `${itemCount}件の荷物情報を読み取りました。1件目をフォームに反映しています。内容を確認して掲載してください。`
-          : "荷物情報を読み取りました。右側のフォームに反映しています。内容を確認して掲載してください。";
+          ? `${itemCount}件の案件情報を読み取りました。1件目をフォームに反映しています。内容を確認して掲載してください。`
+          : "案件情報を読み取りました。右側のフォームに反映しています。内容を確認して掲載してください。";
       }
 
       const aiMsg: ChatMessage = {
@@ -519,7 +519,7 @@ export default function CargoForm() {
         const extractedLines = data.text.split("\n").filter((l: string) => l.trim()).length;
         const previewText = extractedLines > 5
           ? `ファイルから${extractedLines}行のデータを読み取りました。解析中...`
-          : `ファイルから以下の情報を読み取りました：\n\n${data.text}\n\n荷物情報を解析中...`;
+          : `ファイルから以下の情報を読み取りました：\n\n${data.text}\n\n案件情報を解析中...`;
         setChatMessages(prev => [...prev, {
           id: `ai-extract-${Date.now()}`,
           role: "assistant",
@@ -719,9 +719,9 @@ export default function CargoForm() {
                       <div className="mt-2 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl px-3 py-2" data-testid="multi-cargo-detected">
                         <div className="flex items-center gap-1.5 mb-1">
                           <Package className="w-3.5 h-3.5 text-blue-600" />
-                          <span className="text-[11px] font-bold text-blue-700 dark:text-blue-400">{msg.items.length}件の荷物を検出</span>
+                          <span className="text-[11px] font-bold text-blue-700 dark:text-blue-400">{msg.items.length}件の案件を検出</span>
                         </div>
-                        <p className="text-[11px] text-blue-600 dark:text-blue-400">1件目をフォームに反映しました。掲載後に次の荷物が自動入力されます。</p>
+                        <p className="text-[11px] text-blue-600 dark:text-blue-400">1件目をフォームに反映しました。掲載後に次の案件が自動入力されます。</p>
                       </div>
                     )}
                   </div>
@@ -777,7 +777,7 @@ export default function CargoForm() {
               <input ref={fileInputRef} type="file" accept="image/*,.pdf,.jpg,.jpeg,.png" onChange={handleFileUpload} className="hidden" data-testid="input-file-upload" />
               <div className="flex gap-2">
                 <Textarea
-                  placeholder="荷物情報を入力、またはデータを貼り付け..."
+                  placeholder="案件情報を入力、またはデータを貼り付け..."
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   onKeyDown={handleKeyDown}
@@ -833,7 +833,7 @@ export default function CargoForm() {
             {showCopyDialog && (
               <div className="border-b border-border bg-muted/30 p-3 max-h-[300px] overflow-y-auto">
                 <div className="flex items-center justify-between gap-2 mb-2">
-                  <span className="text-xs font-bold">過去の荷物からコピー</span>
+                  <span className="text-xs font-bold">過去の案件からコピー</span>
                   <Button variant="ghost" size="sm" onClick={() => setShowCopyDialog(false)} data-testid="button-close-copy-dialog">
                     閉じる
                   </Button>
@@ -841,7 +841,7 @@ export default function CargoForm() {
                 {!myCargoList ? (
                   <div className="text-xs text-muted-foreground text-center py-4"><Loader2 className="w-4 h-4 animate-spin inline mr-1" />読み込み中...</div>
                 ) : myCargoList.length === 0 ? (
-                  <div className="text-xs text-muted-foreground text-center py-4">過去の荷物情報がありません</div>
+                  <div className="text-xs text-muted-foreground text-center py-4">過去の案件情報がありません</div>
                 ) : (
                   <div className="space-y-1">
                     {myCargoList.slice(0, 20).map((cargo) => (
@@ -1266,7 +1266,7 @@ export default function CargoForm() {
                         </Button>
                       )}
                       <Button type="submit" className="flex-1 text-sm font-bold" disabled={mutation.isPending} data-testid="button-submit-cargo">
-                        {mutation.isPending ? (isEditMode ? "更新中..." : "掲載中...") : isEditMode ? "荷物情報を更新する" : totalItems > 1 ? `掲載する（${currentItemIndex + 1}/${totalItems}）` : "荷物情報を掲載する"}
+                        {mutation.isPending ? (isEditMode ? "更新中..." : "掲載中...") : isEditMode ? "案件情報を更新する" : totalItems > 1 ? `掲載する（${currentItemIndex + 1}/${totalItems}）` : "案件情報を掲載する"}
                       </Button>
                     </div>
                   </form>

@@ -280,7 +280,7 @@ export default function TruckForm() {
                 name="availableDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>空車日</FormLabel>
+                    <FormLabel>空き日</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} data-testid="input-available-date" />
                     </FormControl>

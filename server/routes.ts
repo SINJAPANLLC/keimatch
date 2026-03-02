@@ -1236,8 +1236,8 @@ export async function registerRoutes(
 
               <h2 style="font-size:16px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px">車両・ドライバー情報</h2>
               <table style="border-collapse:collapse;width:100%;margin-bottom:16px">
-                ${fmtRow("運送会社", dispatchRequest.transportCompany)}
-                ${fmtRow("実運送会社", dispatchRequest.actualTransportCompany)}
+                ${fmtRow("配送会社", dispatchRequest.transportCompany)}
+                ${fmtRow("実配送会社", dispatchRequest.actualTransportCompany)}
                 ${fmtRow("車両番号", dispatchRequest.vehicleNumber)}
                 ${fmtRow("ドライバー名", dispatchRequest.driverName)}
                 ${fmtRow("ドライバー連絡先", dispatchRequest.driverPhone)}
@@ -1262,7 +1262,7 @@ export async function registerRoutes(
                 ${fmtRow("備考", dispatchRequest.notes)}
               </table>
 
-              ${dispatchRequest.transportCompanyNotes ? `<h2 style="font-size:16px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px">注意事項</h2><p style="white-space:pre-wrap">${dispatchRequest.transportCompanyNotes}</p>` : ""}
+              ${dispatchRequest.transportCompanyNotes ? `<h2 style="font-size:16px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px">配送会社備考</h2><p style="white-space:pre-wrap">${dispatchRequest.transportCompanyNotes}</p>` : ""}
 
               <div style="margin-top:24px;padding:12px;background:#f0fffe;border-radius:6px;font-size:12px;color:#666">
                 <p style="margin:0">このメールはKEI MATCH（keimatch-sinjapan.com）から自動送信されています。</p>
@@ -1287,7 +1287,7 @@ export async function registerRoutes(
 
               <h2 style="font-size:16px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px">運行情報</h2>
               <table style="border-collapse:collapse;width:100%;margin-bottom:16px">
-                ${fmtRow("運送会社", dispatchRequest.transportCompany)}
+                ${fmtRow("配送会社", dispatchRequest.transportCompany)}
                 ${fmtRow("荷主会社", dispatchRequest.shipperCompany)}
                 ${fmtRow("担当者", dispatchRequest.contactPerson)}
               </table>
@@ -1331,7 +1331,7 @@ export async function registerRoutes(
                 ${fmtRow("ドライバー連絡先", dispatchRequest.driverPhone)}
               </table>
 
-              ${dispatchRequest.transportCompanyNotes ? `<h2 style="font-size:16px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px">運送会社備考</h2><p style="white-space:pre-wrap">${dispatchRequest.transportCompanyNotes}</p>` : ""}
+              ${dispatchRequest.transportCompanyNotes ? `<h2 style="font-size:16px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px">配送会社備考</h2><p style="white-space:pre-wrap">${dispatchRequest.transportCompanyNotes}</p>` : ""}
 
               <div style="margin-top:24px;padding:12px;background:#f0fffe;border-radius:6px;font-size:12px;color:#666">
                 <p style="margin:0">このメールはKEI MATCH（keimatch-sinjapan.com）から自動送信されています。</p>
@@ -1359,7 +1359,7 @@ export async function registerRoutes(
       await expireOldTruckListings(listings);
       res.json(listings);
     } catch (error) {
-      res.status(500).json({ message: "空車一覧の取得に失敗しました" });
+      res.status(500).json({ message: "空き車両一覧の取得に失敗しました" });
     }
   });
 
@@ -1371,7 +1371,7 @@ export async function registerRoutes(
       res.json(activeListings);
     } catch (error) {
       console.error("Failed to fetch truck listings:", error);
-      res.status(500).json({ message: "空車一覧の取得に失敗しました" });
+      res.status(500).json({ message: "空き車両一覧の取得に失敗しました" });
     }
   });
 
@@ -1379,11 +1379,11 @@ export async function registerRoutes(
     try {
       const listing = await storage.getTruckListing(req.params.id);
       if (!listing) {
-        return res.status(404).json({ message: "空車情報が見つかりません" });
+        return res.status(404).json({ message: "空き車両情報が見つかりません" });
       }
       res.json(listing);
     } catch (error) {
-      res.status(500).json({ message: "空車情報の取得に失敗しました" });
+      res.status(500).json({ message: "空き車両情報の取得に失敗しました" });
     }
   });
 
@@ -1408,7 +1408,7 @@ export async function registerRoutes(
         action: "create",
         targetType: "truck",
         targetId: listing.id,
-        details: `空車登録: ${listing.currentArea}→${listing.destinationArea} ${listing.vehicleType || ""}`,
+        details: `空き車両登録: ${listing.currentArea}→${listing.destinationArea} ${listing.vehicleType || ""}`,
         ipAddress: (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.ip || "",
       }).catch(() => {});
 
@@ -1433,7 +1433,7 @@ export async function registerRoutes(
               await storage.createNotification({
                 userId: u.id,
                 type: "truck_new",
-                title: "新しい空車が登録されました",
+                title: "新しい空き車両が登録されました",
                 message: `${listing.currentArea}→${listing.destinationArea} ${listing.vehicleType} ${listing.maxWeight}`,
                 relatedId: listing.id,
               });
@@ -1458,7 +1458,7 @@ export async function registerRoutes(
         }
       });
     } catch (error) {
-      res.status(500).json({ message: "空車の登録に失敗しました" });
+      res.status(500).json({ message: "空き車両の登録に失敗しました" });
     }
   });
 
@@ -1467,7 +1467,7 @@ export async function registerRoutes(
       const truckId = req.params.id as string;
       const listing = await storage.getTruckListing(truckId);
       if (!listing) {
-        return res.status(404).json({ message: "空車情報が見つかりません" });
+        return res.status(404).json({ message: "空き車両情報が見つかりません" });
       }
       if (listing.userId !== req.session.userId) {
         return res.status(403).json({ message: "この操作を行う権限がありません" });
@@ -1480,7 +1480,7 @@ export async function registerRoutes(
       const updated = await storage.updateTruckListing(truckId, safeBody);
       res.json(updated);
     } catch (error) {
-      res.status(500).json({ message: "空車情報の更新に失敗しました" });
+      res.status(500).json({ message: "空き車両情報の更新に失敗しました" });
     }
   });
 
@@ -1488,7 +1488,7 @@ export async function registerRoutes(
     try {
       const deleted = await storage.deleteTruckListing(req.params.id as string);
       if (!deleted) {
-        return res.status(404).json({ message: "空車情報が見つかりません" });
+        return res.status(404).json({ message: "空き車両情報が見つかりません" });
       }
       const currentUser = await storage.getUser(req.session.userId as string);
       storage.createAuditLog({
@@ -1497,12 +1497,12 @@ export async function registerRoutes(
         action: "delete",
         targetType: "truck",
         targetId: req.params.id,
-        details: "空車削除",
+        details: "空き車両削除",
         ipAddress: (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.ip || "",
       }).catch(() => {});
       res.json({ message: "削除しました" });
     } catch (error) {
-      res.status(500).json({ message: "空車の削除に失敗しました" });
+      res.status(500).json({ message: "空き車両の削除に失敗しました" });
     }
   });
 
@@ -1793,7 +1793,7 @@ export async function registerRoutes(
     try {
       const listing = await storage.getTruckListing(req.params.id as string);
       if (!listing) {
-        return res.status(404).json({ message: "空車情報が見つかりません" });
+        return res.status(404).json({ message: "空き車両情報が見つかりません" });
       }
       const truckAllowed = ["title", "currentArea", "currentAddress", "destinationArea", "destinationAddress", "vehicleType", "truckCount", "bodyType", "maxWeight", "availableDate", "price", "description", "status"];
       const safeBody: Record<string, any> = {};
@@ -1811,7 +1811,7 @@ export async function registerRoutes(
       });
       res.json(updated);
     } catch (error) {
-      res.status(500).json({ message: "空車情報の更新に失敗しました" });
+      res.status(500).json({ message: "空き車両情報の更新に失敗しました" });
     }
   });
 
@@ -1819,7 +1819,7 @@ export async function registerRoutes(
     try {
       const listing = await storage.getTruckListing(req.params.id as string);
       if (!listing) {
-        return res.status(404).json({ message: "空車情報が見つかりません" });
+        return res.status(404).json({ message: "空き車両情報が見つかりません" });
       }
       await storage.deleteTruckListing(req.params.id as string);
       const admin = await storage.getUser(req.session.userId as string);
@@ -1834,7 +1834,7 @@ export async function registerRoutes(
       });
       res.json({ message: "削除しました" });
     } catch (error) {
-      res.status(500).json({ message: "空車の削除に失敗しました" });
+      res.status(500).json({ message: "空き車両の削除に失敗しました" });
     }
   });
 
@@ -2047,8 +2047,8 @@ export async function registerRoutes(
 
   "cargoType": "荷種（例: 食品、機械部品、建材）",
   "weight": "重量（例: 5t、500kg）",
-  "vehicleType": "車種（以下から選択、複数可: 軽車両, 1t車, 1.5t車, 2t車, 3t車, 4t車, 5t車, 6t車, 7t車, 8t車, 10t車, 11t車, 13t車, 15t車, 増トン車, 大型車, トレーラー, フルトレーラー, その他）",
-  "bodyType": "車体タイプ（以下から選択、複数可: 平ボディ, バン, 箱車, ウイング, 幌ウイング, 冷蔵車, 冷凍車, 冷凍冷蔵車, ダンプ, タンクローリー, 車載車, セルフローダー, セーフティローダー, ユニック, クレーン付き, パワーゲート付き, エアサス, コンテナ車, 海上コンテナ, 低床, 高床, ショート, ロング, ワイド, ワイドロング, その他）",
+  "vehicleType": "車種（以下から選択、複数可: 軽バン, 軽トラック, 軽冷凍車, 軽冷蔵車, 軽ワゴン, バイク便, その他）",
+  "bodyType": "車体タイプ（以下から選択、複数可: 標準ボディ, ハイルーフ, 幌車, 冷蔵仕様, 冷凍仕様, パワーゲート付き, その他）",
   "temperatureControl": "温度管理（以下から選択: 指定なし, 常温, 冷蔵（0〜10℃）, 冷凍（-18℃以下）, 定温）",
   "price": "運賃（税別、数字のみ、例: 50000。金額不明の場合は「要相談」）",
   "transportType": "輸送形態（以下から選択: スポット, 定期）",
@@ -2088,13 +2088,16 @@ ${cargoFieldSchema}
 - 軽貨物配送業界の略語・表記ゆれを正しく理解すること:
   - 「発」「積地」「積込」「積み」= departureArea/departureAddress（積む場所）
   - 「着」「卸地」「卸先」「降ろし」「おろし」「納品先」= arrivalArea/arrivalAddress（降ろす場所）
-  - 「W」「ウイング」= bodyType: "ウイング"
+  - 「軽バン」「バン」= vehicleType: "軽バン"
+  - 「軽トラ」= vehicleType: "軽トラック"
+  - 「冷凍」= vehicleType: "軽冷凍車"
+  - 「冷蔵」= vehicleType: "軽冷蔵車"
   - 「PG」「パワゲ」= bodyType: "パワーゲート付き"
-  - 「4t」「4トン」= vehicleType: "4t車"、「大型」= vehicleType: "大型車"
-  - 「箱」= bodyType: "箱車"
+  - 「ハイルーフ」= bodyType: "ハイルーフ"
+  - 「幌」= bodyType: "幌車"
   - 「高速込」= highwayFee: "込み"、「高速別」= highwayFee: "別途"
   - 「手積み」「手降ろし」「手積手降」= driverWork: "手積み手降ろし"
-  - 「フォーク」= driverWork: "フォークリフト"
+  - 「台車」= driverWork: "台車使用"
   - 「パレ」= loadingMethod: "パレット"、「バラ」= loadingMethod: "バラ積み"
 - 住所から都道府県を推測すること（例: 「横浜市」→ "神奈川"、「熊谷」→ "埼玉"、「香取市」→ "千葉"）
 - 日付の表記ゆれに対応（「3/5」「3月5日」「3.5」→ "YYYY/03/05"）
@@ -2106,9 +2109,9 @@ ${cargoFieldSchema}
 - 「24積み25」→ desiredDate: 当月24日、arrivalDate: 当月25日
 - 「熊谷積み」→ departureArea: "埼玉", departureAddress: "熊谷"
 - 「香取市」→ 文脈で判断（積み地の後なら着地）
-- 「4トン50」「4t50」→ vehicleType: "4t車", price: "50000"（2桁金額は万円単位）
-- 「大型80」→ vehicleType: "大型車", price: "80000"
-- 金額が2桁の場合は万円単位（50→50000）、5桁以上や「￥20000」のようにはっきり書かれている場合はそのまま
+- 「軽バン15」→ vehicleType: "軽バン", price: "15000"（2桁金額は千円単位）
+- 「軽トラ20」→ vehicleType: "軽トラック", price: "20000"
+- 金額が2桁の場合は千円単位（15→15000）、5桁以上や「￥20000」のようにはっきり書かれている場合はそのまま
 - 「中原区～所沢」「A～B」「A→B」→ departureAddress/arrivalAddressに分割
 - 「8:00～9:00」→ departureTime: "8:00"（時間帯は開始時間を採用）
 - 「12:00指定」→ arrivalTime: "12:00"
@@ -2116,16 +2119,18 @@ ${cargoFieldSchema}
 - titleは自動生成: 「{departureArea}→{arrivalArea} {cargoType} {vehicleType}」
 
 車種・車体の解析:
-- 「2tL」「2tロング」→ vehicleType: "2t車", bodyType: "ロング"
-- 「2tワイド」→ vehicleType: "2t車", bodyType: "ワイド"
-- 「2tLかワイド」→ vehicleType: "2t車", bodyType: "ロング, ワイド"（複数選択）
-- 「ショート」「ロング」「ワイド」「ワイドロング」はbodyTypeの選択肢として入れる
-- 「W」は文脈で判断: 車体タイプなら「ウイング」、サイズなら「ワイド」
-- 引越し・家具運搬: bodyTypeに「箱車」を含める、movingJob: "引っ越し案件"
+- 「軽バン」「バン」→ vehicleType: "軽バン"
+- 「軽トラ」「軽トラック」→ vehicleType: "軽トラック"
+- 「冷凍」→ vehicleType: "軽冷凍車"
+- 「冷蔵」→ vehicleType: "軽冷蔵車"
+- 「ハイルーフ」→ bodyType: "ハイルーフ"
+- 「幌」→ bodyType: "幌車"
+- 「PG」「パワゲ」→ bodyType: "パワーゲート付き"
+- 引越し・家具運搬: movingJob: "引っ越し案件"
 - 「手伝いあり」→ descriptionに記載
 
 情報が不明な場合はそのフィールドを空文字にしてください。入力テキストに明記されていない情報は絶対に勝手に推測して入れないこと。特にloadingMethod（荷姿）、driverWork（作業）、consolidation（積合）、temperatureControl（温度管理）等は明確な記載がある場合のみ設定。
-vehicleTypeとbodyTypeは複数選択の場合カンマ区切りで返してください（例: "4t車, 10t車"）。
+vehicleTypeとbodyTypeは複数選択の場合カンマ区切りで返してください（例: "軽バン, 軽トラック"）。
 JSONのみを返してください。説明文は不要です。${fewShotSection}`,
           },
           {
@@ -2184,8 +2189,8 @@ JSONのみを返してください。説明文は不要です。${fewShotSection
 
   "cargoType": "荷種（例: 食品、機械部品、建材）",
   "weight": "重量（例: 5t、500kg）",
-  "vehicleType": "車種（以下から選択、複数可: 軽車両, 1t車, 1.5t車, 2t車, 3t車, 4t車, 5t車, 6t車, 7t車, 8t車, 10t車, 11t車, 13t車, 15t車, 増トン車, 大型車, トレーラー, フルトレーラー, その他）",
-  "bodyType": "車体タイプ（以下から選択、複数可: 平ボディ, バン, 箱車, ウイング, 幌ウイング, 冷蔵車, 冷凍車, 冷凍冷蔵車, ダンプ, タンクローリー, 車載車, セルフローダー, セーフティローダー, ユニック, クレーン付き, パワーゲート付き, エアサス, コンテナ車, 海上コンテナ, 低床, 高床, ショート, ロング, ワイド, ワイドロング, その他）",
+  "vehicleType": "車種（以下から選択、複数可: 軽バン, 軽トラック, 軽冷凍車, 軽冷蔵車, 軽ワゴン, バイク便, その他）",
+  "bodyType": "車体タイプ（以下から選択、複数可: 標準ボディ, ハイルーフ, 幌車, 冷蔵仕様, 冷凍仕様, パワーゲート付き, その他）",
   "temperatureControl": "温度管理（以下から選択: 指定なし, 常温, 冷蔵（0〜10℃）, 冷凍（-18℃以下）, 定温）",
   "price": "運賃（税別、数字のみ、例: 50000。金額不明の場合は「要相談」）",
   "transportType": "輸送形態（以下から選択: スポット, 定期）",
@@ -2242,14 +2247,14 @@ JSONのみを返してください。説明文は不要です。${fewShotSection
 - テキスト全体を必ず読み込み、見落としがないようにすること
 
 短文・メモ形式の解析パターン（非常に重要）:
-運送業界では以下のような超短文メモやLINE/チャットの短い文章で案件が流れてきます。正しく解析してください:
+軽貨物配送業界では以下のような超短文メモやLINE/チャットの短い文章で案件が流れてきます。正しく解析してください:
 - 「24積み25」→ desiredDate: 当月24日、arrivalDate: 当月25日（数字+積み+数字 = 積み日と降ろし日）
 - 「熊谷積み」→ departureArea: "埼玉", departureAddress: "熊谷"（地名+積み = 発地）
 - 「香取市」→ 前後の文脈で発地か着地か判断（積み地の後なら着地）→ arrivalArea: "千葉", arrivalAddress: "香取市"
-- 「4トン50」「4t50」→ vehicleType: "4t車", price: "50000"（車種+金額。50=50000円、35=35000円のように万円単位で省略されることが多い）
-- 「大型80」→ vehicleType: "大型車", price: "80000"
-- 「10t W」→ vehicleType: "10t車", bodyType: "ウイング"
-- 金額が2桁の場合は万円単位（50→50000、35→35000、80→80000）、5桁以上や「￥20000」のようにはっきり書かれている場合はそのまま
+- 「軽バン15」→ vehicleType: "軽バン", price: "15000"（車種+金額。15=15000円、20=20000円のように千円単位で省略されることが多い）
+- 「軽トラ20」→ vehicleType: "軽トラック", price: "20000"
+- 「冷凍 25」→ vehicleType: "軽冷凍車", price: "25000"
+- 金額が2桁の場合は千円単位（15→15000、20→20000、25→25000）、5桁以上や「￥20000」のようにはっきり書かれている場合はそのまま
 - 「中原区～所沢」「A～B」「A→B」→ departureAddress: "中原区", arrivalAddress: "所沢"
 - 「8:00～9:00」「8時～9時」→ departureTime: "8:00"（時間帯の場合は開始時間を採用）
 - 「12:00指定」→ arrivalTime: "12:00"
@@ -2258,18 +2263,20 @@ JSONのみを返してください。説明文は不要です。${fewShotSection
 - titleは自動生成すること: 「{departureArea}→{arrivalArea} {cargoType} {vehicleType}」の形式で作成。荷種不明の場合は「{departureArea}→{arrivalArea} {vehicleType}」
 
 車種・車体の解析（非常に重要）:
-- 「2tL」「2tロング」「2トンロング」→ vehicleType: "2t車", bodyType: "ロング"
-- 「2tワイド」「2トンワイド」→ vehicleType: "2t車", bodyType: "ワイド"  
-- 「2tLかワイド」「2tロングかワイド」→ vehicleType: "2t車", bodyType: "ロング, ワイド"（複数選択）
-- 「ショート」「ロング」「ワイド」「ワイドロング」はbodyTypeの選択肢として入れる
-- 「W」は文脈で判断: 車体タイプとして使われていれば「ウイング」、サイズ指定なら「ワイド」
-- 引越し案件・家具運搬の場合: bodyType に「箱車」を含める（ウイングではない）、movingJob: "引っ越し案件"
+- 「軽バン」「バン」→ vehicleType: "軽バン"
+- 「軽トラ」「軽トラック」→ vehicleType: "軽トラック"
+- 「冷凍」「レイトウ」→ vehicleType: "軽冷凍車"
+- 「冷蔵」→ vehicleType: "軽冷蔵車"
+- 「ハイルーフ」→ bodyType: "ハイルーフ"
+- 「幌」→ bodyType: "幌車"
+- 「PG」「パワゲ」→ bodyType: "パワーゲート付き"
+- 引越し案件・家具運搬の場合: movingJob: "引っ越し案件"
 - 「手伝いあり」「荷主手伝い」→ description に記載（ドライバー以外の手伝いがある意味）
 
 運賃相場の目安（一般的な参考値）:
-- 近距離（同一県内〜隣県）: 2t車 15,000〜25,000円、4t車 20,000〜35,000円、10t車 35,000〜55,000円
-- 中距離（200〜400km）: 2t車 25,000〜40,000円、4t車 35,000〜60,000円、10t車 55,000〜80,000円
-- 長距離（400km以上）: 2t車 40,000〜60,000円、4t車 60,000〜90,000円、10t車 80,000〜130,000円
+- 近距離（同一県内〜隣県）: 軽バン 8,000〜15,000円、軽トラック 10,000〜18,000円
+- 中距離（100〜200km）: 軽バン 15,000〜25,000円、軽トラック 18,000〜30,000円
+- 長距離（200km以上）: 軽バン 25,000〜40,000円、軽トラック 30,000〜50,000円
 - 冷凍・冷蔵は上記の1.2〜1.5倍
 - 高速代込みの場合は上記に高速代を加算
 これはあくまで目安で、荷物内容・時期・緊急度などで変動します。
@@ -2336,19 +2343,20 @@ ${cargoFieldSchema}
 { "items": [ {案件1}, {案件2}, ... ] }
 
 データ解析の注意点:
-- 「W」「ウイング」= bodyType: "ウイング"
+- 「軽バン」「バン」= vehicleType: "軽バン"
+- 「軽トラ」= vehicleType: "軽トラック"
+- 「冷凍」= vehicleType: "軽冷凍車"
 - 「PG」「パワゲ」= bodyType: "パワーゲート付き"
-- 「4t」「4トン」= vehicleType: "4t車"、「大型」= vehicleType: "大型車"
-- 「箱」= bodyType: "箱車"
+- 「ハイルーフ」= bodyType: "ハイルーフ"
 - 「高速込」= highwayFee: "込み"、「高速別」= highwayFee: "別途"
 - 住所から都道府県を推測（「横浜市」→"神奈川"、「熊谷」→"埼玉"、「江東区」→"東京"）
 - 日付の表記ゆれ（「3/5」→"${new Date().getFullYear()}/03/05"）
 - 時間の表記ゆれ（「8時」→"8:00"）
-- 金額が2桁の場合は万円単位（50→50000）
+- 金額が2桁の場合は千円単位（15→15000）
 - 「当日」→ arrivalDate = desiredDate
 - 「貸切」→ consolidation: "不可"
 - titleは自動生成: 「{departureArea}→{arrivalArea} {cargoType} {vehicleType}」
-- 引越し案件: bodyType="箱車", movingJob="引っ越し案件"
+- 引越し案件: movingJob="引っ越し案件"
 - 情報がないフィールドは空文字にすること${chatFewShotSection}`,
             },
             { role: "user", content: lastUserText },
@@ -2521,16 +2529,16 @@ JSONのみを返してください。${chatFewShotSection}`,
       }
 
       const truckFieldSchema = `{
-  "title": "タイトル（車種 空車地→行先地の形式、例: 10t車 東京→大阪 空車あり）",
-  "currentArea": "空車地の都道府県名のみ（例: 東京）",
-  "currentAddress": "空車地の詳細住所（市区町村以降、例: 名古屋市中村区、横浜市港北区）",
+  "title": "タイトル（車種 出発地→行先地の形式、例: 軽バン 東京→大阪 空き車両あり）",
+  "currentArea": "出発地の都道府県名のみ（例: 東京）",
+  "currentAddress": "出発地の詳細住所（市区町村以降、例: 名古屋市中村区、横浜市港北区）",
   "destinationArea": "行先地の都道府県名のみ（例: 大阪）",
   "destinationAddress": "行先地の詳細住所（市区町村以降、例: 大阪市北区、さいたま市大宮区）",
-  "vehicleType": "車種（以下から選択: 軽車両, 1t車, 1.5t車, 2t車, 3t車, 4t車, 5t車, 6t車, 7t車, 8t車, 10t車, 11t車, 13t車, 15t車, 増トン車, 大型車, トレーラー, フルトレーラー, その他）",
-  "bodyType": "車体タイプ（以下から選択: 平ボディ, バン, ウイング, 幌ウイング, 冷蔵車, 冷凍車, 冷凍冷蔵車, ダンプ, タンクローリー, 車載車, セルフローダー, セーフティローダー, ユニック, クレーン付き, パワーゲート付き, エアサス, コンテナ車, 海上コンテナ, 低床, 高床, その他）",
+  "vehicleType": "車種（以下から選択: 軽バン, 軽トラック, 軽冷凍車, 軽冷蔵車, 軽ワゴン, バイク便, その他）",
+  "bodyType": "車体タイプ（以下から選択: 標準ボディ, ハイルーフ, 幌車, 冷蔵仕様, 冷凍仕様, パワーゲート付き, その他）",
   "truckCount": "台数（例: 1, 2, 3。数字のみ）",
   "maxWeight": "最大積載量（例: 10t, 2t, 500kg）",
-  "availableDate": "空車日（YYYY/MM/DD形式）",
+  "availableDate": "空き日（YYYY/MM/DD形式）",
   "price": "最低運賃（税別、数字のみ、例: 50000。金額不明の場合は空文字）",
   "description": "備考",
   "companyName": "会社名",
@@ -2543,7 +2551,7 @@ JSONのみを返してください。${chatFewShotSection}`,
 重要: 現在の日付は${new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}です。日付が年を省略している場合は、必ず${new Date().getFullYear()}年として扱ってください。過去の年を設定しないでください。
 
 あなたの役割:
-1. ユーザーが入力した雑多なテキスト・データから空車情報を正確に抽出・整理する
+1. ユーザーが入力した雑多なテキスト・データから空き車両情報を正確に抽出・整理する
 2. 不足している情報があれば会話で確認する
 3. 運賃について相談されたら、ルート・車種・距離から相場を提案する
 4. 複数案件が含まれる場合はそれぞれ分けて処理する
@@ -2565,25 +2573,29 @@ JSONのみを返してください。${chatFewShotSection}`,
 - テキスト全体を必ず読み込み、見落としがないようにすること
 
 短文・メモ形式の解析パターン（非常に重要）:
-運送業界では以下のような超短文メモやLINE/チャットの短い文章で案件が流れてきます。正しく解析してください:
-- 「東京 空車あり 3/7」→ currentArea: "東京", availableDate: "YYYY/03/07"
-- 「神奈川→大阪 10tW」→ currentArea: "神奈川", destinationArea: "大阪", vehicleType: "10t車", bodyType: "ウイング"
-- 「4t平 埼玉空き 3月5日」→ vehicleType: "4t車", bodyType: "平ボディ", currentArea: "埼玉", availableDate: "YYYY/03/05"
-- 「大型冷凍 千葉→東北方面」→ vehicleType: "大型車", bodyType: "冷凍車", currentArea: "千葉", destinationArea: "東北方面"
+軽貨物配送業界では以下のような超短文メモやLINE/チャットの短い文章で案件が流れてきます。正しく解析してください:
+- 「東京 空き車両あり 3/7」→ currentArea: "東京", availableDate: "YYYY/03/07"
+- 「神奈川→大阪 軽バン」→ currentArea: "神奈川", destinationArea: "大阪", vehicleType: "軽バン"
+- 「軽トラ 埼玉空き 3月5日」→ vehicleType: "軽トラック", currentArea: "埼玉", availableDate: "YYYY/03/05"
+- 「冷凍車 千葉→東北方面」→ vehicleType: "軽冷凍車", currentArea: "千葉", destinationArea: "東北方面"
 - 金額が2桁の場合は万円単位（50→50000、35→35000、80→80000）、5桁以上や「￥20000」のようにはっきり書かれている場合はそのまま
 - 「A→B」「A～B」= currentArea→destinationArea
-- titleは自動生成すること: 「{vehicleType} {currentArea}→{destinationArea} 空車あり」の形式で作成
+- titleは自動生成すること: 「{vehicleType} {currentArea}→{destinationArea} 空き車両あり」の形式で作成
 
 車種・車体の解析（非常に重要）:
-- 「2tL」「2tロング」「2トンロング」→ vehicleType: "2t車", bodyType: "ロング" ではなく description に「ロング」と記載
-- 「2tワイド」「2トンワイド」→ vehicleType: "2t車", description に「ワイド」と記載
-- 「W」は文脈で判断: 車体タイプとして使われていれば「ウイング」
+- 「軽バン」「バン」→ vehicleType: "軽バン"
+- 「軽トラ」「軽トラック」→ vehicleType: "軽トラック"
+- 「冷凍」「レイトウ」→ vehicleType: "軽冷凍車"
+- 「冷蔵」→ vehicleType: "軽冷蔵車"
+- 「ハイルーフ」→ bodyType: "ハイルーフ"
+- 「幌」→ bodyType: "幌車"
+- 「PG」「パワゲ」→ bodyType: "パワーゲート付き"
 - bodyTypeの選択肢に合致するもののみbodyTypeに設定、それ以外はdescriptionに記載
 
 運賃相場の目安（一般的な参考値）:
-- 近距離（同一県内〜隣県）: 2t車 15,000〜25,000円、4t車 20,000〜35,000円、10t車 35,000〜55,000円
-- 中距離（200〜400km）: 2t車 25,000〜40,000円、4t車 35,000〜60,000円、10t車 55,000〜80,000円
-- 長距離（400km以上）: 2t車 40,000〜60,000円、4t車 60,000〜90,000円、10t車 80,000〜130,000円
+- 近距離（同一県内〜隣県）: 軽バン 8,000〜15,000円、軽トラック 10,000〜18,000円
+- 中距離（100〜200km）: 軽バン 15,000〜25,000円、軽トラック 18,000〜30,000円
+- 長距離（200km以上）: 軽バン 25,000〜40,000円、軽トラック 30,000〜50,000円
 これはあくまで目安で、車種・時期・路線などで変動します。
 
 応答のJSON形式（必ずこの形式で返してください）:
@@ -2597,10 +2609,10 @@ JSONのみを返してください。${chatFewShotSection}`,
 
 【最重要ルール】messageフィールドには絶対にJSONデータを入れないこと:
 - messageには「"items":」「"currentArea":」「"vehicleType":」等のJSON構文を絶対に含めない
-- 空車データはすべてitemsフィールドとextractedFieldsフィールドに入れること。messageにはデータの中身を書かない
+- 空き車両データはすべてitemsフィールドとextractedFieldsフィールドに入れること。messageにはデータの中身を書かない
 - ユーザーが「○件ある」「もっとある」等と言った場合も、messageは自然な会話で返し、データはitemsに入れる
-- 良いmessage例: 「3台分の空車情報を確認しました。1台目をフォームに反映しています。」
-- 悪いmessage例: 「以下の空車を検出しました: {"title":"10t車 東京→大阪"...」← これは絶対NG
+- 良いmessage例: 「3台分の空き車両情報を確認しました。1台目をフォームに反映しています。」
+- 悪いmessage例: 「以下の空き車両を検出しました: {"title":"軽バン 東京→大阪"...」← これは絶対NG
 
 statusの意味:
 - "extracting": 情報を抽出中、まだ不足あり
@@ -2615,8 +2627,8 @@ statusの意味:
 - messageは必ず日本語で、丁寧だが堅すぎない口調で
 - messageにはJSON構造、フィールド名、配列、オブジェクト、技術的なデータ構造を絶対に含めないこと。messageはユーザーへの自然な会話文のみにすること。
 - messageにextractedFieldsやitemsの中身をテキストとして書かないこと。データはextractedFieldsとitemsフィールドに入れればフォームに自動反映される。
-- 複数空車を検出した場合のmessageの例: 「○台分の空車情報を読み取りました。1台目をフォームに反映しています。内容を確認して掲載してください。」
-- 単一空車の場合のmessageの例: 「空車情報を読み取りました。右側のフォームに反映しています。内容を確認して掲載してください。」
+- 複数空き車両を検出した場合のmessageの例: 「○台分の空き車両情報を読み取りました。1台目をフォームに反映しています。内容を確認して掲載してください。」
+- 単一空き車両の場合のmessageの例: 「空き車両情報を読み取りました。右側のフォームに反映しています。内容を確認して掲載してください。」
 - 運賃の相談には積極的に応じて、具体的な金額を提案してください
 - 大量のデータが来た場合は、整理して要約してから確認してください。ただし要約はmessageに自然な日本語で書き、生データやJSONは含めないこと。
 - 入力データからできるだけ多くの情報を漏れなく抽出してください
@@ -2634,18 +2646,18 @@ statusの意味:
           messages: [
             {
               role: "system",
-              content: `あなたは運送データのパーサーです。入力テキストから空車情報を抽出してJSON配列で返してください。
+              content: `あなたは軽貨物配送データのパーサーです。入力テキストから空き車両情報を抽出してJSON配列で返してください。
 
 フィールドスキーマ: ${truckFieldSchema}
 
 ルール:
-- 各行/各エントリを個別の空車案件として解析する
-- 略語を正しく展開: W=ウイング, PG=パワーゲート付き, 箱=バン, 平=平ボディ, 冷凍=冷凍車, 冷蔵=冷蔵車
-- 車種の数字表記: 4t=4t車, 10t=10t車, 大型=大型車, 増トン=増トン車
+- 各行/各エントリを個別の空き車両案件として解析する
+- 略語を正しく展開: PG=パワーゲート付き, 冷凍=軽冷凍車, 冷蔵=軽冷蔵車, バン=軽バン, 軽トラ=軽トラック
+- 車種の表記: 軽バン, 軽トラック, 軽冷凍車, 軽冷蔵車, 軽ワゴン, バイク便
 - 都道府県の推測: 横浜→神奈川, 熊谷→埼玉, 市川→千葉 等
 - 金額が2桁なら万円単位(50→50000)
 - 日付の年省略は${new Date().getFullYear()}年
-- titleは自動生成: 「{vehicleType} {currentArea}→{destinationArea} 空車あり」
+- titleは自動生成: 「{vehicleType} {currentArea}→{destinationArea} 空き車両あり」
 
 必ず以下のJSON形式で返してください:
 {"items": [各案件のオブジェクト配列]}`,
@@ -2664,8 +2676,8 @@ statusの意味:
           const truckRemaining = truckItems.length > 1 ? truckItems.slice(1) : [];
           res.json({
             message: truckItems.length > 1
-              ? `${truckItems.length}台分の空車情報を読み取りました。1台目をフォームに反映しています。内容を確認して掲載してください。`
-              : "空車情報を読み取りました。右側のフォームに反映しています。内容を確認して掲載してください。",
+              ? `${truckItems.length}台分の空き車両情報を読み取りました。1台目をフォームに反映しています。内容を確認して掲載してください。`
+              : "空き車両情報を読み取りました。右側のフォームに反映しています。内容を確認して掲載してください。",
             extractedFields: truckFirst,
             items: truckRemaining,
             priceSuggestion: null,
@@ -2699,14 +2711,14 @@ statusの意味:
       try {
         const parsed = JSON.parse(content);
         res.json({
-          message: parsed.message || "空車情報を読み取りました。",
+          message: parsed.message || "空き車両情報を読み取りました。",
           extractedFields: parsed.extractedFields || {},
           items: parsed.items || [],
           priceSuggestion: parsed.priceSuggestion || null,
           status: parsed.status || "chatting",
         });
       } catch {
-        let truckFallbackMsg = "空車情報を処理中です。";
+        let truckFallbackMsg = "空き車両情報を処理中です。";
         try {
           const m = content.match(/"message"\s*:\s*"([^"]+)"/);
           if (m) truckFallbackMsg = m[1];
@@ -2995,14 +3007,14 @@ statusの意味:
         records = records.filter(r => (r.shipperName || "").includes(shipperName));
       }
       const data = records.map(r => ({
-        "運送日": r.transportDate || "",
+        "配送日": r.transportDate || "",
         "荷主名": r.shipperName || "",
         "発地": r.departureArea || "",
         "着地": r.arrivalArea || "",
         "荷種": r.cargoDescription || "",
         "車種": r.vehicleType || "",
         "運賃": r.fare || "",
-        "実運送会社": r.transportCompany || "",
+        "実配送会社": r.transportCompany || "",
         "ドライバー名": r.driverName || "",
         "ドライバー電話": r.driverPhone || "",
         "車両番号": r.vehicleNumber || "",
@@ -3013,7 +3025,7 @@ statusの意味:
       const XLSX = await import("xlsx");
       const ws = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "実運送体制管理簿");
+      XLSX.utils.book_append_sheet(wb, ws, "配送管理簿");
 
       const buffer = XLSX.write(wb, { type: "buffer", bookType: "xlsx" });
 
@@ -3194,7 +3206,7 @@ statusの意味:
       },
       {
         triggerEvent: "dispatch_request_transport",
-        name: "配車依頼書（運送会社向け）",
+        name: "配車依頼書（配送会社向け）",
         description: "配車依頼書メール（件名と冒頭文が編集可能、詳細データは自動挿入）",
         variables: [
           { key: "senderName", label: "送信者名" },
@@ -3215,8 +3227,8 @@ statusの意味:
       },
       {
         triggerEvent: "truck_new",
-        name: "新着空車通知",
-        description: "新しい空車が登録された際に全ユーザーへ送信されるメール",
+        name: "新着空き車両通知",
+        description: "新しい空き車両が登録された際に全ユーザーへ送信されるメール",
         variables: [
           { key: "currentArea", label: "現在地" },
           { key: "destinationArea", label: "行先" },
@@ -4740,7 +4752,7 @@ JSON形式で以下を返してください（日本語で）:
       const result = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
-          { role: "system", content: `あなたは物流業界専門のSNSマーケターです。${platform}に最適化された日本語の投稿文を作成してください。ハッシュタグも含めてください。` },
+          { role: "system", content: `あなたは軽貨物配送業界専門のSNSマーケターです。${platform}に最適化された日本語の投稿文を作成してください。ハッシュタグも含めてください。` },
           { role: "user", content: `トピック: ${topic}\n\n投稿文を1つ生成してください。` },
         ],
         max_tokens: 300,

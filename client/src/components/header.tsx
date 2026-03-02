@@ -254,7 +254,7 @@ export default function Header() {
           <div className="flex items-center justify-between gap-4 h-12">
             <div className="flex items-center gap-4">
               <Link href="/home" className="flex items-center shrink-0" data-testid="text-logo">
-                <img src={logoImage} alt="KEI MATCH" className="h-8 w-auto" />
+                <img src={logoImage} alt="軽貨物マッチ" className="h-8 w-auto" />
               </Link>
             </div>
 
@@ -273,7 +273,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between gap-4 flex-wrap h-16">
           <Link href={isAuthenticated ? "/home" : "/"} className="flex items-center shrink-0" data-testid="text-logo">
-            <img src={logoImage} alt="KEI MATCH" className="h-9 sm:h-10 w-auto" />
+            <img src={logoImage} alt="軽貨物マッチ" className="h-9 sm:h-10 w-auto" />
           </Link>
 
           {navItems.length > 0 && (

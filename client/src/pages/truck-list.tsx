@@ -64,8 +64,8 @@ const SELECT_FIELD_OPTIONS: Record<string, string[]> = {
 };
 
 const FIELD_LABELS: Record<string, string> = {
-  title: "タイトル", currentArea: "空車地", currentAddress: "空車地詳細住所", destinationArea: "行先地", destinationAddress: "行先地詳細住所",
-  vehicleType: "車種", bodyType: "車体タイプ", maxWeight: "最大積載量", availableDate: "空車日",
+  title: "タイトル", currentArea: "出発地", currentAddress: "出発地詳細住所", destinationArea: "行先地", destinationAddress: "行先地詳細住所",
+  vehicleType: "車種", bodyType: "車体タイプ", maxWeight: "最大積載量", availableDate: "空き日",
   price: "最低運賃", description: "備考",
 };
 
@@ -197,7 +197,7 @@ function TruckDetailPanel({ listing, onClose }: { listing: TruckListing | null; 
     if (!listing) return;
     const row = (label: string, value: string | null | undefined) =>
       `<tr><td style="padding:6px 10px;font-weight:bold;white-space:nowrap;border:1px solid #ddd;background:#f9f9f9;font-size:13px;width:140px">${label}</td><td style="padding:6px 10px;border:1px solid #ddd;font-size:13px">${value || "-"}</td></tr>`;
-    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>空車情報 - ${listing.companyName}</title>
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>空き車両情報 - ${listing.companyName}</title>
 <style>body{font-family:'Hiragino Sans','Meiryo',sans-serif;margin:20px;color:#333}
 h2{font-size:18px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px}
 table{border-collapse:collapse;width:100%;margin-bottom:16px}
@@ -208,7 +208,7 @@ table{border-collapse:collapse;width:100%;margin-bottom:16px}
 .price{font-size:22px;font-weight:bold;margin-bottom:16px}
 @media print{body{margin:10px}}</style></head><body>
 <div class="header"><h1>KEI MATCH 空き車両情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
-<h2>空車情報</h2>
+<h2>空き車両情報</h2>
 <div class="route">
 <div class="route-side"><div style="font-weight:bold;font-size:14px">${listing.currentArea}</div><div style="font-size:12px;color:#888;margin-top:4px">現在地</div></div>
 <div class="route-arrow">→</div>
@@ -222,7 +222,7 @@ ${row("車種", listing.vehicleType)}
 ${row("車体タイプ", listing.bodyType)}
 ${row("台数", listing.truckCount ? `${listing.truckCount}台` : "-")}
 ${row("最大積載量", listing.maxWeight)}
-${row("空車日", listing.availableDate)}
+${row("空き日", listing.availableDate)}
 ${row("連絡先", listing.contactPhone)}
 ${row("メール", listing.contactEmail)}
 ${row("備考", listing.description)}
@@ -267,7 +267,7 @@ ${row("保有車両台数", companyInfo?.truckCount ? `${companyInfo.truckCount}
               className={`px-3 py-1.5 text-sm font-bold rounded-md transition-colors ${panelTab === "truck" ? "text-primary border border-primary bg-primary/5" : "text-muted-foreground"}`}
               data-testid="tab-truck-info"
             >
-              空車情報
+              空き車両情報
             </button>
             <button
               onClick={() => setPanelTab("company")}
@@ -325,7 +325,7 @@ ${row("保有車両台数", companyInfo?.truckCount ? `${companyInfo.truckCount}
             <DetailRow label="台数" value={listing.truckCount ? `${listing.truckCount}台` : "-"} />
             <DetailRow label="車体タイプ" value={listing.bodyType || "-"} />
             <DetailRow label="最大積載量" value={listing.maxWeight} />
-            <DetailRow label="空車日" value={listing.availableDate} />
+            <DetailRow label="空き日" value={listing.availableDate} />
             <DetailRow label="連絡方法">
               <div className="flex items-center gap-1.5">
                 <Phone className="w-3.5 h-3.5 text-muted-foreground" />
@@ -472,7 +472,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
     {
       id: "welcome",
       role: "assistant",
-      content: "空車登録のお手伝いをします！\n\n空車の情報をテキストで入力するか、ファイルをアップロードしてください。運賃の相談もできます。\n\n例：「3月5日に東京から大阪まで10t車が空いています」",
+      content: "空き車両登録のお手伝いをします！\n\n空き車両の情報をテキストで入力するか、ファイルをアップロードしてください。運賃の相談もできます。\n\n例：「3月5日に東京から大阪まで軽バンが空いています」",
       status: "chatting",
     },
   ]);
@@ -643,7 +643,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
         setChatMessages(prev => [...prev, {
           id: `ai-extract-${Date.now()}`,
           role: "assistant",
-          content: `ファイルから以下の情報を読み取りました：\n\n${data.text}\n\nこの情報から空車を登録しますね。`,
+          content: `ファイルから以下の情報を読み取りました：\n\n${data.text}\n\nこの情報から空き車両を登録しますね。`,
         }]);
         await sendChatMessage(data.text, { skipGuard: true, skipUserMsg: true });
       } else {
@@ -735,7 +735,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
       setExtractedFields(normalized);
       applyFieldsToForm(normalized);
       toast({
-        title: `次の空車を入力しました（${currentItemIndex + 2}/${totalItems}件目）`,
+        title: `次の空き車両を入力しました（${currentItemIndex + 2}/${totalItems}件目）`,
         description: `残り${remaining.length}件`,
       });
     }
@@ -750,10 +750,10 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
       queryClient.invalidateQueries({ queryKey: ["/api/trucks"] });
       queryClient.invalidateQueries({ queryKey: ["/api/my-trucks"] });
       if (pendingItems.length > 0) {
-        toast({ title: "空車情報を掲載しました", description: "次の空車を読み込みます..." });
+        toast({ title: "空き車両情報を掲載しました", description: "次の空き車両を読み込みます..." });
         loadNextPendingItem();
       } else {
-        toast({ title: "空車情報を掲載しました" });
+        toast({ title: "空き車両情報を掲載しました" });
         form.reset();
         setExtractedFields({});
         setTotalItems(0);
@@ -761,7 +761,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
         setChatMessages([{
           id: "welcome",
           role: "assistant",
-          content: "空車登録が完了しました！\n\n続けて別の空車を登録する場合は、情報を入力してください。",
+          content: "空き車両登録が完了しました！\n\n続けて別の空き車両を登録する場合は、情報を入力してください。",
           status: "chatting",
         }]);
       }
@@ -782,7 +782,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
       <div className="bg-primary px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 shrink-0">
         <Truck className="w-5 h-5 text-primary-foreground" />
         <div className="flex-1 min-w-0">
-          <h1 className="text-base sm:text-lg font-bold text-primary-foreground text-shadow-lg truncate" data-testid="text-truck-register-title">AI空車登録</h1>
+          <h1 className="text-base sm:text-lg font-bold text-primary-foreground text-shadow-lg truncate" data-testid="text-truck-register-title">空き車両登録</h1>
           <p className="text-[10px] sm:text-xs text-primary-foreground/80 text-shadow">AIアシスタントが登録をサポートします</p>
         </div>
         <div className="flex lg:hidden gap-1">
@@ -891,7 +891,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
                     <div className="mt-2 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-xl px-3 py-2" data-testid="truck-multi-detected">
                       <div className="flex items-center gap-1.5 mb-1">
                         <Truck className="w-3.5 h-3.5 text-blue-600" />
-                        <span className="text-[11px] font-bold text-blue-700 dark:text-blue-400">{msg.items.length}件の空車を検出</span>
+                        <span className="text-[11px] font-bold text-blue-700 dark:text-blue-400">{msg.items.length}件の空き車両を検出</span>
                       </div>
                       <p className="text-[11px] text-blue-600 dark:text-blue-400">1件目をフォームに反映しました。</p>
                     </div>
@@ -949,7 +949,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
             <input ref={fileInputRef} type="file" accept="image/*,.pdf,.jpg,.jpeg,.png" onChange={handleFileUpload} className="hidden" data-testid="input-truck-reg-file-upload" />
             <div className="flex gap-2">
               <Textarea
-                placeholder="空車情報を入力、またはデータを貼り付け..."
+                placeholder="空き車両情報を入力、またはデータを貼り付け..."
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -1005,7 +1005,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
                 <FormField control={form.control} name="title" render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-xs">タイトル</FormLabel>
-                    <FormControl><Input placeholder="例: 10t車 東京→大阪 空車あり" {...field} className="h-8 text-xs" data-testid="input-truck-title" /></FormControl>
+                    <FormControl><Input placeholder="例: 軽バン 東京→大阪 空き車両あり" {...field} className="h-8 text-xs" data-testid="input-truck-title" /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
@@ -1016,7 +1016,7 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
                     <div className="grid grid-cols-[auto_1fr] gap-2 items-end">
                       <FormField control={form.control} name="currentArea" render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-xs">空車地</FormLabel>
+                          <FormLabel className="text-xs">出発地</FormLabel>
                           <Select onValueChange={field.onChange} value={field.value}>
                             <FormControl><SelectTrigger className="h-8 text-xs w-[90px]" data-testid="select-current-area"><SelectValue placeholder="選択" /></SelectTrigger></FormControl>
                             <SelectContent>{PREFECTURES.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent>
@@ -1118,13 +1118,13 @@ function TruckRegisterTab({ tabBar }: { tabBar: (hasMarginBottom: boolean) => Re
                     <FormField control={form.control} name="maxWeight" render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-xs">最大積載量</FormLabel>
-                        <FormControl><Input placeholder="例: 10t" {...field} className="h-8 text-xs" data-testid="input-max-weight" /></FormControl>
+                        <FormControl><Input placeholder="例: 350kg" {...field} className="h-8 text-xs" data-testid="input-max-weight" /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
                     <FormField control={form.control} name="availableDate" render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs">空車日</FormLabel>
+                        <FormLabel className="text-xs">空き日</FormLabel>
                         <FormControl><Input type="date" {...field} className="h-8 text-xs" data-testid="input-available-date" /></FormControl>
                         <FormMessage />
                       </FormItem>
@@ -1251,7 +1251,7 @@ function TruckEditPanel({ listing, onClose }: { listing: TruckListing; onClose: 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/my-trucks"] });
       queryClient.invalidateQueries({ queryKey: ["/api/trucks"] });
-      toast({ title: "空車情報を更新しました" });
+      toast({ title: "空き車両情報を更新しました" });
     },
     onError: () => {
       toast({ title: "更新に失敗しました", variant: "destructive" });
@@ -1270,7 +1270,7 @@ function TruckEditPanel({ listing, onClose }: { listing: TruckListing; onClose: 
     <div className="w-full lg:w-[420px] shrink-0 border-t lg:border-t-0 lg:border-l border-border bg-background h-full overflow-y-auto" data-testid="panel-truck-edit">
       <div className="sticky top-0 bg-background z-10">
         <div className="flex items-center justify-between gap-2 px-4 py-2 border-b border-border">
-          <span className="text-sm font-bold text-foreground">空車情報を編集</span>
+          <span className="text-sm font-bold text-foreground">空き車両情報を編集</span>
           <Button variant="ghost" size="icon" onClick={onClose} data-testid="button-close-truck-edit">
             <X className="w-4 h-4" />
           </Button>
@@ -1285,7 +1285,7 @@ function TruckEditPanel({ listing, onClose }: { listing: TruckListing; onClose: 
 
         <div className="grid grid-cols-[auto_1fr] gap-2 items-end">
           <div>
-            <label className="text-xs font-bold text-muted-foreground mb-1 block">空車地</label>
+            <label className="text-xs font-bold text-muted-foreground mb-1 block">出発地</label>
             <Select value={editFields.currentArea} onValueChange={v => handleChange("currentArea", v)}>
               <SelectTrigger className="w-[90px]" data-testid="select-edit-currentArea"><SelectValue /></SelectTrigger>
               <SelectContent>{PREFECTURES.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}</SelectContent>
@@ -1329,11 +1329,11 @@ function TruckEditPanel({ listing, onClose }: { listing: TruckListing; onClose: 
 
         <div>
           <label className="text-xs font-bold text-muted-foreground mb-1 block">最大積載量</label>
-          <Input value={editFields.maxWeight} onChange={e => handleChange("maxWeight", e.target.value)} placeholder="例: 10t" data-testid="input-edit-maxWeight" />
+          <Input value={editFields.maxWeight} onChange={e => handleChange("maxWeight", e.target.value)} placeholder="例: 350kg" data-testid="input-edit-maxWeight" />
         </div>
 
         <div>
-          <label className="text-xs font-bold text-muted-foreground mb-1 block">空車日</label>
+          <label className="text-xs font-bold text-muted-foreground mb-1 block">空き日</label>
           <Input value={editFields.availableDate} onChange={e => handleChange("availableDate", e.target.value)} placeholder="YYYY/MM/DD" data-testid="input-edit-availableDate" />
         </div>
 
@@ -1384,7 +1384,7 @@ function MyTrucksTab({ selectedTruckId, onSelectTruck }: { selectedTruckId: stri
       queryClient.invalidateQueries({ queryKey: ["/api/my-trucks"] });
       queryClient.invalidateQueries({ queryKey: ["/api/trucks"] });
       if (selectedTruckId === deletedId) onSelectTruck(null);
-      toast({ title: "空車情報を削除しました" });
+      toast({ title: "空き車両情報を削除しました" });
     },
     onError: () => {
       toast({ title: "削除に失敗しました", variant: "destructive" });
@@ -1422,7 +1422,7 @@ function MyTrucksTab({ selectedTruckId, onSelectTruck }: { selectedTruckId: stri
         <Card>
           <CardContent className="p-8 text-center">
             <Truck className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
-            <p className="text-muted-foreground text-sm">登録した空車情報はありません</p>
+            <p className="text-muted-foreground text-sm">登録した空き車両情報はありません</p>
           </CardContent>
         </Card>
       )}
@@ -1466,7 +1466,7 @@ function MyTrucksTab({ selectedTruckId, onSelectTruck }: { selectedTruckId: stri
                         {truck.bodyType && <span>{truck.bodyType}</span>}
                         <span className="flex items-center gap-1">
                           <Clock className="w-3 h-3" />
-                          空車日: {truck.availableDate}
+                          空き日: {truck.availableDate}
                         </span>
                       </div>
                       <div className="text-[10px] text-muted-foreground">
@@ -1487,7 +1487,7 @@ function MyTrucksTab({ selectedTruckId, onSelectTruck }: { selectedTruckId: stri
                         size="icon"
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (confirm("この空車情報を削除しますか？")) {
+                          if (confirm("この空き車両情報を削除しますか？")) {
                             deleteMutation.mutate(truck.id);
                           }
                         }}
@@ -1794,10 +1794,10 @@ export default function TruckList() {
               <Select value={filterCurrentArea || "all"} onValueChange={(v) => { setFilterCurrentArea(v === "all" ? "" : v); setPage(1); }}>
                 <SelectTrigger className="text-xs h-8 w-[110px]" data-testid="filter-truck-current-area">
                   <MapPin className="w-3 h-3 mr-1 shrink-0 text-muted-foreground" />
-                  <SelectValue placeholder="空車地" />
+                  <SelectValue placeholder="出発地" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">空車地</SelectItem>
+                  <SelectItem value="all">出発地</SelectItem>
                   {PREFECTURES.map((p) => (<SelectItem key={p} value={p}>{p}</SelectItem>))}
                 </SelectContent>
               </Select>
@@ -1887,7 +1887,7 @@ export default function TruckList() {
 
           <div className="flex items-center justify-center gap-3 pt-1">
             <Button onClick={handleTruckSearch} className="px-8" data-testid="button-truck-search">
-              <Search className="w-4 h-4 mr-1.5" />空車検索
+              <Search className="w-4 h-4 mr-1.5" />空き車両検索
             </Button>
             <Button variant="outline" onClick={handleTruckClear} data-testid="button-truck-clear">
               <RotateCcw className="w-3.5 h-3.5 mr-1.5" />クリア
@@ -1908,9 +1908,9 @@ export default function TruckList() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="newest">新着順</SelectItem>
-              <SelectItem value="date">空車日時</SelectItem>
+              <SelectItem value="date">空き日時</SelectItem>
               <SelectItem value="price">運賃</SelectItem>
-              <SelectItem value="currentArea">空車地</SelectItem>
+              <SelectItem value="currentArea">出発地</SelectItem>
               <SelectItem value="destArea">行先地</SelectItem>
             </SelectContent>
           </Select>
@@ -1936,7 +1936,7 @@ export default function TruckList() {
             <thead>
               <tr className="border-b bg-muted/60">
                 <th className="text-left px-2 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">企業名</th>
-                <th className="text-left px-2 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap min-w-[200px]">空車日時・空車地 / 行先日時・行先地</th>
+                <th className="text-left px-2 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap min-w-[200px]">空き日時・出発地 / 行先日時・行先地</th>
                 <th className="text-right px-2 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">運賃</th>
                 <th className="text-center px-1.5 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">重量</th>
                 <th className="text-center px-1.5 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">車種</th>
@@ -2051,7 +2051,7 @@ export default function TruckList() {
         data-testid="tab-truck-register"
       >
         <Plus className="w-3.5 h-3.5 inline mr-1.5" />
-        AI空車登録
+        空き車両登録
       </button>
       <button
         onClick={() => setActiveTab("my")}
@@ -2059,7 +2059,7 @@ export default function TruckList() {
         data-testid="tab-truck-my"
       >
         <FileText className="w-3.5 h-3.5 inline mr-1.5" />
-        登録した空車
+        登録した空き車両
       </button>
     </div>
   );

@@ -443,7 +443,7 @@ export default function AdminSettings() {
                     data-testid="switch-registration-notification"
                   />
                 </SettingRow>
-                <SettingRow icon={Package} title="荷物掲載通知" description="新しい荷物・空車が登録された時に通知">
+                <SettingRow icon={Package} title="荷物掲載通知" description="新しい案件・空き車両が登録された時に通知">
                   <Switch
                     checked={cargoApprovalNotification}
                     onCheckedChange={setCargoApprovalNotification}

@@ -128,7 +128,7 @@ export default function AdminRevenue() {
           <StatCard label="承認済み" value={stats?.approvedUsers ?? 0} icon={UserCheck} color="text-emerald-600 dark:text-emerald-400" bg="bg-emerald-50 dark:bg-emerald-950/30" loading={isLoading} />
           <StatCard label="荷物掲載" value={stats?.totalCargo ?? 0} icon={Package} color="text-violet-600 dark:text-violet-400" bg="bg-violet-50 dark:bg-violet-950/30" suffix="件" loading={isLoading} />
           <StatCard label="成約数" value={stats?.completedCargoCount ?? 0} icon={CheckCircle} color="text-amber-600 dark:text-amber-400" bg="bg-amber-50 dark:bg-amber-950/30" suffix="件" loading={isLoading} />
-          <StatCard label="空車掲載" value={stats?.totalTrucks ?? 0} icon={Truck} color="text-teal-600 dark:text-teal-400" bg="bg-teal-50 dark:bg-teal-950/30" suffix="件" loading={isLoading} />
+          <StatCard label="空き車両掲載" value={stats?.totalTrucks ?? 0} icon={Truck} color="text-teal-600 dark:text-teal-400" bg="bg-teal-50 dark:bg-teal-950/30" suffix="件" loading={isLoading} />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -349,7 +349,7 @@ export default function AdminRevenue() {
                   <tr className="border-b bg-muted/40">
                     <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">月</th>
                     <th className="text-right px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">荷物掲載</th>
-                    <th className="text-right px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">空車掲載</th>
+                    <th className="text-right px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">空き車両掲載</th>
                     <th className="text-right px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">新規登録</th>
                     <th className="text-right px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">商流額</th>
                     <th className="text-right px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">収益</th>

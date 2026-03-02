@@ -1325,15 +1325,15 @@ export default function UserSettings() {
                           <>
                             <div className="flex items-center gap-2 text-sm text-foreground">
                               <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                              AI荷物登録 無制限
+                              案件登録 無制限
                             </div>
                             <div className="flex items-center gap-2 text-sm text-foreground">
                               <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                              荷物成約 無制限
+                              案件成約 無制限
                             </div>
                             <div className="flex items-center gap-2 text-sm text-foreground">
                               <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                              荷物・空車検索
+                              案件・空き車両検索
                             </div>
                             <div className="flex items-center gap-2 text-sm text-foreground">
                               <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
@@ -1352,7 +1352,7 @@ export default function UserSettings() {
                           <>
                             <div className="flex items-center gap-2 text-sm text-foreground">
                               <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                              荷物・空車検索
+                              案件・空き車両検索
                             </div>
                             <div className="flex items-center gap-2 text-sm text-foreground">
                               <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
@@ -1743,7 +1743,7 @@ export default function UserSettings() {
                       </label>
                       <label className="flex items-center gap-3 cursor-pointer" data-testid="toggle-email-truck">
                         <input type="checkbox" checked={emailTruck} onChange={(e) => setEmailTruck(e.target.checked)} className="w-4 h-4 rounded border-border accent-primary" />
-                        <span className="text-sm text-foreground">空車情報の通知メール</span>
+                        <span className="text-sm text-foreground">空き車両情報の通知メール</span>
                       </label>
                       <label className="flex items-center gap-3 cursor-pointer" data-testid="toggle-email-announcement">
                         <input type="checkbox" checked={emailAnnouncement} onChange={(e) => setEmailAnnouncement(e.target.checked)} className="w-4 h-4 rounded border-border accent-primary" />

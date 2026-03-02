@@ -39,7 +39,7 @@ export default function AdminDashboard() {
 
   const stats = [
     { label: "荷物掲載数", value: cargo?.length ?? 0, icon: Package, bgClass: "bg-blue-50 dark:bg-blue-950/30", iconClass: "text-blue-600 dark:text-blue-400", link: "/cargo" },
-    { label: "空車掲載数", value: trucks?.length ?? 0, icon: Truck, bgClass: "bg-emerald-50 dark:bg-emerald-950/30", iconClass: "text-emerald-600 dark:text-emerald-400", link: "/trucks" },
+    { label: "空き車両数", value: trucks?.length ?? 0, icon: Truck, bgClass: "bg-emerald-50 dark:bg-emerald-950/30", iconClass: "text-emerald-600 dark:text-emerald-400", link: "/trucks" },
     { label: "総ユーザー数", value: users?.filter(u => u.role !== "admin")?.length ?? 0, icon: Users, bgClass: "bg-violet-50 dark:bg-violet-950/30", iconClass: "text-violet-600 dark:text-violet-400", link: "/admin/users" },
     { label: "承認待ち", value: pendingUsers.length, icon: Activity, bgClass: "bg-amber-50 dark:bg-amber-950/30", iconClass: "text-amber-600 dark:text-amber-400", link: "/admin/applications", highlight: pendingUsers.length > 0 },
   ];
@@ -168,7 +168,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between gap-2 p-3 rounded-md bg-muted/40">
                     <div className="flex items-center gap-2.5">
                       <Truck className="w-4 h-4 text-emerald-500" />
-                      <span className="text-sm text-foreground">空車掲載中</span>
+                      <span className="text-sm text-foreground">空き車両掲載中</span>
                     </div>
                     <span className="text-lg font-bold text-foreground">{trucks?.length ?? 0}</span>
                   </div>
@@ -298,7 +298,7 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-between gap-2 mb-4">
                 <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
                   <Truck className="w-4 h-4 text-primary" />
-                  最新の空車掲載
+                  最新の空き車両掲載
                 </h2>
                 <Button variant="ghost" size="sm" onClick={() => navigate("/trucks")} data-testid="button-view-all-trucks">
                   すべて見る
@@ -314,7 +314,7 @@ export default function AdminDashboard() {
               ) : recentTrucks.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8">
                   <Truck className="w-10 h-10 text-muted-foreground/30 mb-2" />
-                  <p className="text-sm text-muted-foreground">空車掲載はまだありません</p>
+                  <p className="text-sm text-muted-foreground">空き車両掲載はまだありません</p>
                 </div>
               ) : (
                 <div className="space-y-1">

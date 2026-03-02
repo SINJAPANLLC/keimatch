@@ -404,7 +404,7 @@ export default function AdminAgents() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-foreground">{totalStats.truck}</p>
-                  <p className="text-[10px] text-muted-foreground">空車登録数</p>
+                  <p className="text-[10px] text-muted-foreground">空き車両登録数</p>
                 </div>
               </div>
             </CardContent>
@@ -500,7 +500,7 @@ export default function AdminAgents() {
                 </div>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
                   <span>荷物成約: {totalStats.completedCargo}件</span>
-                  <span>空車成約: {totalStats.completedTruck}件</span>
+                  <span>空き車両成約: {totalStats.completedTruck}件</span>
                 </div>
               </CardContent>
             </Card>
@@ -543,7 +543,7 @@ export default function AdminAgents() {
                                 <Package className="w-3 h-3" />荷物: {s.cargoCount}件
                               </span>
                               <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                <Truck className="w-3 h-3" />空車: {s.truckCount}件
+                                <Truck className="w-3 h-3" />空き車両: {s.truckCount}件
                               </span>
                               <span className="text-xs flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
                                 <CheckCircle2 className="w-3 h-3" />成約: {totalCompleted}件
@@ -850,7 +850,7 @@ function AgentDetailContent({ agent, stats }: { agent: Agent; stats?: AgentStat 
           <CardContent className="p-3 text-center">
             <Truck className="w-5 h-5 text-cyan-600 dark:text-cyan-400 mx-auto mb-1" />
             <p className="text-xl font-bold text-foreground">{stats?.truckCount ?? 0}</p>
-            <p className="text-[10px] text-muted-foreground">空車登録数</p>
+            <p className="text-[10px] text-muted-foreground">空き車両登録数</p>
           </CardContent>
         </Card>
         <Card>
@@ -882,7 +882,7 @@ function AgentDetailContent({ agent, stats }: { agent: Agent; stats?: AgentStat 
         </div>
         <div>
           <h4 className="text-xs font-bold text-foreground mb-1 flex items-center gap-1">
-            <Truck className="w-3.5 h-3.5" />空車内訳
+            <Truck className="w-3.5 h-3.5" />空き車両内訳
           </h4>
           <div className="flex gap-3 text-xs text-muted-foreground">
             <span>掲載中: {stats?.activeTruckCount ?? 0}件</span>
@@ -916,7 +916,7 @@ function AgentDetailContent({ agent, stats }: { agent: Agent; stats?: AgentStat 
 
       {stats && stats.recentTrucks.length > 0 && (
         <div>
-          <h4 className="text-xs font-bold text-foreground mb-2">最近の空車登録</h4>
+          <h4 className="text-xs font-bold text-foreground mb-2">最近の空き車両登録</h4>
           <div className="space-y-1">
             {stats.recentTrucks.map(t => (
               <div key={t.id} className="flex items-center justify-between gap-2 text-xs py-1 border-b last:border-0">

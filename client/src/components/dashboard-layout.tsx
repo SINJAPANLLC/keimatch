@@ -16,12 +16,12 @@ type AdminMenuGroup = {
 };
 
 const userMenuItems: MenuItem[] = [
-  { href: "/cargo", label: "AI案件検索", icon: Sparkles },
-  { href: "/cargo/new", label: "AI案件登録", icon: Plus },
+  { href: "/cargo", label: "案件検索", icon: Sparkles },
+  { href: "/cargo/new", label: "案件登録", icon: Plus },
   { href: "/my-cargo", label: "登録した案件", icon: FileText },
   { href: "/completed-cargo", label: "成約した案件", icon: CheckCircle },
-  { href: "/trucks", label: "AI空き車両検索", icon: Sparkles },
-  { href: "/trucks/new", label: "AI空き車両登録", icon: Truck },
+  { href: "/trucks", label: "空き車両検索", icon: Sparkles },
+  { href: "/trucks/new", label: "空き車両登録", icon: Truck },
   { href: "/companies", label: "企業検索", icon: Building },
   { href: "/payment", label: "プラン", icon: CreditCard },
   { href: "/services", label: "便利サービス", icon: Star },

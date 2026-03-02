@@ -44,7 +44,7 @@ type AiCorrectionLog = {
 
 const CATEGORIES = [
   { value: "cargo", label: "荷物" },
-  { value: "truck", label: "空車" },
+  { value: "truck", label: "空き車両" },
 ];
 
 function getCategoryLabel(value: string) {

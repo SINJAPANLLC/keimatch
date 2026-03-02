@@ -72,7 +72,7 @@ export default function TruckDetail() {
               </p>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
-              <Badge variant="default" className="shrink-0">{listing.status === "active" ? "空車あり" : "終了"}</Badge>
+              <Badge variant="default" className="shrink-0">{listing.status === "active" ? "空き車両あり" : "終了"}</Badge>
               {user && listing.userId === user.id && (
                 <Link href={`/trucks/edit/${id}`}>
                   <Button variant="outline" size="sm" data-testid="button-edit-truck">
@@ -120,7 +120,7 @@ export default function TruckDetail() {
                 <div className="text-sm font-medium text-foreground">{listing.maxWeight}</div>
               </div>
               <div className="p-3 rounded-md bg-muted/50">
-                <div className="text-xs text-muted-foreground mb-1">空車日</div>
+                <div className="text-xs text-muted-foreground mb-1">空き日</div>
                 <div className="text-sm font-medium text-foreground">{listing.availableDate}</div>
               </div>
             </div>

@@ -8,11 +8,11 @@ const BASE_URL = "https://keimatch-sinjapan.com";
 const organizationData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "KEI MATCH",
-  alternateName: "ケイマッチ",
+  name: "軽貨物マッチ",
+  alternateName: "KEI MATCH",
   url: BASE_URL,
   logo: `${BASE_URL}/og-image.png`,
-  description: "KEI MATCHは軽貨物会社をつなぐAI求荷求車サービスです。",
+  description: "軽貨物マッチは軽貨物ドライバーと配送案件をAIでマッチングするプラットフォームです。",
   address: {
     "@type": "PostalAddress",
     streetAddress: "中津7287",
@@ -36,8 +36,8 @@ const organizationData = {
 const webSiteData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "KEI MATCH",
-  alternateName: "ケイマッチ",
+  name: "軽貨物マッチ",
+  alternateName: "KEI MATCH",
   url: BASE_URL,
   potentialAction: {
     "@type": "SearchAction",

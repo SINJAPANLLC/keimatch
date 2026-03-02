@@ -71,15 +71,15 @@ export default function Payment() {
               <div className="space-y-3 flex-1">
                 <div className="flex items-start gap-2">
                   <X className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-                  <span className="text-sm text-muted-foreground">荷物成約 不可</span>
+                  <span className="text-sm text-muted-foreground">案件成約 不可</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <X className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-                  <span className="text-sm text-muted-foreground">AI荷物登録 不可</span>
+                  <span className="text-sm text-muted-foreground">案件登録 不可</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground">荷物・空車検索</span>
+                  <span className="text-sm text-foreground">案件・空き車両検索</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
@@ -133,15 +133,15 @@ export default function Payment() {
               <div className="space-y-3 flex-1">
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground font-bold">荷物成約 無制限</span>
+                  <span className="text-sm text-foreground font-bold">案件成約 無制限</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground font-bold">AI荷物登録 無制限</span>
+                  <span className="text-sm text-foreground font-bold">案件登録 無制限</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground">荷物・空車検索</span>
+                  <span className="text-sm text-foreground">案件・空き車両検索</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
@@ -201,15 +201,15 @@ export default function Payment() {
               <div className="space-y-3 flex-1">
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground font-bold">荷物成約 無制限</span>
+                  <span className="text-sm text-foreground font-bold">案件成約 無制限</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground font-bold">AI荷物登録 無制限</span>
+                  <span className="text-sm text-foreground font-bold">案件登録 無制限</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                  <span className="text-sm text-foreground">荷物・空車検索</span>
+                  <span className="text-sm text-foreground">案件・空き車両検索</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />

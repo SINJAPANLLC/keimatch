@@ -69,7 +69,7 @@ export default function MyTrucks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/my-trucks"] });
       queryClient.invalidateQueries({ queryKey: ["/api/trucks"] });
-      toast({ title: "空車情報を削除しました" });
+      toast({ title: "空き車両情報を削除しました" });
     },
     onError: () => {
       toast({ title: "削除に失敗しました", variant: "destructive" });
@@ -93,7 +93,7 @@ export default function MyTrucks() {
     <DashboardLayout>
       <div className="p-4 space-y-4" data-testid="page-my-trucks">
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <h1 className="text-lg font-bold" data-testid="text-my-trucks-title">登録した空車</h1>
+          <h1 className="text-lg font-bold" data-testid="text-my-trucks-title">登録した空き車両</h1>
           <div className="flex items-center gap-2">
             <Badge variant="secondary" data-testid="text-my-trucks-count">
               {trucks ? `${trucks.length}件` : "..."}
@@ -117,11 +117,11 @@ export default function MyTrucks() {
           <Card>
             <CardContent className="p-8 text-center">
               <Truck className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
-              <p className="text-muted-foreground text-sm mb-3">登録した空車情報はありません</p>
+              <p className="text-muted-foreground text-sm mb-3">登録した空き車両情報はありません</p>
               <Link href="/trucks/new">
                 <Button size="sm" data-testid="button-new-truck-empty">
                   <Plus className="w-4 h-4 mr-1" />
-                  空車を登録する
+                  空き車両を登録する
                 </Button>
               </Link>
             </CardContent>
@@ -166,7 +166,7 @@ export default function MyTrucks() {
                           )}
                           <span className="flex items-center gap-1">
                             <Clock className="w-3 h-3" />
-                            空車日: {truck.availableDate}
+                            空き日: {truck.availableDate}
                           </span>
                         </div>
 
@@ -185,7 +185,7 @@ export default function MyTrucks() {
                           variant="ghost"
                           size="icon"
                           onClick={() => {
-                            if (confirm("この空車情報を削除しますか？")) {
+                            if (confirm("この空き車両情報を削除しますか？")) {
                               deleteMutation.mutate(truck.id);
                             }
                           }}
