@@ -42,3 +42,6 @@ waitForPort = 5000
 
 [userenv.shared]
 APP_BASE_URL = "https://keimatch-sinjapan.com"
+SMTP_HOST = "smtp.hostinger.com"
+SMTP_PORT = "465"
+SMTP_FROM = "info@keimatch-sinjapan.com"
