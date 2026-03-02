@@ -505,7 +505,7 @@ export default function Home() {
       <section className="py-16 sm:py-20 bg-primary">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-center mb-4 text-shadow-lg">サービス内容</h2>
-          <p className="text-base text-primary-foreground text-center mb-12 text-shadow">軽貨物ドライバーと荷主のマッチングサービス</p>
+          <p className="text-base text-primary-foreground text-center mb-12 text-shadow">軽貨物会社同士のマッチングサービス</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-primary-foreground/15 rounded-md p-6 flex items-start gap-4 text-shadow">
               <div className="w-12 h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center shrink-0">
