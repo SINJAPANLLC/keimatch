@@ -257,7 +257,7 @@ tbody td:last-child { text-align: right; font-family: 'SF Mono', 'Consolas', mon
     </div>
   </div>
   <div class="footer">
-    <span class="brand">KEI MATCH</span> — KEI MATCHングプラットフォーム | &copy; ${new Date().getFullYear()} All Rights Reserved.
+    <span class="brand">KEI MATCH</span> — 軽貨物マッチングプラットフォーム | &copy; ${new Date().getFullYear()} All Rights Reserved.
   </div>
 </div>
 </body>

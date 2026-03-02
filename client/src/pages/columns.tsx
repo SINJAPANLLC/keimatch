@@ -101,7 +101,7 @@ export default function Columns() {
                   <TrendingUp className="w-5 h-5 text-blue-600" />
                   <Badge variant="secondary" className="text-xs">比較</Badge>
                 </div>
-                <h3 className="text-sm font-bold text-foreground mb-1">KEI MATCHングサイト比較 2026</h3>
+                <h3 className="text-sm font-bold text-foreground mb-1">軽貨物マッチングサイト比較 2026</h3>
                 <p className="text-xs text-muted-foreground">主要サイトの特徴・料金・向き不向きを徹底比較</p>
               </CardContent>
             </Card>
