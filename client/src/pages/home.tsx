@@ -528,7 +528,7 @@ export default function Home() {
               <div>
                 <h3 className="text-lg font-bold text-primary-foreground mb-1">空き車両情報のAI掲載・AI検索</h3>
                 <p className="text-base text-primary-foreground leading-relaxed">
-                  空き車両の情報をAIで簡単掲載し、車両を探している荷主とマッチング。効率的に案件を見つけられます。
+                  空き車両の情報をAIで簡単掲載し、車両を探している軽貨物会社とマッチング。効率的に案件を見つけられます。
                 </p>
                 <Link href="/trucks" className="inline-flex items-center gap-1 mt-3 text-sm text-primary-foreground font-medium">
                   車両一覧を見る <ChevronRight className="w-3.5 h-3.5" />
