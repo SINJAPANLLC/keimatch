@@ -7,6 +7,7 @@ import { ArrowLeft, Mail } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import logoImage from "@assets/IMG_0213_1772414648452.jpg";
 
 export default function ForgotPassword() {
   const { toast } = useToast();
@@ -42,7 +43,7 @@ export default function ForgotPassword() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <span className="text-2xl font-bold text-primary">軽貨物マッチ</span>
+            <img src={logoImage} alt="KEI MATCH" className="h-10 w-auto" />
           </div>
           <CardTitle className="text-2xl">パスワードをお忘れの方</CardTitle>
           <p className="text-sm text-muted-foreground">

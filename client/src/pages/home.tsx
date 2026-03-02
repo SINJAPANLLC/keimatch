@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { X } from "lucide-react";
+import logoImage from "@assets/IMG_0213_1772414648452.jpg";
 import { formatPrice, hasNumericPrice } from "@/lib/utils";
 
 const LOGO_WALL_IMAGES_ROW1 = [
@@ -335,7 +336,7 @@ export default function Home() {
               軽貨物案件マッチングサービス
             </h1>
             <div className="mt-6 flex justify-center">
-              <span className="text-3xl sm:text-4xl font-bold text-primary-foreground tracking-wider text-shadow-lg">軽貨物マッチ</span>
+              <img src={logoImage} alt="KEI MATCH" className="h-14 sm:h-20 w-auto brightness-0 invert" />
             </div>
             <p className="mt-6 text-xl sm:text-2xl text-primary-foreground font-bold leading-relaxed text-shadow" data-testid="text-hero-subtitle">
               AIで軽貨物の案件や空き車両を簡単登録　簡単検索

@@ -8,6 +8,7 @@ import { UserPlus, Upload, FileText, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
+import logoImage from "@assets/IMG_0213_1772414648452.jpg";
 
 export default function Register() {
   const [, setLocation] = useLocation();
@@ -88,7 +89,7 @@ export default function Register() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <span className="text-2xl font-bold text-primary">軽貨物マッチ</span>
+            <img src={logoImage} alt="KEI MATCH" className="h-10 w-auto" />
           </div>
           <CardTitle className="text-2xl">新規登録</CardTitle>
           <p className="text-sm text-muted-foreground">軽貨物マッチのアカウントを作成</p>

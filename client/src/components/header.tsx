@@ -8,6 +8,7 @@ import type { Notification } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import logoImage from "@assets/IMG_0213_1772414648452.jpg";
 
 function NotificationDropdown() {
   const [open, setOpen] = useState(false);
@@ -253,7 +254,7 @@ export default function Header() {
           <div className="flex items-center justify-between gap-4 h-12">
             <div className="flex items-center gap-4">
               <Link href="/home" className="flex items-center shrink-0" data-testid="text-logo">
-                <span className="text-lg font-bold text-primary">軽貨物マッチ</span>
+                <img src={logoImage} alt="KEI MATCH" className="h-6 w-auto" />
               </Link>
             </div>
 
@@ -272,7 +273,7 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between gap-4 flex-wrap h-16">
           <Link href={isAuthenticated ? "/home" : "/"} className="flex items-center shrink-0" data-testid="text-logo">
-            <span className="text-xl font-bold text-primary">軽貨物マッチ</span>
+            <img src={logoImage} alt="KEI MATCH" className="h-7 sm:h-8 w-auto" />
           </Link>
 
           {navItems.length > 0 && (

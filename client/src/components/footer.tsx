@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import logoImage from "@assets/IMG_0213_1772414648452.jpg";
 
 export default function Footer() {
   return (
@@ -7,7 +8,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row gap-8">
           <div className="md:flex-1">
             <div className="flex items-center mb-4">
-              <span className="text-2xl font-bold text-primary-foreground">軽貨物マッチ</span>
+              <img src={logoImage} alt="KEI MATCH" className="h-10 w-auto brightness-0 invert" />
             </div>
             <p className="text-base text-primary-foreground leading-relaxed mb-4">
               軽貨物ドライバーをつなぐ、AI案件マッチングサービス
