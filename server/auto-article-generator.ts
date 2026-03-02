@@ -1,0 +1,204 @@
+import OpenAI from "openai";
+import { storage } from "./storage";
+
+function getOpenAI() {
+  const apiKey = process.env.OPENAI_API_KEY || process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
+  if (!apiKey) {
+    throw new Error("OpenAI API key not configured");
+  }
+  return new OpenAI({
+    apiKey,
+    ...(process.env.OPENAI_API_KEY ? {} : process.env.AI_INTEGRATIONS_OPENAI_BASE_URL ? { baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL } : {}),
+  });
+}
+
+const SEO_TOPICS = [
+  { topic: "求荷求車マッチングサービスの活用方法", keywords: "求荷求車, マッチング, 運送, 物流", category: "kyukakyusha" },
+  { topic: "空車を活用して売上を伸ばす方法", keywords: "空車, 空車情報, 配車, 運送会社", category: "carrier-sales" },
+  { topic: "荷主が運送会社を選ぶときのポイント", keywords: "荷主, 運送会社, 選び方, 物流", category: "truck-order" },
+  { topic: "求荷求車システムで物流コストを削減する方法", keywords: "求荷求車, コスト削減, 物流効率化", category: "kyukakyusha" },
+  { topic: "運送業界のDX化と求荷求車プラットフォーム", keywords: "物流DX, デジタル化, 求荷求車, テクノロジー", category: "kyukakyusha" },
+  { topic: "2024年問題と運送業界の対策", keywords: "2024年問題, ドライバー不足, 働き方改革, 運送", category: "carrier-sales" },
+  { topic: "共同配送のメリットとデメリット", keywords: "共同配送, コスト削減, 物流効率, 混載", category: "truck-order" },
+  { topic: "チャーター便と混載便の使い分け", keywords: "チャーター, 混載, 貸切, 積合せ", category: "truck-order" },
+  { topic: "配車計画を効率化するAI技術の活用", keywords: "配車, AI, 効率化, 自動化", category: "kyukakyusha" },
+  { topic: "トラック運送業の開業に必要な許認可", keywords: "運送業, 許認可, 一般貨物運送事業, 開業", category: "carrier-sales" },
+  { topic: "物流業界の最新トレンドと今後の展望", keywords: "物流, トレンド, 自動運転, ドローン配送", category: "kyukakyusha" },
+  { topic: "燃料費高騰時代の運送コスト管理術", keywords: "燃料費, コスト管理, 運賃, 運送", category: "carrier-sales" },
+  { topic: "運送業の安全管理と事故防止対策", keywords: "安全管理, 事故防止, デジタコ, 運行管理", category: "carrier-sales" },
+  { topic: "帰り便を活用した物流コスト削減術", keywords: "帰り便, 空車, コスト削減, 求荷求車", category: "kyukakyusha" },
+  { topic: "中小運送会社が生き残るための戦略", keywords: "中小企業, 運送会社, 経営戦略, 差別化", category: "carrier-sales" },
+  { topic: "物流倉庫の選び方と効率的な在庫管理", keywords: "倉庫, 在庫管理, 物流センター, EC物流", category: "truck-order" },
+  { topic: "求荷求車サイトの選び方と比較ポイント", keywords: "求荷求車, サイト比較, マッチング, 選び方", category: "kyukakyusha" },
+  { topic: "運送契約の基礎知識と注意点", keywords: "運送契約, 契約書, 運賃, 保険", category: "truck-order" },
+  { topic: "グリーン物流の推進と環境対策", keywords: "グリーン物流, 環境, CO2削減, エコドライブ", category: "carrier-sales" },
+  { topic: "食品輸送における温度管理のポイント", keywords: "食品輸送, 温度管理, 冷蔵, 冷凍輸送", category: "truck-order" },
+  { topic: "引越し業界と運送業の違いと共通点", keywords: "引越し, 運送, 業界比較, 許認可", category: "carrier-sales" },
+  { topic: "長距離輸送の効率化テクニック", keywords: "長距離, 輸送, 中継輸送, 効率化", category: "kyukakyusha" },
+  { topic: "荷物保険の種類と選び方ガイド", keywords: "荷物保険, 貨物保険, 運送保険, 補償", category: "truck-order" },
+  { topic: "物流業界での人材確保と定着率向上策", keywords: "人材確保, ドライバー, 採用, 定着率", category: "carrier-sales" },
+  { topic: "AIを活用した最適ルート検索の仕組み", keywords: "AI, ルート検索, 最適化, 配送計画", category: "kyukakyusha" },
+  { topic: "軽貨物運送で独立開業するステップガイド", keywords: "軽貨物, 独立, 開業, フリーランス", category: "carrier-sales" },
+  { topic: "国際物流の基礎知識とフォワーダーの役割", keywords: "国際物流, フォワーダー, 輸出入, 通関", category: "truck-order" },
+  { topic: "物流コンプライアンスと法令遵守の重要性", keywords: "コンプライアンス, 法令遵守, 運送業法, 罰則", category: "carrier-sales" },
+  { topic: "ECサイト運営者のための物流パートナー選び", keywords: "EC, 物流パートナー, フルフィルメント, 配送", category: "truck-order" },
+  { topic: "災害時の物流対策と事業継続計画", keywords: "災害, BCP, 事業継続, 緊急輸送", category: "carrier-sales" },
+];
+
+function generateSlug(title: string): string {
+  const base = title
+    .toLowerCase()
+    .replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .substring(0, 60);
+  const dateStr = new Date().toISOString().slice(0, 10);
+  const rand = Math.random().toString(36).substring(2, 6);
+  return `${dateStr}-${rand}-${base || "article"}`;
+}
+
+const DAILY_ARTICLE_COUNT = 10;
+
+async function generateSingleArticle(selectedTopic: { topic: string; keywords: string; category: string }, articleIndex: number) {
+  try {
+    const completion = await getOpenAI().chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: `あなたはSEOに強い物流業界専門のコラムライターです。「トラマッチ」という求荷求車マッチングプラットフォームのコラム記事を作成してください。
+
+記事の要件：
+1. SEOに最適化されたタイトル（# 見出し）- キーワードを含む
+2. 読者を引き込む導入文（200文字程度）
+3. 本文（## と ### の見出しで構造化、合計2000〜3000文字）
+  - 具体的なデータや事例を含める
+  - 読者にとって実用的な情報を提供
+  - 自然にキーワードを含める（キーワード密度2-3%）
+  - トラマッチのサービスを自然に紹介
+4. まとめ・結論
+
+重要な出力ルール：
+- マークダウン形式で出力してください
+- 見出しは ## や ### のマークダウン記法のみを使い、「H2:」「H3:」のようなプレフィックスは絶対に付けないでください
+- HTMLタグは使わないでください（<h2>、<h3>、<p>などは不可）
+- 正しい例: ## 求荷求車とは
+- 間違った例: ## H2: 求荷求車とは
+
+最後にJSON形式でメタ情報を出力してください：
+---META---
+{"metaDescription": "160文字以内のSEO用ディスクリプション", "faq": [{"question": "質問1", "answer": "回答1"}, {"question": "質問2", "answer": "回答2"}, {"question": "質問3", "answer": "回答3"}]}`
+        },
+        {
+          role: "user",
+          content: `テーマ: ${selectedTopic.topic}\nキーワード: ${selectedTopic.keywords}\n備考: トラマッチのサービスを自然に紹介してください`
+        }
+      ],
+      max_tokens: 4000,
+    });
+
+    const rawContent = completion.choices[0]?.message?.content || "";
+    let content = rawContent;
+    let metaDescription = "";
+    let faq: string | null = null;
+    const metaMatch = rawContent.match(/---META---\s*(\{[\s\S]*?\})/);
+    if (metaMatch) {
+      content = rawContent.replace(/---META---[\s\S]*$/, "").trim();
+      try {
+        const meta = JSON.parse(metaMatch[1]);
+        metaDescription = meta.metaDescription || "";
+        if (meta.faq && Array.isArray(meta.faq)) {
+          faq = JSON.stringify(meta.faq);
+        }
+      } catch {}
+    }
+    const titleMatch = content.match(/^#\s+(.+)$/m);
+    const title = titleMatch ? titleMatch[1] : selectedTopic.topic;
+    const slug = generateSlug(title);
+    const wordCount = content.replace(/[#*\-\n\s]/g, "").length;
+
+    await storage.createSeoArticle({
+      topic: selectedTopic.topic,
+      keywords: selectedTopic.keywords,
+      title,
+      slug,
+      metaDescription: metaDescription || null,
+      content,
+      status: "published",
+      autoGenerated: true,
+      category: selectedTopic.category,
+      wordCount,
+      faq,
+    });
+
+    console.log(`[Auto Article] [${articleIndex + 1}] Successfully generated and published: ${title}`);
+  } catch (error) {
+    console.error(`[Auto Article] [${articleIndex + 1}] Failed to generate article:`, error);
+  }
+}
+
+export async function runDailyArticleGeneration() {
+  try {
+    const todayCount = await storage.getTodayAutoArticleCount();
+    if (todayCount >= DAILY_ARTICLE_COUNT) {
+      console.log(`[Auto Article] Today's ${DAILY_ARTICLE_COUNT} articles already generated, skipping.`);
+      return;
+    }
+
+    const remaining = DAILY_ARTICLE_COUNT - todayCount;
+    console.log(`[Auto Article] Generating ${remaining} articles today (${todayCount} already done)...`);
+
+    const existingArticles = await storage.getSeoArticles();
+    const usedTopics = new Set(existingArticles.map(a => a.topic));
+
+    const availableTopics = SEO_TOPICS.filter(t => !usedTopics.has(t.topic));
+    
+    for (let i = 0; i < remaining; i++) {
+      let selectedTopic: { topic: string; keywords: string; category: string };
+      if (availableTopics.length > 0) {
+        selectedTopic = availableTopics.splice(Math.floor(Math.random() * availableTopics.length), 1)[0];
+      } else {
+        const idx = Math.floor(Math.random() * SEO_TOPICS.length);
+        selectedTopic = SEO_TOPICS[idx];
+      }
+
+      console.log(`[Auto Article] [${todayCount + i + 1}/${DAILY_ARTICLE_COUNT}] Generating: ${selectedTopic.topic}`);
+      await generateSingleArticle(selectedTopic, todayCount + i);
+
+      if (i < remaining - 1) {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+    }
+
+    pingGoogleSitemap();
+    console.log(`[Auto Article] Daily generation complete. Total today: ${DAILY_ARTICLE_COUNT}`);
+  } catch (error) {
+    console.error("[Auto Article] Failed during daily generation:", error);
+  }
+}
+
+export async function pingGoogleSitemap() {
+  try {
+    const baseUrl = process.env.SITE_URL || "https://tramatch-sinjapan.com";
+    const sitemapUrl = encodeURIComponent(`${baseUrl}/sitemap.xml`);
+    const pingUrl = `https://www.google.com/ping?sitemap=${sitemapUrl}`;
+    const response = await fetch(pingUrl);
+    if (response.ok) {
+      console.log("[Sitemap Ping] Successfully pinged Google with sitemap update");
+    } else {
+      console.log(`[Sitemap Ping] Google responded with status ${response.status}`);
+    }
+  } catch (error) {
+    console.log("[Sitemap Ping] Failed to ping Google (non-critical):", error);
+  }
+}
+
+export function scheduleAutoArticleGeneration() {
+  runDailyArticleGeneration();
+
+  setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 6 && now.getMinutes() === 0) {
+      runDailyArticleGeneration();
+    }
+  }, 60 * 1000);
+}

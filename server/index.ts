@@ -1,14 +1,28 @@
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
+import compression from "compression";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
+import { dbPool } from "./db";
 
 const app = express();
+app.set("trust proxy", 1);
 const httpServer = createServer(app);
+
+app.use(compression());
 
 declare module "http" {
   interface IncomingMessage {
     rawBody: unknown;
+  }
+}
+
+declare module "express-session" {
+  interface SessionData {
+    userId: string;
+    role: string;
   }
 }
 
@@ -21,6 +35,26 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
+
+const PgStore = connectPgSimple(session);
+
+app.use(
+  session({
+    store: new PgStore({
+      pool: dbPool,
+      createTableIfMissing: true,
+    }),
+    secret: process.env.SESSION_SECRET || "tramatch-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+    },
+  })
+);
 
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
@@ -36,23 +70,11 @@ export function log(message: string, source = "express") {
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
 
   res.on("finish", () => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
-
-      log(logLine);
+      log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
     }
   });
 
@@ -60,7 +82,31 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  const { seedDatabase } = await import("./seed");
+  try {
+    await seedDatabase();
+  } catch (e) {
+    console.error("Seed error:", e);
+  }
+
   await registerRoutes(httpServer, app);
+
+  if (process.env.NODE_ENV === "production") {
+    setTimeout(async () => {
+      try {
+        const { scheduleAutoArticleGeneration } = await import("./auto-article-generator");
+        scheduleAutoArticleGeneration();
+        const { scheduleAutoPublish } = await import("./youtube-auto-publisher");
+        scheduleAutoPublish();
+        const { scheduleLeadCrawler } = await import("./lead-crawler");
+        scheduleLeadCrawler();
+      } catch (e) {
+        console.error("Scheduler init error:", e);
+      }
+    }, 10000);
+  } else {
+    console.log("[Dev] Skipping scheduled tasks in dev mode");
+  }
 
   app.use((err: any, _req: Request, res: Response, next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
@@ -75,9 +121,6 @@ app.use((req, res, next) => {
     return res.status(status).json({ message });
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
   if (process.env.NODE_ENV === "production") {
     serveStatic(app);
   } else {
@@ -85,10 +128,6 @@ app.use((req, res, next) => {
     await setupVite(httpServer, app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
   const port = parseInt(process.env.PORT || "5000", 10);
   httpServer.listen(
     {
