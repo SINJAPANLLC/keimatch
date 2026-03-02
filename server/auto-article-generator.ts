@@ -16,7 +16,7 @@ const SEO_TOPICS = [
   { topic: "軽貨物案件マッチングサービスの活用方法", keywords: "軽貨物, マッチング, 案件, 配送", category: "kyukakyusha" },
   { topic: "空き車両を活用して売上を伸ばす方法", keywords: "空き車両, 軽貨物, 配車, ドライバー", category: "carrier-sales" },
   { topic: "荷主が軽貨物ドライバーを選ぶときのポイント", keywords: "荷主, 軽貨物ドライバー, 選び方, 配送", category: "truck-order" },
-  { topic: "軽貨物マッチングで配送コストを削減する方法", keywords: "軽貨物, コスト削減, 配送効率化", category: "kyukakyusha" },
+  { topic: "KEI MATCHングで配送コストを削減する方法", keywords: "軽貨物, コスト削減, 配送効率化", category: "kyukakyusha" },
   { topic: "軽貨物業界のDX化とマッチングプラットフォーム", keywords: "軽貨物DX, デジタル化, マッチング, テクノロジー", category: "kyukakyusha" },
   { topic: "2024年問題と軽貨物配送業界の対策", keywords: "2024年問題, ドライバー不足, 働き方改革, 軽貨物", category: "carrier-sales" },
   { topic: "ラストマイル配送の効率化テクニック", keywords: "ラストマイル, 配送効率, 軽貨物, EC物流", category: "truck-order" },
@@ -29,7 +29,7 @@ const SEO_TOPICS = [
   { topic: "個人事業主として軽貨物で稼ぐためのコツ", keywords: "個人事業主, 軽貨物, 収入, フリーランス", category: "kyukakyusha" },
   { topic: "軽貨物ドライバーが案件を安定的に獲得する方法", keywords: "軽貨物, 案件獲得, 営業, ドライバー", category: "carrier-sales" },
   { topic: "EC物流における軽貨物配送の役割", keywords: "EC, 軽貨物, ラストマイル, 宅配", category: "truck-order" },
-  { topic: "軽貨物マッチングサイトの選び方と比較ポイント", keywords: "軽貨物, サイト比較, マッチング, 選び方", category: "kyukakyusha" },
+  { topic: "KEI MATCHングサイトの選び方と比較ポイント", keywords: "軽貨物, サイト比較, マッチング, 選び方", category: "kyukakyusha" },
   { topic: "軽貨物の業務委託契約の基礎知識と注意点", keywords: "業務委託, 契約書, 運賃, 軽貨物", category: "truck-order" },
   { topic: "軽貨物配送における環境配慮とEV化の動向", keywords: "EV, 環境, CO2削減, 軽貨物", category: "carrier-sales" },
   { topic: "食品配送における温度管理のポイント", keywords: "食品配送, 温度管理, 冷蔵, 軽貨物", category: "truck-order" },
@@ -65,7 +65,7 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
       messages: [
         {
           role: "system",
-          content: `あなたはSEOに強い軽貨物配送業界専門のコラムライターです。「軽貨物マッチ」という軽貨物案件マッチングプラットフォームのコラム記事を作成してください。
+          content: `あなたはSEOに強い軽貨物配送業界専門のコラムライターです。「KEI MATCH」という軽貨物案件マッチングプラットフォームのコラム記事を作成してください。
 
 記事の要件：
 1. SEOに最適化されたタイトル（# 見出し）- キーワードを含む
@@ -74,7 +74,7 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
   - 具体的なデータや事例を含める
   - 読者にとって実用的な情報を提供
   - 自然にキーワードを含める（キーワード密度2-3%）
-  - 軽貨物マッチのサービスを自然に紹介
+  - KEI MATCHのサービスを自然に紹介
 4. まとめ・結論
 
 重要な出力ルール：
@@ -90,7 +90,7 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
         },
         {
           role: "user",
-          content: `テーマ: ${selectedTopic.topic}\nキーワード: ${selectedTopic.keywords}\n備考: 軽貨物マッチのサービスを自然に紹介してください`
+          content: `テーマ: ${selectedTopic.topic}\nキーワード: ${selectedTopic.keywords}\n備考: KEI MATCHのサービスを自然に紹介してください`
         }
       ],
       max_tokens: 4000,

@@ -43,7 +43,7 @@ export default function Login() {
             <img src={logoImage} alt="KEI MATCH" className="h-10 w-auto" />
           </div>
           <CardTitle className="text-2xl">ログイン</CardTitle>
-          <p className="text-sm text-muted-foreground">軽貨物マッチにログインしてください</p>
+          <p className="text-sm text-muted-foreground">KEI MATCHにログインしてください</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

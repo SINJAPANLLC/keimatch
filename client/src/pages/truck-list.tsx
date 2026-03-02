@@ -207,7 +207,7 @@ table{border-collapse:collapse;width:100%;margin-bottom:16px}
 .route-side{flex:1}.route-arrow{padding:0 16px;font-size:20px;color:#999}
 .price{font-size:22px;font-weight:bold;margin-bottom:16px}
 @media print{body{margin:10px}}</style></head><body>
-<div class="header"><h1>軽貨物マッチ 空き車両情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
+<div class="header"><h1>KEI MATCH 空き車両情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
 <h2>空車情報</h2>
 <div class="route">
 <div class="route-side"><div style="font-weight:bold;font-size:14px">${listing.currentArea}</div><div style="font-size:12px;color:#888;margin-top:4px">現在地</div></div>
@@ -341,7 +341,7 @@ ${row("保有車両台数", companyInfo?.truckCount ? `${companyInfo.truckCount}
           <h3 className="text-base font-bold text-foreground">{companyInfo?.companyName || listing.companyName}</h3>
 
           <Card className="p-3">
-            <div className="text-xs font-bold text-muted-foreground mb-3">軽貨物マッチでの実績</div>
+            <div className="text-xs font-bold text-muted-foreground mb-3">KEI MATCHでの実績</div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1.5 mb-1">
@@ -361,7 +361,7 @@ ${row("保有車両台数", companyInfo?.truckCount ? `${companyInfo.truckCount}
               </div>
             </div>
             <div className="text-[10px] text-muted-foreground font-bold text-right mt-2">
-              軽貨物マッチ登録年月 {companyInfo?.registrationDate || "-"}
+              KEI MATCH登録年月 {companyInfo?.registrationDate || "-"}
             </div>
           </Card>
 

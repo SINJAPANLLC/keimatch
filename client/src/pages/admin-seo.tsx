@@ -19,14 +19,14 @@ import type { SeoArticle } from "@shared/schema";
 import DashboardLayout from "@/components/dashboard-layout";
 
 const KEYWORD_PRESETS = [
-  { label: "軽貨物マッチング", value: "軽貨物, マッチング, 配送, ラストマイル" },
+  { label: "KEI MATCHング", value: "軽貨物, マッチング, 配送, ラストマイル" },
   { label: "空き車両情報", value: "空き車両, 空き車両情報, 配送, 軽貨物ドライバー" },
   { label: "配送DX", value: "配送DX, デジタル化, テクノロジー, 効率化" },
   { label: "コスト削減", value: "コスト削減, 配送費, 配送料金, 効率化" },
   { label: "2024年問題", value: "2024年問題, ドライバー不足, 働き方改革" },
   { label: "配送計画", value: "配送, AI, 自動化, 効率化" },
   { label: "共同配送", value: "共同配送, 混載, コスト削減, 配送効率" },
-  { label: "帰り便", value: "帰り便, 空き車両, コスト削減, 軽貨物マッチング" },
+  { label: "帰り便", value: "帰り便, 空き車両, コスト削減, KEI MATCHング" },
 ];
 
 const CATEGORY_OPTIONS = [
@@ -193,7 +193,7 @@ export default function AdminSeo() {
                   <Label htmlFor="seo-topic">記事テーマ</Label>
                   <Input
                     id="seo-topic"
-                    placeholder="例: 軽貨物マッチングサービスのメリット"
+                    placeholder="例: KEI MATCHングサービスのメリット"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
                     className="mt-1"

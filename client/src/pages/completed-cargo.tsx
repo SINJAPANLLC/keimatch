@@ -800,7 +800,7 @@ function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing:
       `<tr><td style="padding:6px 10px;font-weight:bold;white-space:nowrap;border:1px solid #ddd;background:#f9f9f9;font-size:13px;width:140px">${label}</td><td style="padding:6px 10px;border:1px solid #ddd;font-size:13px">${value || "-"}</td></tr>`;
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>成約情報 - ${listing.companyName}</title>
 <style>body{font-family:'Hiragino Sans','Meiryo',sans-serif;margin:20px;color:#333}h2{font-size:18px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px}table{border-collapse:collapse;width:100%;margin-bottom:16px}.header{text-align:center;margin-bottom:24px}.header h1{font-size:22px;color:#40E0D0;margin:0}@media print{body{margin:10px}}</style></head><body>
-<div class="header"><h1>軽貨物マッチ 成約情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
+<div class="header"><h1>KEI MATCH 成約情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
 <h2>成約情報</h2>
 <table>${row("成約番号", listing.cargoNumber ? String(listing.cargoNumber) : "-")}${row("企業名", listing.companyName)}${row("担当者", listing.contactPerson)}${row("連絡先", listing.contactPhone)}${row("荷種", listing.cargoType)}${row("車種", listing.vehicleType)}${row("運賃", listing.price ? `${formatPrice(listing.price)}円(税別)` : "要相談")}${row("高速代", listing.highwayFee || "なし")}${row("発日時", `${formatDateFull(listing.desiredDate)} ${listing.departureTime || ""}`)}${row("発地", `${listing.departureArea} ${listing.departureAddress || ""}`)}${row("着日時", `${formatDateFull(listing.arrivalDate)} ${listing.arrivalTime || ""}`)}${row("着地", `${listing.arrivalArea} ${listing.arrivalAddress || ""}`)}${row("備考", listing.description)}</table></body></html>`;
     const printWindow = window.open("", "_blank");
@@ -992,7 +992,7 @@ function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing:
           <h3 className="text-base font-bold text-foreground">{companyInfo?.companyName || listing.companyName}</h3>
 
           <Card className="p-3">
-            <div className="text-xs font-bold text-muted-foreground mb-3">軽貨物マッチでの実績</div>
+            <div className="text-xs font-bold text-muted-foreground mb-3">KEI MATCHでの実績</div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1.5 mb-1">

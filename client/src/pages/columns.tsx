@@ -61,8 +61,8 @@ export default function Columns() {
   return (
     <div className="min-h-screen bg-background">
       <SeoHead
-        title="コラム記事 | 軽貨物マッチ - 軽貨物案件マッチングプラットフォーム"
-        description="軽貨物マッチの軽貨物・ラストマイル配送コラム。案件マッチング、配送効率化、軽貨物DXなど業界の最新情報とノウハウをお届けします。"
+        title="コラム記事 | KEI MATCH - 軽貨物案件マッチングプラットフォーム"
+        description="KEI MATCHの軽貨物・ラストマイル配送コラム。案件マッチング、配送効率化、軽貨物DXなど業界の最新情報とノウハウをお届けします。"
       />
       <StructuredData type="Organization" />
       <StructuredData type="WebSite" />
@@ -101,7 +101,7 @@ export default function Columns() {
                   <TrendingUp className="w-5 h-5 text-blue-600" />
                   <Badge variant="secondary" className="text-xs">比較</Badge>
                 </div>
-                <h3 className="text-sm font-bold text-foreground mb-1">軽貨物マッチングサイト比較 2026</h3>
+                <h3 className="text-sm font-bold text-foreground mb-1">KEI MATCHングサイト比較 2026</h3>
                 <p className="text-xs text-muted-foreground">主要サイトの特徴・料金・向き不向きを徹底比較</p>
               </CardContent>
             </Card>

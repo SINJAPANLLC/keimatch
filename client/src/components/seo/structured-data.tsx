@@ -8,11 +8,11 @@ const BASE_URL = "https://keikamotsu-match.com";
 const organizationData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "軽貨物マッチ",
-  alternateName: "KEIKAMOTSU MATCH",
+  name: "KEI MATCH",
+  alternateName: "ケイマッチ",
   url: BASE_URL,
   logo: `${BASE_URL}/og-image.png`,
-  description: "軽貨物マッチは荷主と軽貨物ドライバーをつなぐAI軽貨物案件マッチングサービスです。",
+  description: "KEI MATCHは軽貨物会社をつなぐAI求荷求車サービスです。",
   address: {
     "@type": "PostalAddress",
     streetAddress: "中津7287",
@@ -36,8 +36,8 @@ const organizationData = {
 const webSiteData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "軽貨物マッチ",
-  alternateName: "KEIKAMOTSU MATCH",
+  name: "KEI MATCH",
+  alternateName: "ケイマッチ",
   url: BASE_URL,
   potentialAction: {
     "@type": "SearchAction",
@@ -67,7 +67,7 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
       jsonLd = {
         "@context": "https://schema.org",
         "@type": "Article",
-        publisher: { "@type": "Organization", name: "軽貨物マッチ", url: BASE_URL },
+        publisher: { "@type": "Organization", name: "KEI MATCH", url: BASE_URL },
         ...data,
       };
       break;

@@ -41,7 +41,7 @@ export default function Guide() {
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold mb-3" data-testid="text-page-title">ご利用ガイド</h1>
-        <p className="text-muted-foreground text-lg">軽貨物マッチの使い方をステップごとにご説明します</p>
+        <p className="text-muted-foreground text-lg">KEI MATCHの使い方をステップごとにご説明します</p>
       </div>
 
       <div className="space-y-6">

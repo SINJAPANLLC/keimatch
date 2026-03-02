@@ -54,7 +54,7 @@ function wrapInEmailTemplate(subject: string, bodyText: string): string {
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>
 <td style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:1px;text-align:center;">
-軽貨物マッチ
+KEI MATCH
 </td>
 </tr>
 <tr>
@@ -83,7 +83,7 @@ ${bodyHtml}
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-top:1px solid #e4e4e7;">
 <tr>
 <td style="padding-top:20px;color:#71717a;font-size:11px;line-height:1.6;text-align:center;">
-本メールは軽貨物マッチから自動送信されています。<br>
+本メールはKEI MATCHから自動送信されています。<br>
 心当たりのない場合はお手数ですが本メールを破棄してください。<br><br>
 合同会社SIN JAPAN<br>
 <a href="https://keikamotsu-match.com" style="color:#0d9488;text-decoration:none;">keikamotsu-match.com</a>

@@ -152,7 +152,7 @@ export default function ColumnDetail() {
   return (
     <div className="min-h-screen bg-background pb-16 sm:pb-0">
       <SeoHead
-        title={`${article.title} | コラム | 軽貨物マッチ`}
+        title={`${article.title} | コラム | KEI MATCH`}
         description={article.metaDescription || ""}
         ogType="article"
         noindex={isNoindex}
@@ -164,7 +164,7 @@ export default function ColumnDetail() {
           description: article.metaDescription,
           datePublished: article.createdAt,
           url: `https://keikamotsu-match.com/column/${article.slug}`,
-          author: { "@type": "Organization", name: "軽貨物マッチ" },
+          author: { "@type": "Organization", name: "KEI MATCH" },
         }}
       />
 

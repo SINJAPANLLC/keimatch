@@ -110,7 +110,7 @@ export default function Services() {
               <div>
                 <h3 className="text-base font-bold text-foreground" data-testid="text-sponsor-title">スポンサー募集中</h3>
                 <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
-                  軽貨物マッチでは、軽貨物配送業界を支えるパートナー企業様を募集しています。サービス掲載・広告掲載にご興味のある企業様は、お気軽にお問い合わせください。
+                  KEI MATCHでは、軽貨物配送業界を支えるパートナー企業様を募集しています。サービス掲載・広告掲載にご興味のある企業様は、お気軽にお問い合わせください。
                 </p>
               </div>
               <Link href="/contact">

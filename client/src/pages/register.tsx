@@ -92,7 +92,7 @@ export default function Register() {
             <img src={logoImage} alt="KEI MATCH" className="h-10 w-auto" />
           </div>
           <CardTitle className="text-2xl">新規登録</CardTitle>
-          <p className="text-sm text-muted-foreground">軽貨物マッチのアカウントを作成</p>
+          <p className="text-sm text-muted-foreground">KEI MATCHのアカウントを作成</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

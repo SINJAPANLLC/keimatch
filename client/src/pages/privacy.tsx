@@ -14,7 +14,7 @@ export default function Privacy() {
           <span className="font-semibold">合同会社SIN JAPAN</span>
         </p>
         <p className="text-muted-foreground leading-relaxed mt-4">
-          当社は軽貨物マッチサービス（以下「本サービス」といいます）の利用者の個人情報を管理するにあたっては細心の注意を払い、以下に掲げたとおりに取り扱います。
+          当社はKEI MATCHサービス（以下「本サービス」といいます）の利用者の個人情報を管理するにあたっては細心の注意を払い、以下に掲げたとおりに取り扱います。
         </p>
       </div>
 

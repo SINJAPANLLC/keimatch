@@ -531,10 +531,10 @@ export async function sendDailyLeadEmails(): Promise<{ sent: number; failed: num
   const template = await storage.getAdminSetting("lead_email_subject");
   const bodyTemplate = await storage.getAdminSetting("lead_email_body");
 
-  const subject = template || "【軽貨物マッチ】配送案件マッチングと空き車両活用のご提案";
+  const subject = template || "【KEI MATCH】配送案件マッチングと空き車両活用のご提案";
   const body = bodyTemplate || `突然のご連絡失礼いたします。
 
-私ども軽貨物マッチは、AIを活用した軽貨物案件マッチングプラットフォームを運営しております。
+私どもKEI MATCHは、AIを活用した軽貨物案件マッチングプラットフォームを運営しております。
 
 貴社の軽貨物配送事業において、以下のような課題はございませんでしょうか？
 
@@ -543,7 +543,7 @@ export async function sendDailyLeadEmails(): Promise<{ sent: number; failed: num
 ・新規取引先の開拓に時間がかかる
 ・配送コストの最適化が進まない
 
-軽貨物マッチでは、AIが自動で最適なマッチングを行い、
+KEI MATCHでは、AIが自動で最適なマッチングを行い、
 空き車両の活用と配送コストの最適化を実現いたします。
 
 ▼ サービス詳細はこちら
@@ -559,7 +559,7 @@ https://keikamotsu-match.com
 ご不明な点がございましたら、お気軽にお問い合わせください。
 
 ─────────────────────
-軽貨物マッチ運営事務局
+KEI MATCH運営事務局
 合同会社SIN JAPAN
 https://keikamotsu-match.com
 ─────────────────────`;

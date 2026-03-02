@@ -31,14 +31,14 @@ export default function Partners() {
       <div className="px-4 sm:px-6 py-6">
         <div className="mb-6">
           <h1 className="text-xl font-bold text-foreground" data-testid="text-page-title">取引先招待</h1>
-          <p className="text-sm text-muted-foreground mt-1">メールで取引先を軽貨物マッチに招待できます</p>
+          <p className="text-sm text-muted-foreground mt-1">メールで取引先をKEI MATCHに招待できます</p>
         </div>
 
         <Card>
           <CardContent className="p-4 sm:p-8 text-center">
             <UserPlus className="w-12 h-12 text-primary mx-auto mb-4" />
             <h2 className="text-lg font-bold text-foreground mb-2" data-testid="text-invite-heading">取引先を招待</h2>
-            <p className="text-sm text-muted-foreground mb-6">メールアドレスを入力して取引先を軽貨物マッチに招待しましょう</p>
+            <p className="text-sm text-muted-foreground mb-6">メールアドレスを入力して取引先をKEI MATCHに招待しましょう</p>
             <div className="max-w-md mx-auto">
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">

@@ -10,17 +10,17 @@ import FaqBlock from "@/components/seo/faq-block";
 import StructuredData from "@/components/seo/structured-data";
 
 const faqItems = [
-  { question: "他サービスから軽貨物マッチに乗り換えるのは簡単ですか？", answer: "はい、軽貨物マッチへの登録は約5分で完了します。既存の他サービスアカウントを維持したまま、軽貨物マッチを併用することも可能です。" },
-  { question: "軽貨物マッチは他サービスと併用できますか？", answer: "はい、問題なく併用できます。複数サービスの併用は業界では一般的で、より多くの案件にアクセスできるメリットがあります。" },
-  { question: "軽貨物マッチの優れている点は？", answer: "軽貨物マッチはAIマッチング機能、モバイル最適化UI、マルチチャネル通知（アプリ内・メール・LINE）、無料の基本プランなどが特徴です。特にAI技術によるマッチング精度の高さが好評です。" },
+  { question: "他サービスからKEI MATCHに乗り換えるのは簡単ですか？", answer: "はい、KEI MATCHへの登録は約5分で完了します。既存の他サービスアカウントを維持したまま、KEI MATCHを併用することも可能です。" },
+  { question: "KEI MATCHは他サービスと併用できますか？", answer: "はい、問題なく併用できます。複数サービスの併用は業界では一般的で、より多くの案件にアクセスできるメリットがあります。" },
+  { question: "KEI MATCHの優れている点は？", answer: "KEI MATCHはAIマッチング機能、モバイル最適化UI、マルチチャネル通知（アプリ内・メール・LINE）、無料の基本プランなどが特徴です。特にAI技術によるマッチング精度の高さが好評です。" },
 ];
 
 export default function AlternativeTrabox() {
   return (
     <div className="min-h-screen bg-background pb-16 sm:pb-0">
       <SeoHead
-        title="他サービスからの乗り換え 2026 | 乗り換え・併用検討者向けガイド | 軽貨物マッチ"
-        description="他の軽貨物マッチングサービスからの乗り換えを検討中の方向けのガイド。軽貨物マッチとの機能比較、乗り換えメリット、併用の方法を紹介します。"
+        title="他サービスからの乗り換え 2026 | 乗り換え・併用検討者向けガイド | KEI MATCH"
+        description="他のKEI MATCHングサービスからの乗り換えを検討中の方向けのガイド。KEI MATCHとの機能比較、乗り換えメリット、併用の方法を紹介します。"
         canonical="https://keikamotsu-match.com/alternative/trabox"
       />
       <StructuredData type="Article" data={{
@@ -115,14 +115,14 @@ export default function AlternativeTrabox() {
           </CardContent>
         </Card>
 
-        <h2 className="text-xl font-bold text-foreground mb-4">軽貨物マッチとの比較</h2>
+        <h2 className="text-xl font-bold text-foreground mb-4">KEI MATCHとの比較</h2>
         <div className="overflow-x-auto mb-8">
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr className="bg-muted">
                 <th className="border p-3 text-left font-medium">項目</th>
                 <th className="border p-3 text-center font-medium">既存サービス</th>
-                <th className="border p-3 text-center font-medium bg-primary/10">軽貨物マッチ</th>
+                <th className="border p-3 text-center font-medium bg-primary/10">KEI MATCH</th>
               </tr>
             </thead>
             <tbody>
@@ -152,7 +152,7 @@ export default function AlternativeTrabox() {
             <ul className="space-y-2 text-sm text-foreground">
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
-                <span>まずは<strong>軽貨物マッチの無料プランで併用</strong>してみて、効果を確認することをおすすめします</span>
+                <span>まずは<strong>KEI MATCHの無料プランで併用</strong>してみて、効果を確認することをおすすめします</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
@@ -178,7 +178,7 @@ export default function AlternativeTrabox() {
           </Link>
           <Link href="/register">
             <Button data-testid="button-register-alternative" data-track-cta="alternative_register">
-              軽貨物マッチに無料登録 <ArrowRight className="w-4 h-4 ml-1" />
+              KEI MATCHに無料登録 <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
         </div>

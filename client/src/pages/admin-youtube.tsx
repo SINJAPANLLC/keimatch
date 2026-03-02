@@ -300,7 +300,7 @@ function AutoPublishTab() {
               <li>• <code>YOUTUBE_OAUTH_CLIENT_SECRET</code> - YouTube投稿用</li>
               <li>• <code>YOUTUBE_OAUTH_REFRESH_TOKEN</code> - YouTube投稿用</li>
             </ul>
-            <p className="mt-2">毎日9:00（JST）に自動で3本生成・投稿されます。概要欄には軽貨物マッチの各ページへのリンクが自動挿入されます。</p>
+            <p className="mt-2">毎日9:00（JST）に自動で3本生成・投稿されます。概要欄にはKEI MATCHの各ページへのリンクが自動挿入されます。</p>
           </div>
         </CardContent>
       </Card>

@@ -45,7 +45,7 @@ export default function AdminSettings() {
     queryKey: ["/api/admin/notification-channels/status"],
   });
 
-  const [siteName, setSiteName] = useState("軽貨物マッチ");
+  const [siteName, setSiteName] = useState("KEI MATCH");
   const [siteDescription, setSiteDescription] = useState("AI軽貨物案件マッチングサービス");
   const [siteKeywords, setSiteKeywords] = useState("軽貨物, マッチング, 配送, ラストマイル, 軽バン, 案件");
   const [approvalRequired, setApprovalRequired] = useState(true);

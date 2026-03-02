@@ -8,7 +8,7 @@ export default function CompanyInfo() {
     { label: "電話番号", value: "046-212-2325" },
     { label: "FAX", value: "046-212-2326" },
     { label: "メール", value: "info@sinjapan.jp" },
-    { label: "事業内容", value: "軽貨物案件マッチングプラットフォーム「軽貨物マッチ」の運営" },
+    { label: "事業内容", value: "軽貨物案件マッチングプラットフォーム「KEI MATCH」の運営" },
   ];
 
   return (

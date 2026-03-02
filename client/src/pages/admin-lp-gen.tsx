@@ -166,7 +166,7 @@ export default function AdminLpGen() {
                       className="mt-1"
                       value={lpTitle}
                       onChange={(e) => setLpTitle(e.target.value)}
-                      placeholder="例: 軽貨物マッチ サービス紹介"
+                      placeholder="例: KEI MATCH サービス紹介"
                       data-testid="input-lp-title"
                     />
                   </div>
@@ -233,7 +233,7 @@ export default function AdminLpGen() {
 
                 <div>
                   <Label className="text-sm font-bold text-foreground">LPタイトル</Label>
-                  <Input className="mt-1" value={aiTitle} onChange={(e) => setAiTitle(e.target.value)} placeholder="例: 軽貨物マッチ - 軽貨物マッチングサービス" data-testid="input-ai-title" />
+                  <Input className="mt-1" value={aiTitle} onChange={(e) => setAiTitle(e.target.value)} placeholder="例: KEI MATCH - KEI MATCHングサービス" data-testid="input-ai-title" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

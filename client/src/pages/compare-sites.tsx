@@ -11,7 +11,7 @@ import StructuredData from "@/components/seo/structured-data";
 
 const services = [
   {
-    name: "軽貨物マッチ",
+    name: "KEI MATCH",
     highlight: true,
     features: {
       aiMatching: true,
@@ -23,7 +23,7 @@ const services = [
     },
     pricing: "基本無料 / 有料プランあり",
     strength: "AIマッチング、モバイル対応、使いやすいUI",
-    bestFor: "個人事業主〜法人、初めて軽貨物マッチングを利用する方",
+    bestFor: "個人事業主〜法人、初めてKEI MATCHングを利用する方",
   },
   {
     name: "PickGo",
@@ -82,21 +82,21 @@ const featureLabels: Record<string, string> = {
 };
 
 const faqItems = [
-  { question: "軽貨物マッチングサイトを選ぶ際の最も重要なポイントは？", answer: "自身の規模・対応エリア・利用頻度に合った料金体系のサービスを選ぶことが重要です。小規模・低頻度なら無料or成功報酬型、大規模・高頻度なら月額固定型が適しています。" },
-  { question: "複数の軽貨物マッチングサイトを同時に使うことはできますか？", answer: "はい、可能です。実際に複数サービスを併用するドライバーも多くいます。それぞれのサービスの強みを活かすことで、より多くの案件にアクセスできます。" },
-  { question: "軽貨物マッチングサイトの乗り換えは簡単ですか？", answer: "基本的には新しいサービスに登録し直すだけで簡単に乗り換えできます。取引履歴の移行はできませんが、既存の取引先との関係は維持できます。" },
+  { question: "KEI MATCHングサイトを選ぶ際の最も重要なポイントは？", answer: "自身の規模・対応エリア・利用頻度に合った料金体系のサービスを選ぶことが重要です。小規模・低頻度なら無料or成功報酬型、大規模・高頻度なら月額固定型が適しています。" },
+  { question: "複数のKEI MATCHングサイトを同時に使うことはできますか？", answer: "はい、可能です。実際に複数サービスを併用するドライバーも多くいます。それぞれのサービスの強みを活かすことで、より多くの案件にアクセスできます。" },
+  { question: "KEI MATCHングサイトの乗り換えは簡単ですか？", answer: "基本的には新しいサービスに登録し直すだけで簡単に乗り換えできます。取引履歴の移行はできませんが、既存の取引先との関係は維持できます。" },
 ];
 
 export default function CompareSites() {
   return (
     <div className="min-h-screen bg-background pb-16 sm:pb-0">
       <SeoHead
-        title="軽貨物マッチングサイト比較 2026 | 主要4サービスの特徴・料金を徹底比較 | 軽貨物マッチ"
-        description="2026年最新の軽貨物マッチングサイト比較。軽貨物マッチ・PickGo・ハコベル・Amazon Flexの特徴・料金・機能・向き不向きを徹底比較します。"
+        title="KEI MATCHングサイト比較 2026 | 主要4サービスの特徴・料金を徹底比較 | KEI MATCH"
+        description="2026年最新のKEI MATCHングサイト比較。KEI MATCH・PickGo・ハコベル・Amazon Flexの特徴・料金・機能・向き不向きを徹底比較します。"
         canonical="https://keikamotsu-match.com/compare/kyukakyusha-sites"
       />
       <StructuredData type="Article" data={{
-        headline: "軽貨物マッチングサイト比較 2026",
+        headline: "KEI MATCHングサイト比較 2026",
         description: "主要4サービスの特徴・料金を徹底比較",
         datePublished: "2026-01-01",
         url: "https://keikamotsu-match.com/compare/kyukakyusha-sites",
@@ -106,7 +106,7 @@ export default function CompareSites() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <Badge variant="secondary" className="mb-3">比較ガイド 2026年版</Badge>
           <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg" data-testid="text-page-title">
-            軽貨物マッチングサイト比較 2026
+            KEI MATCHングサイト比較 2026
           </h1>
           <p className="text-primary-foreground/80 mt-2 text-shadow">
             主要4サービスの特徴・料金・機能を徹底比較
@@ -117,13 +117,13 @@ export default function CompareSites() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <Breadcrumb items={[
           { label: "コラム", href: "/column" },
-          { label: "軽貨物マッチングサイト比較 2026" },
+          { label: "KEI MATCHングサイト比較 2026" },
         ]} />
 
         <Card className="mb-8">
           <CardContent className="p-5 sm:p-8">
             <p className="text-foreground leading-relaxed mb-4">
-              軽貨物マッチングサービスは数多く存在しますが、それぞれ特徴や強みが異なります。本記事では、2026年時点で主要な4つの軽貨物マッチングサービスを、機能・料金・対象ユーザーの観点から客観的に比較します。
+              KEI MATCHングサービスは数多く存在しますが、それぞれ特徴や強みが異なります。本記事では、2026年時点で主要な4つのKEI MATCHングサービスを、機能・料金・対象ユーザーの観点から客観的に比較します。
             </p>
             <p className="text-foreground leading-relaxed">
               各サービスには「向き不向き」があります。自社の規模、利用頻度、必要な機能に合わせて最適なサービスを選ぶことが、物流コスト削減の第一歩です。
@@ -206,7 +206,7 @@ export default function CompareSites() {
             <ul className="space-y-2 text-sm text-foreground">
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
-                <span><strong>初めて軽貨物マッチングを使う方</strong>には、無料で始められてAIマッチング機能がある軽貨物マッチがおすすめです</span>
+                <span><strong>初めてKEI MATCHングを使う方</strong>には、無料で始められてAIマッチング機能があるKEI MATCHがおすすめです</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
@@ -232,7 +232,7 @@ export default function CompareSites() {
           </Link>
           <Link href="/register">
             <Button data-testid="button-register-compare" data-track-cta="compare_register">
-              軽貨物マッチに無料登録 <ArrowRight className="w-4 h-4 ml-1" />
+              KEI MATCHに無料登録 <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
         </div>
