@@ -328,7 +328,7 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       <section className="bg-primary">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
           <div className="text-center max-w-3xl mx-auto">
@@ -341,17 +341,17 @@ export default function Home() {
             <p className="mt-6 text-xl sm:text-2xl text-primary-foreground font-bold leading-relaxed text-shadow" data-testid="text-hero-subtitle">
               AIで軽貨物の案件や空き車両を簡単登録　簡単検索
             </p>
-            <p className="mt-3 text-base sm:text-lg text-primary-foreground leading-relaxed mx-auto text-shadow whitespace-nowrap">
+            <p className="mt-3 text-sm sm:text-lg text-primary-foreground leading-relaxed mx-auto text-shadow">
               軽貨物の案件・空き車両情報をリアルタイムでAI登録・AI検索できます。
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/login">
-                <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm min-w-[220px] text-base" data-testid="button-hero-cargo">
+                <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm w-full sm:w-auto sm:min-w-[220px] text-base" data-testid="button-hero-cargo">
                   案件を見てみる
                 </Button>
               </Link>
               <Link href="/login">
-                <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm min-w-[220px] text-base" data-testid="button-hero-trucks">
+                <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm w-full sm:w-auto sm:min-w-[220px] text-base" data-testid="button-hero-trucks">
                   空き車両を見てみる
                 </Button>
               </Link>
@@ -669,7 +669,7 @@ export default function Home() {
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/register">
-              <Button size="lg" variant="outline" className="bg-primary-foreground text-primary font-bold border-primary-foreground min-w-[220px]" data-testid="button-cta-register">
+              <Button size="lg" variant="outline" className="bg-primary-foreground text-primary font-bold border-primary-foreground w-full sm:w-auto sm:min-w-[220px]" data-testid="button-cta-register">
                 無料会員登録
               </Button>
             </Link>
@@ -712,9 +712,9 @@ function PromoBanner() {
 
   return (
     <div
-      className="fixed bottom-3 left-3 z-50 animate-in slide-in-from-bottom-4 duration-500"
+      className="fixed bottom-3 left-3 right-3 sm:right-auto z-50 animate-in slide-in-from-bottom-4 duration-500"
       data-testid="promo-banner"
-      style={{ width: "220px" }}
+      style={{ maxWidth: "220px" }}
     >
       <div className="relative bg-white rounded-md shadow-lg border border-border overflow-visible">
         <button
