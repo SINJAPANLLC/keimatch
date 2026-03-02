@@ -341,7 +341,7 @@ export default function Home() {
             <p className="mt-6 text-xl sm:text-2xl text-primary-foreground font-bold leading-relaxed text-shadow" data-testid="text-hero-subtitle">
               AIで軽貨物の案件や空き車両を簡単登録　簡単検索
             </p>
-            <p className="mt-3 text-base sm:text-lg text-primary-foreground leading-relaxed max-w-xl mx-auto text-shadow">
+            <p className="mt-3 text-base sm:text-lg text-primary-foreground leading-relaxed mx-auto text-shadow whitespace-nowrap">
               軽貨物の案件・空き車両情報をリアルタイムでAI登録・AI検索できます。
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
