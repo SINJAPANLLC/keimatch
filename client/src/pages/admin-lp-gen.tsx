@@ -256,7 +256,7 @@ export default function AdminLpGen() {
                     <Label className="text-sm font-bold text-foreground">カラーテーマ</Label>
                     <div className="grid grid-cols-4 gap-1.5 mt-1">
                       {[
-                        { id: "teal", label: "ターコイズ", color: "#0d9488" },
+                        { id: "teal", label: "ターコイズ", color: "#1a2f6e" },
                         { id: "blue", label: "ブルー", color: "#2563eb" },
                         { id: "purple", label: "パープル", color: "#7c3aed" },
                         { id: "orange", label: "オレンジ", color: "#ea580c" },

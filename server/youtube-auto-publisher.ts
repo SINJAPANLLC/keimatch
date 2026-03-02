@@ -222,7 +222,7 @@ export async function generateVideo(audioPath: string, title: string, jobId: str
     cmd = `ffmpeg -y -loop 1 -i "${logoPath}" -i "${audioPath}" -vf "scale=1920:1080" -c:v libx264 -preset fast -crf 23 -c:a aac -b:a 192k -pix_fmt yuv420p -shortest -t ${duration} "${videoPath}" 2>&1`;
   } else {
     console.warn("[YouTube Auto] Logo not found, using solid color background");
-    cmd = `ffmpeg -y -f lavfi -i "color=c=#0d9488:s=1920x1080:d=${duration}" -i "${audioPath}" -c:v libx264 -preset fast -crf 23 -c:a aac -b:a 192k -pix_fmt yuv420p -shortest "${videoPath}" 2>&1`;
+    cmd = `ffmpeg -y -f lavfi -i "color=c=#1a2f6e:s=1920x1080:d=${duration}" -i "${audioPath}" -c:v libx264 -preset fast -crf 23 -c:a aac -b:a 192k -pix_fmt yuv420p -shortest "${videoPath}" 2>&1`;
   }
 
   try {

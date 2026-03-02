@@ -175,7 +175,7 @@ export default function AdminInvoices() {
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Hiragino Sans', 'Meiryo', 'Yu Gothic', sans-serif; color: #1a1a1a; background: #f5f5f5; }
 .invoice-wrap { max-width: 800px; margin: 0 auto; background: white; }
-.header { background: linear-gradient(135deg, #0d9488, #14b8a6); padding: 32px 40px; color: white; display: flex; justify-content: space-between; align-items: flex-start; }
+.header { background: linear-gradient(135deg, #1a2f6e, #14b8a6); padding: 32px 40px; color: white; display: flex; justify-content: space-between; align-items: flex-start; }
 .header-left h1 { font-size: 28px; font-weight: 800; letter-spacing: 2px; }
 .header-left p { font-size: 12px; opacity: 0.85; margin-top: 4px; }
 .header-right { text-align: right; }
@@ -185,22 +185,22 @@ body { font-family: 'Hiragino Sans', 'Meiryo', 'Yu Gothic', sans-serif; color: #
 .body { padding: 32px 40px; }
 .parties { display: flex; justify-content: space-between; gap: 32px; margin-bottom: 32px; }
 .party { flex: 1; }
-.party-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #0d9488; font-weight: 700; margin-bottom: 8px; border-bottom: 2px solid #0d9488; padding-bottom: 4px; }
+.party-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #1a2f6e; font-weight: 700; margin-bottom: 8px; border-bottom: 2px solid #1a2f6e; padding-bottom: 4px; }
 .party-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
 .party-detail { font-size: 12px; color: #666; line-height: 1.7; }
 .table-wrap { margin-bottom: 24px; }
 table { width: 100%; border-collapse: collapse; }
-thead th { background: #f0fdfa; color: #0d9488; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 12px; text-align: left; border-bottom: 2px solid #0d9488; }
+thead th { background: #f0fdfa; color: #1a2f6e; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; padding: 10px 12px; text-align: left; border-bottom: 2px solid #1a2f6e; }
 thead th:last-child { text-align: right; }
 tbody td { padding: 12px; font-size: 13px; border-bottom: 1px solid #e5e7eb; }
 tbody td:last-child { text-align: right; font-family: 'SF Mono', 'Consolas', monospace; }
 .totals { display: flex; justify-content: flex-end; }
 .totals-table { width: 280px; }
 .totals-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; border-bottom: 1px solid #e5e7eb; }
-.totals-row.grand { border-top: 2px solid #0d9488; border-bottom: 2px solid #0d9488; font-size: 18px; font-weight: 800; color: #0d9488; padding: 12px 0; margin-top: 4px; }
+.totals-row.grand { border-top: 2px solid #1a2f6e; border-bottom: 2px solid #1a2f6e; font-size: 18px; font-weight: 800; color: #1a2f6e; padding: 12px 0; margin-top: 4px; }
 .totals-row span:last-child { font-family: 'SF Mono', 'Consolas', monospace; }
-.payment-info { margin-top: 32px; padding: 20px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #0d9488; }
-.payment-info h3 { font-size: 13px; font-weight: 700; color: #0d9488; margin-bottom: 8px; }
+.payment-info { margin-top: 32px; padding: 20px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #1a2f6e; }
+.payment-info h3 { font-size: 13px; font-weight: 700; color: #1a2f6e; margin-bottom: 8px; }
 .payment-info p { font-size: 12px; color: #666; line-height: 1.7; }
 .footer { background: #1f2937; color: #9ca3af; padding: 20px 40px; text-align: center; font-size: 11px; }
 .footer .brand { color: #14b8a6; font-weight: 700; }

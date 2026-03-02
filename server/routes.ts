@@ -132,8 +132,8 @@ function generateInvoiceEmailHtml(invoice: any, adminInfo?: any): string {
 <html lang="ja">
 <head><meta charset="UTF-8"></head>
 <body style="font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;max-width:700px;margin:0 auto;padding:20px;color:#333;">
-  <div style="text-align:center;border-bottom:3px solid #0d9488;padding-bottom:15px;margin-bottom:20px;">
-    <h1 style="color:#0d9488;margin:0;font-size:24px;">請求書</h1>
+  <div style="text-align:center;border-bottom:3px solid #1a2f6e;padding-bottom:15px;margin-bottom:20px;">
+    <h1 style="color:#1a2f6e;margin:0;font-size:24px;">請求書</h1>
     <p style="margin:5px 0 0;color:#666;font-size:14px;">KEI MATCH - 軽貨物案件マッチングプラットフォーム</p>
   </div>
   <table style="width:100%;margin-bottom:20px;font-size:14px;">
@@ -156,9 +156,9 @@ function generateInvoiceEmailHtml(invoice: any, adminInfo?: any): string {
     <p style="margin:0;font-size:16px;">${invoice.companyName} 御中</p>
   </div>
   <table style="width:100%;border-collapse:collapse;margin-bottom:20px;">
-    <thead><tr style="background:#0d9488;color:white;">
-      <th style="padding:10px;text-align:left;border:1px solid #0d9488;">項目</th>
-      <th style="padding:10px;text-align:right;border:1px solid #0d9488;">金額</th>
+    <thead><tr style="background:#1a2f6e;color:white;">
+      <th style="padding:10px;text-align:left;border:1px solid #1a2f6e;">項目</th>
+      <th style="padding:10px;text-align:right;border:1px solid #1a2f6e;">金額</th>
     </tr></thead>
     <tbody>
       <tr><td style="padding:10px;border:1px solid #ddd;">${descriptionLines[0] || "月額利用料"}</td>
@@ -167,11 +167,11 @@ function generateInvoiceEmailHtml(invoice: any, adminInfo?: any): string {
           <td style="padding:10px;text-align:right;border:1px solid #ddd;">¥${invoice.tax.toLocaleString()}</td></tr>
       <tr style="background:#f8f9fa;font-weight:bold;">
         <td style="padding:10px;border:1px solid #ddd;">合計金額（税込）</td>
-        <td style="padding:10px;text-align:right;border:1px solid #ddd;color:#0d9488;font-size:18px;">¥${invoice.totalAmount.toLocaleString()}</td></tr>
+        <td style="padding:10px;text-align:right;border:1px solid #ddd;color:#1a2f6e;font-size:18px;">¥${invoice.totalAmount.toLocaleString()}</td></tr>
     </tbody>
   </table>
   <div style="background:#f0fdfa;padding:15px;border-radius:6px;border:1px solid #99f6e4;margin-bottom:20px;">
-    <p style="margin:0 0 10px;font-weight:bold;color:#0d9488;">お振込先</p>
+    <p style="margin:0 0 10px;font-weight:bold;color:#1a2f6e;">お振込先</p>
     <table style="font-size:14px;border-collapse:collapse;">
       <tr><td style="padding:3px 15px 3px 0;color:#666;">銀行名</td><td style="padding:3px 0;font-weight:bold;">${bankName}</td></tr>
       <tr><td style="padding:3px 15px 3px 0;color:#666;">支店名</td><td style="padding:3px 0;font-weight:bold;">${bankBranch}</td></tr>
@@ -183,7 +183,7 @@ function generateInvoiceEmailHtml(invoice: any, adminInfo?: any): string {
   </div>
   <div style="text-align:center;margin-bottom:20px;">
     <p style="margin:0 0 10px;font-size:14px;color:#333;">クレジットカードでのお支払いも可能です</p>
-    <a href="${paymentUrl}" style="display:inline-block;background:#0d9488;color:white;text-decoration:none;padding:12px 30px;border-radius:6px;font-size:16px;font-weight:bold;">カード決済はこちら</a>
+    <a href="${paymentUrl}" style="display:inline-block;background:#1a2f6e;color:white;text-decoration:none;padding:12px 30px;border-radius:6px;font-size:16px;font-weight:bold;">カード決済はこちら</a>
   </div>
   <div style="text-align:center;padding-top:15px;border-top:1px solid #eee;color:#999;font-size:12px;">
     <p>合同会社SIN JAPAN ｜ KEI MATCH</p>

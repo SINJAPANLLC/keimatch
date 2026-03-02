@@ -604,7 +604,7 @@ export default function AdminNotifications() {
                               className="min-h-[250px] font-mono text-xs leading-relaxed"
                               value={formHtmlBody}
                               onChange={e => setFormHtmlBody(e.target.value)}
-                              placeholder={`<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: sans-serif; margin: 0; padding: 20px; }\n    .header { background: #0d9488; color: white; padding: 20px; text-align: center; }\n    .content { padding: 20px; }\n  </style>\n</head>\n<body>\n  <div class="header">\n    <h1>KEI MATCH</h1>\n  </div>\n  <div class="content">\n    <p>{{会社名}} 様</p>\n    <p>いつもKEI MATCHをご利用いただき...</p>\n  </div>\n</body>\n</html>`}
+                              placeholder={`<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: sans-serif; margin: 0; padding: 20px; }\n    .header { background: #1a2f6e; color: white; padding: 20px; text-align: center; }\n    .content { padding: 20px; }\n  </style>\n</head>\n<body>\n  <div class="header">\n    <h1>KEI MATCH</h1>\n  </div>\n  <div class="content">\n    <p>{{会社名}} 様</p>\n    <p>いつもKEI MATCHをご利用いただき...</p>\n  </div>\n</body>\n</html>`}
                               data-testid="input-template-html-body"
                             />
                             {formHtmlBody.trim() && (
