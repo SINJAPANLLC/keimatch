@@ -514,7 +514,7 @@ export default function Home() {
               <div>
                 <h3 className="text-lg font-bold text-primary-foreground mb-1">案件情報のAI掲載・AI検索</h3>
                 <p className="text-base text-primary-foreground leading-relaxed">
-                  配送案件の情報を掲載し、空き車両を持つ軽貨物ドライバーとマッチング。AIに投げるだけで簡単登録　簡単検索
+                  配送案件の情報を掲載し、空き車両を持つ軽貨物会社とマッチング。AIに投げるだけで簡単登録　簡単検索
                 </p>
                 <Link href="/cargo" className="inline-flex items-center gap-1 mt-3 text-sm text-primary-foreground font-medium">
                   案件一覧を見る <ChevronRight className="w-3.5 h-3.5" />
