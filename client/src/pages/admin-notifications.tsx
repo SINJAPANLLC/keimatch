@@ -33,6 +33,58 @@ type NotificationTemplate = {
   updatedAt: string;
 };
 
+function wrapTextInEmailHtml(subject: string, bodyText: string): string {
+  const bodyHtml = bodyText
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#1a2f6e;text-decoration:underline;word-break:break-all;">$1</a>')
+    .replace(/\n/g, "<br>");
+  return `<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${subject}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f4f5;font-family:'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP','Yu Gothic',Meiryo,sans-serif;">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f4f4f5;">
+<tr><td align="center" style="padding:24px 16px;">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);">
+<tr>
+<td style="background-color:#1a2f6e;padding:20px 24px;text-align:center;">
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+<tr><td style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:1px;text-align:center;">KEI MATCH</td></tr>
+<tr><td style="color:rgba(255,255,255,0.85);font-size:11px;text-align:center;padding-top:2px;">KEIKAMOTSU MATCH</td></tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="padding:32px 24px 24px 24px;">
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+<tr><td style="color:#18181b;font-size:15px;line-height:1.8;word-break:break-word;">${bodyHtml}</td></tr>
+</table>
+</td>
+</tr>
+<tr>
+<td style="padding:0 24px 24px 24px;">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-top:1px solid #e4e4e7;">
+<tr><td style="padding-top:20px;color:#71717a;font-size:11px;line-height:1.6;text-align:center;">
+本メールはKEI MATCHから自動送信されています。<br>
+心当たりのない場合はお手数ですが本メールを破棄してください。<br><br>
+合同会社SIN JAPAN<br>
+<a href="https://keikamotsu-match.com" style="color:#1a2f6e;text-decoration:none;">keikamotsu-match.com</a>
+</td></tr>
+</table>
+</td>
+</tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+}
+
 type ChannelStatus = {
   configured: boolean;
   label: string;
@@ -80,7 +132,7 @@ export default function AdminNotifications() {
   const [formTrigger, setFormTrigger] = useState("");
   const [formCategory, setFormCategory] = useState("regular");
   const [emailEditMode, setEmailEditMode] = useState<"text" | "html">("text");
-  const [previewMode, setPreviewMode] = useState<"text" | "html">("text");
+  const [previewMode, setPreviewMode] = useState<"text" | "html">("html");
 
   const [aiPurpose, setAiPurpose] = useState("");
   const [aiTone, setAiTone] = useState("standard");
@@ -797,11 +849,11 @@ export default function AdminNotifications() {
                           </div>
                         )}
                         <div className="p-3">
-                          {previewTemplate.channel === "email" && previewTemplate.htmlBody && previewMode === "html" ? (
+                          {previewTemplate.channel === "email" && previewMode === "html" ? (
                             <>
-                              <p className="text-xs text-muted-foreground mb-2">HTMLメールプレビュー</p>
+                              <p className="text-xs text-muted-foreground mb-2">HTMLメールプレビュー（実際の送信デザイン）</p>
                               <iframe
-                                srcDoc={previewTemplate.htmlBody}
+                                srcDoc={previewTemplate.htmlBody || wrapTextInEmailHtml(previewTemplate.subject || "KEI MATCH", previewTemplate.body)}
                                 className="w-full min-h-[400px] bg-white border border-border rounded-md"
                                 sandbox="allow-same-origin"
                                 title="HTML Email Preview"
