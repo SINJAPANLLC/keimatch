@@ -55,7 +55,7 @@ const categoryOptions = [
 const targetLabels: Record<string, string> = {
   all: "全ユーザー",
   shippers: "荷主のみ",
-  carriers: "運送会社のみ",
+  carriers: "軽貨物会社のみ",
 };
 
 type EmailTemplateInfo = {
@@ -903,7 +903,7 @@ export default function AdminNotifications() {
                       <SelectContent>
                         <SelectItem value="all">全ユーザー</SelectItem>
                         <SelectItem value="shippers">荷主のみ</SelectItem>
-                        <SelectItem value="carriers">運送会社のみ</SelectItem>
+                        <SelectItem value="carriers">軽貨物会社のみ</SelectItem>
                         <SelectItem value="selected">個別選択</SelectItem>
                       </SelectContent>
                     </Select>

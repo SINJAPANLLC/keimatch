@@ -526,7 +526,7 @@ export default function AdminSettings() {
             </CardHeader>
             <CardContent>
               <div className="divide-y divide-border">
-                <SettingRow icon={Zap} title="コラム記事の自動生成" description="毎日AIが物流関連コラムを自動生成・公開">
+                <SettingRow icon={Zap} title="コラム記事の自動生成" description="毎日AIが軽貨物関連コラムを自動生成・公開">
                   <Switch
                     checked={seoAutoGeneration}
                     onCheckedChange={setSeoAutoGeneration}
@@ -554,7 +554,7 @@ export default function AdminSettings() {
                 <div className="flex items-start gap-2">
                   <Info className="w-3.5 h-3.5 text-muted-foreground mt-0.5 shrink-0" />
                   <div className="text-xs text-muted-foreground space-y-1">
-                    <p>30種類の物流トピックからローテーションで記事を自動生成します。</p>
+                    <p>30種類の軽貨物トピックからローテーションで記事を自動生成します。</p>
                     <p>生成された記事は /columns で公開されます。</p>
                     <p>詳細な管理は「SEO記事生成」ページから行えます。</p>
                   </div>

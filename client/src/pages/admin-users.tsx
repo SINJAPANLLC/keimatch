@@ -998,7 +998,7 @@ function UserDetailPanel({
               <DetailRow label="電話番号" value={user.phone} />
               {user.fax && <DetailRow label="FAX" value={user.fax} />}
               <DetailRow label="住所" value={`${user.postalCode ? `〒${user.postalCode}\n` : ""}${user.address || "-"}`} />
-              <DetailRow label="ユーザー種別" value={user.userType === "shipper" ? "荷主" : user.userType === "carrier" ? "運送会社" : user.userType === "both" ? "荷主・運送会社" : user.userType} />
+              <DetailRow label="ユーザー種別" value={user.userType === "shipper" ? "荷主" : user.userType === "carrier" ? "軽貨物会社" : user.userType === "both" ? "荷主・軽貨物会社" : user.userType} />
               {user.truckCount && <DetailRow label="保有台数" value={`${user.truckCount}台`} />}
               <DetailRow label="登録日" value={formatDate()} />
             </div>

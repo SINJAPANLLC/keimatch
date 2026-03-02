@@ -37,7 +37,7 @@ export default function CtaBlock({ variant = "both", location, articleSlug }: Ct
           <Link href="/register" onClick={() => handleClick("carrier")}>
             <Button variant="outline" className="w-full sm:w-auto" data-testid={`button-cta-carrier-${location}`} data-track-cta="carrier">
               <Truck className="w-4 h-4 mr-1.5" />
-              運送会社として登録
+              軽貨物会社として登録
               <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>

@@ -280,7 +280,7 @@ export default function AdminLpGen() {
 
                 <div>
                   <Label className="text-sm font-bold text-foreground">ターゲット</Label>
-                  <Input className="mt-1" value={aiTarget} onChange={(e) => setAiTarget(e.target.value)} placeholder="例: 運送会社、荷主企業" data-testid="input-ai-target" />
+                  <Input className="mt-1" value={aiTarget} onChange={(e) => setAiTarget(e.target.value)} placeholder="例: 軽貨物会社、荷主企業" data-testid="input-ai-target" />
                 </div>
 
                 <div>

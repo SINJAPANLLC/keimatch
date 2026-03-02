@@ -159,7 +159,7 @@ export default function AdminSeo() {
                 自動生成について
               </h2>
               <p className="text-sm text-muted-foreground">
-                毎日朝6時に物流・運送業界に関するSEOコラム記事が自動的に10本生成・公開されます。
+                毎日朝6時に軽貨物配送業界に関するSEOコラム記事が自動的に10本生成・公開されます。
                 各記事にはカテゴリ・FAQ・文字数が自動付与されます。
               </p>
               <div className="flex items-center gap-2 mt-3">

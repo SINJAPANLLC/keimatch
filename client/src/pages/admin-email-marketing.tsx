@@ -444,7 +444,7 @@ export default function AdminEmailMarketing() {
                 <CardContent className="space-y-4">
                   <div className="bg-muted/50 rounded-lg p-4 text-sm space-y-2">
                     <p className="font-medium text-foreground">自動スケジュール</p>
-                    <p className="text-muted-foreground">毎日 07:00 JST にAIが自動でクロールを実行し、一般貨物・利用運送企業のメールアドレスを収集します。</p>
+                    <p className="text-muted-foreground">毎日 07:00 JST にAIが自動でクロールを実行し、軽貨物運送企業のメールアドレスを収集します。</p>
                     <p className="text-muted-foreground">毎日 10:00 JST に未送信リードへ営業メールを自動送信します（上限300件/日）。</p>
                   </div>
                   <Button
@@ -455,7 +455,7 @@ export default function AdminEmailMarketing() {
                     {crawlMutation.isPending ? <Loader2 className="w-4 h-4 mr-1.5 animate-spin" /> : <Search className="w-4 h-4 mr-1.5" />}
                     今すぐAIクロール実行
                   </Button>
-                  <p className="text-xs text-muted-foreground">AIが検索クエリを生成し、運送会社のウェブサイトからメール・FAX番号を自動抽出します。完了まで数分かかります。</p>
+                  <p className="text-xs text-muted-foreground">AIが検索クエリを生成し、軽貨物会社のウェブサイトからメール・FAX番号を自動抽出します。完了まで数分かかります。</p>
                 </CardContent>
               </Card>
 

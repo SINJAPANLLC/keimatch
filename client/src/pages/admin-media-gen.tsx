@@ -43,12 +43,12 @@ const videoStyles = [
 ];
 
 const templatePrompts = [
-  { label: "バナー広告", prompt: "物流マッチングサービスのバナー広告、トラックとデジタル技術をイメージ、プロフェッショナル" },
-  { label: "SNS投稿用", prompt: "物流業界向けSNS投稿画像、明るくモダンなデザイン、ターコイズカラー基調" },
-  { label: "ブログアイキャッチ", prompt: "運送業界ブログのアイキャッチ画像、高速道路を走るトラック、夕焼け" },
-  { label: "サービス紹介", prompt: "AIを活用した物流マッチングの概念図、テクノロジーと物流の融合" },
-  { label: "求人広告", prompt: "運送会社の求人広告用画像、働くドライバーのイメージ、活気のある職場" },
-  { label: "LP用ヒーロー", prompt: "物流プラットフォームのランディングページ用ヒーロー画像、信頼性と効率性" },
+  { label: "バナー広告", prompt: "軽貨物マッチングサービスのバナー広告、軽バンとデジタル技術をイメージ、プロフェッショナル" },
+  { label: "SNS投稿用", prompt: "軽貨物配送業界向けSNS投稿画像、明るくモダンなデザイン、ネイビーブルー基調" },
+  { label: "ブログアイキャッチ", prompt: "軽貨物配送ブログのアイキャッチ画像、街中を走る軽バン、明るい都市風景" },
+  { label: "サービス紹介", prompt: "AIを活用した軽貨物マッチングの概念図、テクノロジーとラストマイル配送の融合" },
+  { label: "求人広告", prompt: "軽貨物ドライバーの求人広告用画像、働くドライバーのイメージ、活気のある職場" },
+  { label: "LP用ヒーロー", prompt: "軽貨物マッチングプラットフォームのランディングページ用ヒーロー画像、信頼性と効率性" },
 ];
 
 export default function AdminMediaGen() {
@@ -116,7 +116,7 @@ export default function AdminMediaGen() {
                     className="mt-2 min-h-[100px] text-sm"
                     value={imagePrompt}
                     onChange={(e) => setImagePrompt(e.target.value)}
-                    placeholder={"生成したい画像の説明を入力してください\n\n例:\n・物流マッチングサービスのバナー広告\n・トラックが高速道路を走るイメージ写真\n・AIと物流を組み合わせたモダンなイラスト"}
+                    placeholder={"生成したい画像の説明を入力してください\n\n例:\n・軽貨物マッチングサービスのバナー広告\n・軽バンが街中を走るイメージ写真\n・AIと軽貨物配送を組み合わせたモダンなイラスト"}
                     data-testid="input-image-prompt"
                   />
                   <div className="flex flex-wrap gap-1.5 mt-2">
