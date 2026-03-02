@@ -616,7 +616,7 @@ export default function AdminNotifications() {
                                 <iframe
                                   srcDoc={formHtmlBody}
                                   className="w-full min-h-[300px] bg-white border-0"
-                                  sandbox=""
+                                  sandbox="allow-same-origin"
                                   title="HTML Preview"
                                   data-testid="iframe-html-preview-edit"
                                 />
@@ -803,7 +803,7 @@ export default function AdminNotifications() {
                               <iframe
                                 srcDoc={previewTemplate.htmlBody}
                                 className="w-full min-h-[400px] bg-white border border-border rounded-md"
-                                sandbox=""
+                                sandbox="allow-same-origin"
                                 title="HTML Email Preview"
                                 data-testid="iframe-html-preview"
                               />
