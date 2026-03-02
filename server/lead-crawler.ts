@@ -1,9 +1,9 @@
 import { storage } from "./storage";
 import { sendEmail } from "./notification-service";
 
-const DAILY_SEND_LIMIT = 300;
-const SEND_INTERVAL_MS = 3000;
-const CRAWL_BATCH_SIZE = 50;
+const DAILY_SEND_LIMIT = 500;
+const SEND_INTERVAL_MS = 2000;
+const CRAWL_BATCH_SIZE = 300;
 
 const SEARCH_QUERIES = [
   "軽貨物 配送 会社概要",
@@ -24,6 +24,22 @@ const SEARCH_QUERIES = [
   "軽貨物 冷蔵冷凍 配送",
   "軽貨物 緊急配送 即日",
   "軽貨物 運送 開業",
+  "軽貨物 配送代行 会社",
+  "軽貨物 企業配送 法人",
+  "軽貨物 ルート配送 募集",
+  "軽貨物 即日配送 会社概要",
+  "軽貨物 物流 アウトソーシング",
+  "軽貨物 配送委託 パートナー",
+  "軽貨物 引越し 赤帽",
+  "軽貨物 ネットスーパー 配送",
+  "軽貨物 医薬品 配送",
+  "バイク便 即日配送 会社",
+  "軽貨物 定期便 契約",
+  "軽貨物 夜間配送 会社",
+  "軽貨物 長距離 チャーター",
+  "軽貨物 共同配送 会社概要",
+  "軽貨物 倉庫 配送 一貫",
+  "軽貨物 ハンドキャリー 会社",
 ];
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
@@ -450,14 +466,13 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
   const limit = maxCount || CRAWL_BATCH_SIZE;
 
   const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
-  const todaysQueries = shuffled.slice(0, 5);
+  const todaysQueries = shuffled.slice(0, 10);
 
   const prefStart = Math.floor(Math.random() * PREFECTURES.length);
-  const todaysPrefectures = [
-    PREFECTURES[prefStart % PREFECTURES.length],
-    PREFECTURES[(prefStart + 1) % PREFECTURES.length],
-    PREFECTURES[(prefStart + 2) % PREFECTURES.length],
-  ];
+  const todaysPrefectures: string[] = [];
+  for (let i = 0; i < 10; i++) {
+    todaysPrefectures.push(PREFECTURES[(prefStart + i) % PREFECTURES.length]);
+  }
 
   for (const query of todaysQueries) {
     if (totalFound >= limit) break;
@@ -606,12 +621,15 @@ https://keimatch-sinjapan.com
 }
 
 export function scheduleLeadCrawler() {
+  const CRAWL_HOURS = [6, 12, 20];
+  const SEND_HOURS = [9, 15];
+
   setInterval(async () => {
     const now = new Date();
     const jstHour = (now.getUTCHours() + 9) % 24;
 
-    if (jstHour === 7 && now.getMinutes() === 0) {
-      console.log("[Lead Crawler] Starting daily crawl...");
+    if (CRAWL_HOURS.includes(jstHour) && now.getMinutes() === 0) {
+      console.log(`[Lead Crawler] Starting crawl (${jstHour}:00 JST)...`);
       try {
         await crawlLeadsWithAI();
       } catch (err) {
@@ -619,8 +637,8 @@ export function scheduleLeadCrawler() {
       }
     }
 
-    if (jstHour === 10 && now.getMinutes() === 0) {
-      console.log("[Lead Email] Starting daily send...");
+    if (SEND_HOURS.includes(jstHour) && now.getMinutes() === 0) {
+      console.log(`[Lead Email] Starting send (${jstHour}:00 JST)...`);
       try {
         await sendDailyLeadEmails();
       } catch (err) {
@@ -631,7 +649,5 @@ export function scheduleLeadCrawler() {
 
   const now = new Date();
   const jstHour = (now.getUTCHours() + 9) % 24;
-  const nextCrawl = jstHour < 7 ? 7 - jstHour : 24 - jstHour + 7;
-  const nextSend = jstHour < 10 ? 10 - jstHour : 24 - jstHour + 10;
-  console.log(`[Lead Crawler] Scheduled: crawl in ~${nextCrawl}h (07:00 JST), send in ~${nextSend}h (10:00 JST)`);
+  console.log(`[Lead Crawler] Scheduled: crawl at ${CRAWL_HOURS.join(",")}時 JST, send at ${SEND_HOURS.join(",")}時 JST (now: ${jstHour}時 JST)`);
 }
