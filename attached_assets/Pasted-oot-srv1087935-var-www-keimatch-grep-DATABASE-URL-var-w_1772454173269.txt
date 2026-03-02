@@ -1,0 +1,26 @@
+oot@srv1087935:/var/www/keimatch# grep DATABASE_URL /var/www/keimatch/.env
+DATABASE_URL=postgresql://neondb_owner:npg_BM9xFGAd1nXU0ep-billowing-breeze-a1uc8e1c-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require
+NEON_DATABASE_URL=postgresql://neondb_owner:npg_BM9xFGAd1nXU0ep-billowing-breeze-a1uc8e1c-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require
+root@srv1087935:/var/www/keimatch# sed -i 's|DATABASE_URL=.*|DATABASE_URL=postgresql://neondb_owner:npg_BM9xFGAd1nXU@ep-billowing-breeze-aiuc8e1c-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require\&channel_binding=require|' /var/www/keimatch/.env
+sed -i 's|NEON_DATABASE_URL=.*|NEON_DATABASE_URL=postgresql://neondb_owner:npg_BM9xFGAd1nXU@ep-billowing-breeze-aiuc8e1c-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require\&channel_binding=require|' /var/www/keimatch/.env
+grep DATABASE_URL /var/www/keimatch/.env
+pm2 restart keimatch
+sleep 3
+curl -s -X POST http://localhost:3001/api/login -H "Content-Type: application/json" -d '{"email":"info@sinjapan.jp","password":"Kazuya8008"}'
+DATABASE_URL=postgresql://neondb_owner:npg_BM9xFGAd1nXU@ep-billowing-breeze-aiuc8e1c-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+NEON_DATABASE_URL=postgresql://neondb_owner:npg_BM9xFGAd1nXU@ep-billowing-breeze-aiuc8e1c-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [keimatch](ids: [ 18 ])
+[PM2] [keimatch](18) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 6  │ aiagent            │ fork     │ 0    │ online    │ 0%       │ 69.7mb   │
+│ 18 │ keimatch           │ fork     │ 1    │ online    │ 0%       │ 5.0mb    │
+│ 3  │ menz-esthe-town    │ fork     │ 0    │ online    │ 0%       │ 142.1mb  │
+│ 4  │ onlyu              │ fork     │ 0    │ online    │ 0%       │ 97.3mb   │
+│ 1  │ sinjapan-manager   │ fork     │ 0    │ online    │ 0%       │ 60.1mb   │
+│ 2  │ sinjapan-onlinesc… │ fork     │ 0    │ online    │ 0%       │ 101.7mb  │
+│ 13 │ tramatch           │ fork     │ 3    │ online    │ 0%       │ 238.0mb  │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+{"message":"ログインに失敗しました"}root@srv1087935:/var/www/keimatch# 
