@@ -8,6 +8,7 @@ import Footer from "@/components/footer";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { lazy, Suspense, useEffect } from "react";
+import logoImage from "@assets/IMG_0215_1772415171642.PNG";
 
 const LandingPage = lazy(() => import("@/pages/home"));
 
@@ -136,8 +137,9 @@ function usePreloadAllPages() {
 
 function LoadingFallback() {
   return (
-    <div className="flex items-center justify-center min-h-[200px]">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
+    <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">
+      <img src={logoImage} alt="KEI MATCH" className="h-10 w-auto" />
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
     </div>
   );
 }
