@@ -94,7 +94,7 @@ export default function Faq() {
     <div className="max-w-3xl mx-auto px-4 py-12">
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold mb-3" data-testid="text-page-title">よくある質問</h1>
-        <p className="text-muted-foreground text-lg">軽貨物マッチに関するよくあるご質問をまとめました</p>
+        <p className="text-muted-foreground text-lg">KEI MATCHに関するよくあるご質問をまとめました</p>
       </div>
 
       {categories.map((category) => (
