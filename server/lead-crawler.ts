@@ -546,12 +546,12 @@ export async function sendDailyLeadEmails(): Promise<{ sent: number; failed: num
   const template = await storage.getAdminSetting("lead_email_subject");
   const bodyTemplate = await storage.getAdminSetting("lead_email_body");
 
-  const subject = template || "軽貨物の案件獲得・空き車両活用でお困りではありませんか？｜軽貨物マッチ";
+  const subject = template || "軽貨物の案件獲得・空き車両活用でお困りではありませんか？｜ケイマッチ";
   const body = bodyTemplate || `{company}
 ご担当者様
 
 突然のご連絡、大変失礼いたします。
-軽貨物案件マッチングサービス「軽貨物マッチ」を運営しております、合同会社SIN JAPANと申します。
+軽貨物案件マッチングサービス「ケイマッチ」を運営しております、合同会社SIN JAPANと申します。
 
 貴社のホームページを拝見し、軽貨物配送事業を展開されていることを知り、ご連絡させていただきました。
 
@@ -564,7 +564,7 @@ export async function sendDailyLeadEmails(): Promise<{ sent: number; failed: num
 ☑ 案件情報が電話・FAX中心で非効率
 
 ━━━━━━━━━━━━━━━━━━━━
-■「軽貨物マッチ」でできること
+■「ケイマッチ」でできること
 ━━━━━━━━━━━━━━━━━━━━
 ✅ AIが最適な案件を自動マッチング
 　→ 空き車両情報を登録するだけで、条件に合う案件をAIが自動提案
@@ -596,7 +596,7 @@ https://keimatch-sinjapan.com/register
 本メールへのご返信、またはお電話にてお気軽にお問い合わせください。
 
 ━━━━━━━━━━━━━━━━━━━━
-軽貨物マッチ運営事務局
+ケイマッチ運営事務局
 合同会社SIN JAPAN
 〒243-0303 神奈川県愛甲郡愛川町中津7287
 TEL: 046-212-2325
