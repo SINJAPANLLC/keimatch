@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logoImage from "@assets/IMG_0215_1772415171642.PNG";
+import logoImage from "@assets/logo.png";
 
 export default function Footer() {
   return (

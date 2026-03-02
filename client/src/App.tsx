@@ -8,7 +8,7 @@ import Footer from "@/components/footer";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { lazy, Suspense, useEffect } from "react";
-import logoImage from "@assets/IMG_0215_1772415171642.PNG";
+import logoImage from "@assets/logo.png";
 
 const LandingPage = lazy(() => import("@/pages/home"));
 

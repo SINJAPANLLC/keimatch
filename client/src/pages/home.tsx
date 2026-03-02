@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { X } from "lucide-react";
-import logoImage from "@assets/IMG_0215_1772415171642.PNG";
+import logoImage from "@assets/logo.png";
 import { formatPrice, hasNumericPrice } from "@/lib/utils";
 
 const LOGO_WALL_IMAGES_ROW1 = [

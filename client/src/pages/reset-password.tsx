@@ -7,7 +7,7 @@ import { ArrowLeft, KeyRound, CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import logoImage from "@assets/IMG_0215_1772415171642.PNG";
+import logoImage from "@assets/logo.png";
 
 export default function ResetPassword() {
   const { toast } = useToast();
