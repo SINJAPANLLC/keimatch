@@ -825,7 +825,7 @@ export default function AdminNotifications() {
                             <p className="text-sm font-bold text-foreground">{previewTemplate.subject}</p>
                           </div>
                         )}
-                        {previewTemplate.channel === "email" && previewTemplate.htmlBody && (
+                        {previewTemplate.channel === "email" && (
                           <div className="bg-muted/30 px-3 py-1.5 border-b border-border flex items-center justify-between">
                             <span className="text-[11px] text-muted-foreground">表示モード</span>
                             <div className="flex items-center gap-1 border border-border rounded-md overflow-hidden">
