@@ -3,7 +3,7 @@ interface StructuredDataProps {
   data?: Record<string, any>;
 }
 
-const BASE_URL = "https://keikamotsu-match.com";
+const BASE_URL = "https://keimatch-sinjapan.com";
 
 const organizationData = {
   "@context": "https://schema.org",

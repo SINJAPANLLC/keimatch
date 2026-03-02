@@ -135,14 +135,14 @@ export default function GuideKyukakyusha() {
       <SeoHead
         title="軽貨物配送 完全ガイド 2026 | 仕組み・使い方・料金・比較を網羅 | KEI MATCH"
         description="軽貨物マッチングの仕組み・使い方・料金体系・主要サービス比較・メリット/デメリット・活用事例・FAQ10問を網羅した完全ガイド。KEI MATCHのAIマッチングで配送を効率化。"
-        canonical="https://keikamotsu-match.com/guide/kyukakyusha-complete"
+        canonical="https://keimatch-sinjapan.com/guide/kyukakyusha-complete"
       />
       <StructuredData type="Article" data={{
         headline: "軽貨物配送 完全ガイド 2026",
         description: "軽貨物マッチングの仕組み・使い方・料金・比較を網羅した完全ガイド",
         datePublished: "2026-01-01",
         dateModified: new Date().toISOString(),
-        url: "https://keikamotsu-match.com/guide/kyukakyusha-complete",
+        url: "https://keimatch-sinjapan.com/guide/kyukakyusha-complete",
         author: { "@type": "Organization", name: "KEI MATCH" },
       }} />
 

@@ -93,13 +93,13 @@ export default function CompareSites() {
       <SeoHead
         title="軽貨物マッチングサイト比較 2026 | 主要4サービスの特徴・料金を徹底比較 | KEI MATCH"
         description="2026年最新の軽貨物マッチングサイト比較。KEI MATCH・PickGo・ハコベル・Amazon Flexの特徴・料金・機能・向き不向きを徹底比較します。"
-        canonical="https://keikamotsu-match.com/compare/kyukakyusha-sites"
+        canonical="https://keimatch-sinjapan.com/compare/kyukakyusha-sites"
       />
       <StructuredData type="Article" data={{
         headline: "軽貨物マッチングサイト比較 2026",
         description: "主要4サービスの特徴・料金を徹底比較",
         datePublished: "2026-01-01",
-        url: "https://keikamotsu-match.com/compare/kyukakyusha-sites",
+        url: "https://keimatch-sinjapan.com/compare/kyukakyusha-sites",
       }} />
 
       <div className="bg-primary py-12 sm:py-16">

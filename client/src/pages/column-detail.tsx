@@ -163,7 +163,7 @@ export default function ColumnDetail() {
           headline: article.title,
           description: article.metaDescription,
           datePublished: article.createdAt,
-          url: `https://keikamotsu-match.com/column/${article.slug}`,
+          url: `https://keimatch-sinjapan.com/column/${article.slug}`,
           author: { "@type": "Organization", name: "KEI MATCH" },
         }}
       />

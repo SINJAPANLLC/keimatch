@@ -73,7 +73,7 @@ function wrapTextInEmailHtml(subject: string, bodyText: string): string {
 本メールはKEI MATCHから自動送信されています。<br>
 心当たりのない場合はお手数ですが本メールを破棄してください。<br><br>
 合同会社SIN JAPAN<br>
-<a href="https://keikamotsu-match.com" style="color:#1a2f6e;text-decoration:none;">keikamotsu-match.com</a>
+<a href="https://keimatch-sinjapan.com" style="color:#1a2f6e;text-decoration:none;">keimatch-sinjapan.com</a>
 </td></tr>
 </table>
 </td>

@@ -21,13 +21,13 @@ export default function AlternativeTrabox() {
       <SeoHead
         title="他サービスからの乗り換え 2026 | 乗り換え・併用検討者向けガイド | KEI MATCH"
         description="他の軽貨物マッチングサービスからの乗り換えを検討中の方向けのガイド。KEI MATCHとの機能比較、乗り換えメリット、併用の方法を紹介します。"
-        canonical="https://keikamotsu-match.com/alternative/trabox"
+        canonical="https://keimatch-sinjapan.com/alternative/trabox"
       />
       <StructuredData type="Article" data={{
         headline: "他サービスからの乗り換え 2026",
         description: "乗り換え・併用検討者向けガイド",
         datePublished: "2026-01-01",
-        url: "https://keikamotsu-match.com/alternative/trabox",
+        url: "https://keimatch-sinjapan.com/alternative/trabox",
       }} />
 
       <div className="bg-primary py-12 sm:py-16">

@@ -14,7 +14,7 @@ export async function seedDatabase() {
         password: adminPassword,
         companyName: "KEI MATCH運営",
         phone: "03-0000-0000",
-        email: "admin@keikamotsu-match.com",
+        email: "admin@keimatch-sinjapan.com",
         userType: "admin",
         role: "admin",
         approved: true,

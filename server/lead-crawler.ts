@@ -33,7 +33,7 @@ const FAX_REGEX = /(?:FAX|fax|Fax|ファクス|ファックス)[：:\s]*([0-9\-\
 const EXCLUDED_EMAIL_DOMAINS = [
   "example.com", "test.com", "gmail.com", "yahoo.co.jp", "hotmail.com",
   "outlook.com", "icloud.com", "googlemail.com", "yahoo.com",
-  "keikamotsu-match.com", "sinjapan.jp",
+  "keimatch-sinjapan.com", "sinjapan.jp",
 ];
 
 function isValidCompanyEmail(email: string): boolean {
@@ -547,7 +547,7 @@ KEI MATCHでは、AIが自動で最適なマッチングを行い、
 空き車両の活用と配送コストの最適化を実現いたします。
 
 ▼ サービス詳細はこちら
-https://keikamotsu-match.com
+https://keimatch-sinjapan.com
 
 ▼ 主な特徴
 ・AI自動マッチング機能
@@ -561,7 +561,7 @@ https://keikamotsu-match.com
 ─────────────────────
 KEI MATCH運営事務局
 合同会社SIN JAPAN
-https://keikamotsu-match.com
+https://keimatch-sinjapan.com
 ─────────────────────`;
 
   const leads = await storage.getNewEmailLeadsForSending(remaining);

@@ -109,7 +109,7 @@ export default function ColumnCategory() {
       <SeoHead
         title={config.metaTitle}
         description={config.metaDescription}
-        canonical={`https://keikamotsu-match.com/column/${category}`}
+        canonical={`https://keimatch-sinjapan.com/column/${category}`}
       />
       <StructuredData type="WebPage" data={{ name: config.metaTitle, description: config.metaDescription }} />
 

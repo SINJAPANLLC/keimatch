@@ -229,7 +229,7 @@ tbody td:last-child { text-align: right; font-family: 'SF Mono', 'Consolas', mon
       <div class="party">
         <div class="party-label">発行元</div>
         <div class="party-name">KEI MATCH</div>
-        <div class="party-detail">KEI MATCH運営事務局<br>info@keikamotsu-match.com</div>
+        <div class="party-detail">KEI MATCH運営事務局<br>info@keimatch-sinjapan.com</div>
       </div>
     </div>
     <div class="table-wrap">
