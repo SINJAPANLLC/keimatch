@@ -464,7 +464,7 @@ export default function Home() {
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <Badge className="bg-yellow-400 text-yellow-900 font-bold text-sm px-4 py-1 no-default-hover-elevate no-default-active-elevate">おすすめ</Badge>
               </div>
-              <p className="text-lg font-bold text-primary mb-1">軽貨物マッチ</p>
+              <p className="text-lg font-bold text-primary mb-1">KEI MATCH</p>
               <div className="space-y-4 mt-6">
                 <div>
                   <p className="text-base text-primary mb-1">初期費用</p>
@@ -663,7 +663,7 @@ export default function Home() {
 
       <section className="py-16 sm:py-20 bg-primary">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg">軽貨物マッチを使って<br className="sm:hidden" />業務をラクにしませんか？</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg">KEI MATCHを使って<br className="sm:hidden" />業務をラクにしませんか？</h2>
           <p className="mt-4 text-primary-foreground text-lg text-shadow">
             無料で会員登録して、軽貨物の案件や空き車両の情報をAI掲載・AI検索できます。
           </p>
