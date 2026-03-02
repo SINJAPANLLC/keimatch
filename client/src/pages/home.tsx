@@ -542,7 +542,7 @@ export default function Home() {
               <div>
                 <h3 className="text-lg font-bold text-primary-foreground mb-1">会員同士の直接マッチング</h3>
                 <p className="text-base text-primary-foreground leading-relaxed">
-                  中間マージンなし。ドライバーと荷主が直接やり取りできるため、コストを抑えた取引が可能です。
+                  中間マージンなし。直接やり取りできるため、コストを抑えた取引が可能です。
                 </p>
               </div>
             </div>
