@@ -8,7 +8,7 @@ import type { Notification } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import logoImage from "@assets/IMG_0213_1772414648452.jpg";
+import logoImage from "@assets/IMG_0215_1772415171642.PNG";
 
 function NotificationDropdown() {
   const [open, setOpen] = useState(false);

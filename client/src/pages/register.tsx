@@ -8,7 +8,7 @@ import { UserPlus, Upload, FileText, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
-import logoImage from "@assets/IMG_0213_1772414648452.jpg";
+import logoImage from "@assets/IMG_0215_1772415171642.PNG";
 
 export default function Register() {
   const [, setLocation] = useLocation();
