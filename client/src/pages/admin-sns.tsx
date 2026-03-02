@@ -134,7 +134,7 @@ export default function AdminSns() {
                     className="mt-2 min-h-[80px] text-sm"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder={"例:\n・新着荷物情報の告知\n・トラマッチの使い方紹介\n・物流業界の最新ニュースについて\n・ドライバー募集のお知らせ"}
+                    placeholder={"例:\n・新着案件情報の告知\n・軽貨物マッチの使い方紹介\n・軽貨物配送業界の最新ニュースについて\n・ドライバー募集のお知らせ"}
                     data-testid="input-sns-prompt"
                   />
                 </div>

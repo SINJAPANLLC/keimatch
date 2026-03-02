@@ -11,7 +11,7 @@ import StructuredData from "@/components/seo/structured-data";
 
 const services = [
   {
-    name: "トラマッチ",
+    name: "軽貨物マッチ",
     highlight: true,
     features: {
       aiMatching: true,
@@ -23,10 +23,10 @@ const services = [
     },
     pricing: "基本無料 / 有料プランあり",
     strength: "AIマッチング、モバイル対応、使いやすいUI",
-    bestFor: "中小〜大手運送会社、初めて求荷求車を利用する企業",
+    bestFor: "個人事業主〜法人、初めて軽貨物マッチングを利用する方",
   },
   {
-    name: "トラボックス",
+    name: "PickGo",
     highlight: false,
     features: {
       aiMatching: false,
@@ -36,9 +36,9 @@ const services = [
       multiChannel: false,
       apiIntegration: false,
     },
-    pricing: "月額制（要問い合わせ）",
-    strength: "老舗サービス、登録会社数が多い",
-    bestFor: "既に多くの取引先を持つ中〜大手運送会社",
+    pricing: "成功報酬制",
+    strength: "大手荷主との取引、知名度が高い",
+    bestFor: "安定した案件を求めるドライバー",
   },
   {
     name: "ハコベル",
@@ -56,19 +56,19 @@ const services = [
     bestFor: "大手荷主企業、物流子会社",
   },
   {
-    name: "求車求荷ネット",
+    name: "Amazon Flex",
     highlight: false,
     features: {
       aiMatching: false,
       freeRegistration: true,
-      mobile: false,
+      mobile: true,
       realtimeVacancy: false,
       multiChannel: false,
       apiIntegration: false,
     },
-    pricing: "無料 / 一部有料",
-    strength: "無料で始められる、シンプルな機能",
-    bestFor: "コストを抑えたい小規模運送会社",
+    pricing: "報酬制",
+    strength: "安定した案件量、シンプルな仕組み",
+    bestFor: "Amazon配送に特化したいドライバー",
   },
 ];
 
@@ -76,37 +76,37 @@ const featureLabels: Record<string, string> = {
   aiMatching: "AIマッチング",
   freeRegistration: "無料登録",
   mobile: "モバイル対応",
-  realtimeVacancy: "リアルタイム空車",
+  realtimeVacancy: "リアルタイム空き車両",
   multiChannel: "マルチチャネル通知",
   apiIntegration: "API連携",
 };
 
 const faqItems = [
-  { question: "求荷求車サイトを選ぶ際の最も重要なポイントは？", answer: "自社の規模・対応エリア・利用頻度に合った料金体系のサービスを選ぶことが重要です。小規模・低頻度なら無料or成功報酬型、大規模・高頻度なら月額固定型が適しています。" },
-  { question: "複数の求荷求車サイトを同時に使うことはできますか？", answer: "はい、可能です。実際に複数サービスを併用する運送会社も多くあります。それぞれのサービスの強みを活かすことで、より多くの案件にアクセスできます。" },
-  { question: "求荷求車サイトの乗り換えは簡単ですか？", answer: "基本的には新しいサービスに登録し直すだけで簡単に乗り換えできます。取引履歴の移行はできませんが、既存の取引先との関係は維持できます。" },
+  { question: "軽貨物マッチングサイトを選ぶ際の最も重要なポイントは？", answer: "自身の規模・対応エリア・利用頻度に合った料金体系のサービスを選ぶことが重要です。小規模・低頻度なら無料or成功報酬型、大規模・高頻度なら月額固定型が適しています。" },
+  { question: "複数の軽貨物マッチングサイトを同時に使うことはできますか？", answer: "はい、可能です。実際に複数サービスを併用するドライバーも多くいます。それぞれのサービスの強みを活かすことで、より多くの案件にアクセスできます。" },
+  { question: "軽貨物マッチングサイトの乗り換えは簡単ですか？", answer: "基本的には新しいサービスに登録し直すだけで簡単に乗り換えできます。取引履歴の移行はできませんが、既存の取引先との関係は維持できます。" },
 ];
 
 export default function CompareSites() {
   return (
     <div className="min-h-screen bg-background pb-16 sm:pb-0">
       <SeoHead
-        title="求荷求車サイト比較 2026 | 主要4サービスの特徴・料金を徹底比較 | トラマッチ"
-        description="2026年最新の求荷求車サイト比較。トラマッチ・トラボックス・ハコベル・求車求荷ネットの特徴・料金・機能・向き不向きを徹底比較します。"
-        canonical="https://tramatch-sinjapan.com/compare/kyukakyusha-sites"
+        title="軽貨物マッチングサイト比較 2026 | 主要4サービスの特徴・料金を徹底比較 | 軽貨物マッチ"
+        description="2026年最新の軽貨物マッチングサイト比較。軽貨物マッチ・PickGo・ハコベル・Amazon Flexの特徴・料金・機能・向き不向きを徹底比較します。"
+        canonical="https://keikamotsu-match.com/compare/kyukakyusha-sites"
       />
       <StructuredData type="Article" data={{
-        headline: "求荷求車サイト比較 2026",
+        headline: "軽貨物マッチングサイト比較 2026",
         description: "主要4サービスの特徴・料金を徹底比較",
         datePublished: "2026-01-01",
-        url: "https://tramatch-sinjapan.com/compare/kyukakyusha-sites",
+        url: "https://keikamotsu-match.com/compare/kyukakyusha-sites",
       }} />
 
       <div className="bg-primary py-12 sm:py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <Badge variant="secondary" className="mb-3">比較ガイド 2026年版</Badge>
           <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg" data-testid="text-page-title">
-            求荷求車サイト比較 2026
+            軽貨物マッチングサイト比較 2026
           </h1>
           <p className="text-primary-foreground/80 mt-2 text-shadow">
             主要4サービスの特徴・料金・機能を徹底比較
@@ -117,13 +117,13 @@ export default function CompareSites() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <Breadcrumb items={[
           { label: "コラム", href: "/column" },
-          { label: "求荷求車サイト比較 2026" },
+          { label: "軽貨物マッチングサイト比較 2026" },
         ]} />
 
         <Card className="mb-8">
           <CardContent className="p-5 sm:p-8">
             <p className="text-foreground leading-relaxed mb-4">
-              求荷求車サービスは数多く存在しますが、それぞれ特徴や強みが異なります。本記事では、2026年時点で主要な4つの求荷求車サービスを、機能・料金・対象ユーザーの観点から客観的に比較します。
+              軽貨物マッチングサービスは数多く存在しますが、それぞれ特徴や強みが異なります。本記事では、2026年時点で主要な4つの軽貨物マッチングサービスを、機能・料金・対象ユーザーの観点から客観的に比較します。
             </p>
             <p className="text-foreground leading-relaxed">
               各サービスには「向き不向き」があります。自社の規模、利用頻度、必要な機能に合わせて最適なサービスを選ぶことが、物流コスト削減の第一歩です。
@@ -206,7 +206,7 @@ export default function CompareSites() {
             <ul className="space-y-2 text-sm text-foreground">
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
-                <span><strong>初めて求荷求車を使う方</strong>には、無料で始められてAIマッチング機能があるトラマッチがおすすめです</span>
+                <span><strong>初めて軽貨物マッチングを使う方</strong>には、無料で始められてAIマッチング機能がある軽貨物マッチがおすすめです</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0 mt-0.5" />
@@ -227,12 +227,12 @@ export default function CompareSites() {
         <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
           <Link href="/guide/kyukakyusha-complete">
             <Button variant="outline" data-testid="button-to-guide">
-              求荷求車 完全ガイドを読む <ArrowRight className="w-4 h-4 ml-1" />
+              軽貨物配送 完全ガイドを読む <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
           <Link href="/register">
             <Button data-testid="button-register-compare" data-track-cta="compare_register">
-              トラマッチに無料登録 <ArrowRight className="w-4 h-4 ml-1" />
+              軽貨物マッチに無料登録 <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
         </div>

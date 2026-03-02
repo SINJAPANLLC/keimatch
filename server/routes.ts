@@ -58,7 +58,7 @@ async function resolveEmailTemplate(
 }
 
 function isAgentAutoEmail(email: string): boolean {
-  return /^agent-[a-z]+@tramatch/.test(email);
+  return /^agent-[a-z]+@keikamotsu/.test(email);
 }
 
 const openai = new Proxy({} as any, {
@@ -108,7 +108,7 @@ function requireAdmin(req: Request, res: Response, next: NextFunction) {
 
 function generateInvoiceEmailHtml(invoice: any, adminInfo?: any): string {
   const statusLabel = invoice.status === "paid" ? "入金済み" : invoice.status === "overdue" ? "支払い期限超過" : "未入金";
-  const appBaseUrl = process.env.APP_BASE_URL || "https://tramatch-sinjapan.com";
+  const appBaseUrl = process.env.APP_BASE_URL || "https://keikamotsu-match.com";
   const paymentUrl = `${appBaseUrl}/payment`;
 
   const bankName = adminInfo?.bankName || "";
@@ -134,7 +134,7 @@ function generateInvoiceEmailHtml(invoice: any, adminInfo?: any): string {
 <body style="font-family:'Helvetica Neue',Arial,'Hiragino Kaku Gothic ProN',sans-serif;max-width:700px;margin:0 auto;padding:20px;color:#333;">
   <div style="text-align:center;border-bottom:3px solid #0d9488;padding-bottom:15px;margin-bottom:20px;">
     <h1 style="color:#0d9488;margin:0;font-size:24px;">請求書</h1>
-    <p style="margin:5px 0 0;color:#666;font-size:14px;">トラマッチ - 求荷求車マッチングプラットフォーム</p>
+    <p style="margin:5px 0 0;color:#666;font-size:14px;">軽貨物マッチ - 軽貨物案件マッチングプラットフォーム</p>
   </div>
   <table style="width:100%;margin-bottom:20px;font-size:14px;">
     <tr><td style="width:50%;vertical-align:top;">
@@ -186,7 +186,7 @@ function generateInvoiceEmailHtml(invoice: any, adminInfo?: any): string {
     <a href="${paymentUrl}" style="display:inline-block;background:#0d9488;color:white;text-decoration:none;padding:12px 30px;border-radius:6px;font-size:16px;font-weight:bold;">カード決済はこちら</a>
   </div>
   <div style="text-align:center;padding-top:15px;border-top:1px solid #eee;color:#999;font-size:12px;">
-    <p>合同会社SIN JAPAN ｜ トラマッチ</p>
+    <p>合同会社SIN JAPAN ｜ 軽貨物マッチ</p>
   </div>
 </body></html>`;
 }
@@ -255,15 +255,15 @@ export async function registerRoutes(
               username: parsed.data.email || "",
               appBaseUrl,
             },
-            "【トラマッチ】会員登録ありがとうございます",
+            "【軽貨物マッチ】会員登録ありがとうございます",
             `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
 <h2 style="color: #333;">会員登録ありがとうございます</h2>
 <p>{{companyName}} 様</p>
-<p>トラマッチへの会員登録ありがとうございます。</p>
+<p>軽貨物マッチへの会員登録ありがとうございます。</p>
 <p>現在、管理者による承認手続きを行っております。<br>承認が完了次第、ログインしてサービスをご利用いただけます。</p>
 <p>承認までしばらくお待ちください。</p>
 <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-<p style="font-size: 12px; color: #888;">このメールはトラマッチから自動送信されています。<br><a href="{{appBaseUrl}}">{{appBaseUrl}}</a></p>
+<p style="font-size: 12px; color: #888;">このメールは軽貨物マッチから自動送信されています。<br><a href="{{appBaseUrl}}">{{appBaseUrl}}</a></p>
 </div>`
           );
           if (resolved) {
@@ -366,14 +366,14 @@ export async function registerRoutes(
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
       await storage.createPasswordResetToken(user.id, tokenHash, expiresAt);
 
-      const appBaseUrl = process.env.APP_BASE_URL || "https://tramatch-sinjapan.com";
+      const appBaseUrl = process.env.APP_BASE_URL || "https://keikamotsu-match.com";
       const resetUrl = `${appBaseUrl}/reset-password?token=${token}`;
 
       const resolved = await resolveEmailTemplate(
         "password_reset",
         { companyName: user.companyName, resetUrl },
-        "【トラマッチ】パスワードリセットのご案内",
-        `{{companyName}} 様\n\n以下のリンクからパスワードをリセットしてください。\nこのリンクは1時間有効です。\n\n{{resetUrl}}\n\n※このメールに心当たりがない場合は無視してください。\n\nトラマッチ運営事務局`
+        "【軽貨物マッチ】パスワードリセットのご案内",
+        `{{companyName}} 様\n\n以下のリンクからパスワードをリセットしてください。\nこのリンクは1時間有効です。\n\n{{resetUrl}}\n\n※このメールに心当たりがない場合は無視してください。\n\n軽貨物マッチ運営事務局`
       );
       if (!resolved) {
         return res.status(500).json({ message: "メールテンプレートが無効です" });
@@ -1047,8 +1047,8 @@ export async function registerRoutes(
                   const resolved = await resolveEmailTemplate(
                     "cargo_new",
                     cargoVars,
-                    "【トラマッチ】新しい荷物が登録されました",
-                    `新しい荷物案件が登録されました。\n\n出発地: ${listing.departureArea}\n到着地: ${listing.arrivalArea}\n荷物種類: ${listing.cargoType}\n重量: ${listing.weight}\n\nトラマッチにログインして詳細をご確認ください。`
+                    "【軽貨物マッチ】新しい案件が登録されました",
+                    `新しい案件が登録されました。\n\n出発地: ${listing.departureArea}\n到着地: ${listing.arrivalArea}\n荷物種類: ${listing.cargoType}\n重量: ${listing.weight}\n\n軽貨物マッチにログインして詳細をご確認ください。`
                   );
                   if (resolved) await sendEmail(u.email, resolved.subject, resolved.body);
                 } catch (emailErr) {
@@ -1204,7 +1204,7 @@ export async function registerRoutes(
 
       if (recipientEmail && isEmailConfigured()) {
         const senderUser = await storage.getUser(req.session.userId as string);
-        const senderName = senderUser?.companyName || dispatchRequest.transportCompany || "トラマッチユーザー";
+        const senderName = senderUser?.companyName || dispatchRequest.transportCompany || "軽貨物マッチユーザー";
 
         const fmtRow = (label: string, value: string | null | undefined) => {
           if (!value) return "";
@@ -1222,14 +1222,14 @@ export async function registerRoutes(
           const shipperResolved = await resolveEmailTemplate(
             "dispatch_request_shipper",
             { senderName },
-            `【トラマッチ】{{senderName}}より車番連絡が届きました`,
+            `【軽貨物マッチ】{{senderName}}より車番連絡が届きました`,
             `{{senderName}} 様より車番連絡が届きました。`
           );
-          emailSubject = shipperResolved?.subject || `【トラマッチ】${senderName}より車番連絡が届きました`;
+          emailSubject = shipperResolved?.subject || `【軽貨物マッチ】${senderName}より車番連絡が届きました`;
           emailHtml = `
           <div style="font-family:'Hiragino Sans','Meiryo',sans-serif;max-width:700px;margin:0 auto;color:#333">
             <div style="background:#40E0D0;padding:16px 24px;border-radius:8px 8px 0 0">
-              <h1 style="color:white;margin:0;font-size:20px">トラマッチ 車番連絡</h1>
+              <h1 style="color:white;margin:0;font-size:20px">軽貨物マッチ 車番連絡</h1>
             </div>
             <div style="padding:24px;border:1px solid #dee2e6;border-top:none;border-radius:0 0 8px 8px">
               <p style="margin:0 0 16px">${shipperResolved?.body || ""}</p>
@@ -1265,7 +1265,7 @@ export async function registerRoutes(
               ${dispatchRequest.transportCompanyNotes ? `<h2 style="font-size:16px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px">注意事項</h2><p style="white-space:pre-wrap">${dispatchRequest.transportCompanyNotes}</p>` : ""}
 
               <div style="margin-top:24px;padding:12px;background:#f0fffe;border-radius:6px;font-size:12px;color:#666">
-                <p style="margin:0">このメールはトラマッチ（tramatch-sinjapan.com）から自動送信されています。</p>
+                <p style="margin:0">このメールは軽貨物マッチ（keikamotsu-match.com）から自動送信されています。</p>
               </div>
             </div>
           </div>`;
@@ -1273,14 +1273,14 @@ export async function registerRoutes(
           const transportResolved = await resolveEmailTemplate(
             "dispatch_request_transport",
             { senderName },
-            `【トラマッチ】{{senderName}}より配車依頼書が届きました`,
+            `【軽貨物マッチ】{{senderName}}より配車依頼書が届きました`,
             `{{senderName}} 様より配車依頼書が届きました。`
           );
-          emailSubject = transportResolved?.subject || `【トラマッチ】${senderName}より配車依頼書が届きました`;
+          emailSubject = transportResolved?.subject || `【軽貨物マッチ】${senderName}より配車依頼書が届きました`;
           emailHtml = `
           <div style="font-family:'Hiragino Sans','Meiryo',sans-serif;max-width:700px;margin:0 auto;color:#333">
             <div style="background:#40E0D0;padding:16px 24px;border-radius:8px 8px 0 0">
-              <h1 style="color:white;margin:0;font-size:20px">トラマッチ 配車依頼書</h1>
+              <h1 style="color:white;margin:0;font-size:20px">軽貨物マッチ 配車依頼書</h1>
             </div>
             <div style="padding:24px;border:1px solid #dee2e6;border-top:none;border-radius:0 0 8px 8px">
               <p style="margin:0 0 16px">${transportResolved?.body || ""}</p>
@@ -1334,7 +1334,7 @@ export async function registerRoutes(
               ${dispatchRequest.transportCompanyNotes ? `<h2 style="font-size:16px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px">運送会社備考</h2><p style="white-space:pre-wrap">${dispatchRequest.transportCompanyNotes}</p>` : ""}
 
               <div style="margin-top:24px;padding:12px;background:#f0fffe;border-radius:6px;font-size:12px;color:#666">
-                <p style="margin:0">このメールはトラマッチ（tramatch-sinjapan.com）から自動送信されています。</p>
+                <p style="margin:0">このメールは軽貨物マッチ（keikamotsu-match.com）から自動送信されています。</p>
               </div>
             </div>
           </div>`;
@@ -1443,8 +1443,8 @@ export async function registerRoutes(
                   const resolved = await resolveEmailTemplate(
                     "truck_new",
                     truckVars,
-                    "【トラマッチ】新しい空車が登録されました",
-                    `新しい空車情報が登録されました。\n\n現在地: ${listing.currentArea}\n行先: ${listing.destinationArea}\n車両タイプ: ${listing.vehicleType}\n積載量: ${listing.maxWeight}\n\nトラマッチにログインして詳細をご確認ください。`
+                    "【軽貨物マッチ】新しい空き車両が登録されました",
+                    `新しい空き車両情報が登録されました。\n\n現在地: ${listing.currentArea}\n行先: ${listing.destinationArea}\n車両タイプ: ${listing.vehicleType}\n積載量: ${listing.maxWeight}\n\n軽貨物マッチにログインして詳細をご確認ください。`
                   );
                   if (resolved) await sendEmail(u.email, resolved.subject, resolved.body);
                 } catch (emailErr) {
@@ -1573,8 +1573,8 @@ export async function registerRoutes(
           email: user.email || "",
           appBaseUrl,
         },
-        "【トラマッチ】アカウントが承認されました",
-        `${user.companyName} 様\n\nご登録ありがとうございます。\n\nアカウントが承認されましたので、以下のリンクからログインしてサービスをご利用いただけます。\n\n${appBaseUrl}/login\n\nトラマッチ運営事務局\n合同会社SIN JAPAN`
+        "【軽貨物マッチ】アカウントが承認されました",
+        `${user.companyName} 様\n\nご登録ありがとうございます。\n\nアカウントが承認されましたので、以下のリンクからログインしてサービスをご利用いただけます。\n\n${appBaseUrl}/login\n\n軽貨物マッチ運営事務局\n合同会社SIN JAPAN`
       );
       if (resolved && user.email) {
         await sendEmail(user.email, resolved.subject, resolved.body);
@@ -1926,12 +1926,12 @@ export async function registerRoutes(
         return res.status(401).json({ message: "ユーザーが見つかりません" });
       }
 
-      const appBaseUrl = process.env.APP_BASE_URL || "https://tramatch-sinjapan.com";
+      const appBaseUrl = process.env.APP_BASE_URL || "https://keikamotsu-match.com";
       const resolved = await resolveEmailTemplate(
         "partner_invite",
         { companyName: user.companyName, registerUrl: `${appBaseUrl}/register`, appBaseUrl },
-        "【トラマッチ】取引先招待のご案内",
-        `{{companyName}}様よりトラマッチへの招待が届いています。\n\n{{companyName}}様があなたを取引先として招待しました。\n以下のリンクからトラマッチに登録して、取引を開始しましょう。\n\n{{registerUrl}}\n\nトラマッチ - 求荷求車マッチングプラットフォーム\n{{appBaseUrl}}`
+        "【軽貨物マッチ】取引先招待のご案内",
+        `{{companyName}}様より軽貨物マッチへの招待が届いています。\n\n{{companyName}}様があなたを取引先として招待しました。\n以下のリンクから軽貨物マッチに登録して、取引を開始しましょう。\n\n{{registerUrl}}\n\n軽貨物マッチ - 軽貨物案件マッチングプラットフォーム\n{{appBaseUrl}}`
       );
       if (!resolved) {
         return res.status(500).json({ message: "メールテンプレートが無効です" });
@@ -1982,7 +1982,7 @@ export async function registerRoutes(
         messages: [
           {
             role: "system",
-            content: `あなたは画像やドキュメントから運送・物流に関する情報を正確に読み取るアシスタントです。
+            content: `あなたは画像やドキュメントから軽貨物配送に関する情報を正確に読み取るアシスタントです。
 画像内のテキストをすべて読み取り、タブ区切りのテキストデータとして忠実に再現してください。
 
 重要なルール:
@@ -2071,11 +2071,11 @@ export async function registerRoutes(
         messages: [
           {
             role: "system",
-            content: `あなたは日本の運送・物流の専門家です。ユーザーが自然言語で入力した荷物情報を構造化データに変換してください。
+            content: `あなたは日本の軽貨物配送の専門家です。ユーザーが自然言語で入力した案件情報を構造化データに変換してください。
 
 重要: 現在の日付は${new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}です。日付が年を省略している場合は、必ず${new Date().getFullYear()}年として扱ってください。過去の年を設定しないでください。
 
-入力に複数の案件（荷物）が含まれている場合は、それぞれ個別のオブジェクトとして配列で返してください。
+入力に複数の案件が含まれている場合は、それぞれ個別のオブジェクトとして配列で返してください。
 1件だけの場合も配列で返してください。
 
 各案件のフォーマット:
@@ -2085,7 +2085,7 @@ ${cargoFieldSchema}
 { "items": [ {案件1}, {案件2}, ... ] }
 
 データ解析の注意点（非常に重要）:
-- 物流業界の略語・表記ゆれを正しく理解すること:
+- 軽貨物配送業界の略語・表記ゆれを正しく理解すること:
   - 「発」「積地」「積込」「積み」= departureArea/departureAddress（積む場所）
   - 「着」「卸地」「卸先」「降ろし」「おろし」「納品先」= arrivalArea/arrivalAddress（降ろす場所）
   - 「W」「ウイング」= bodyType: "ウイング"
@@ -2203,7 +2203,7 @@ JSONのみを返してください。説明文は不要です。${fewShotSection
   "description": "備考"
 }`;
 
-      const systemPrompt = `あなたは「トラマッチ」の荷物登録AIアシスタントです。日本の運送・物流に精通しています。
+      const systemPrompt = `あなたは「軽貨物マッチ」の案件登録AIアシスタントです。日本の軽貨物配送に精通しています。
 
 重要: 現在の日付は${new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}です。日付が年を省略している場合は、必ず${new Date().getFullYear()}年として扱ってください。過去の年を設定しないでください。
 
@@ -2214,18 +2214,17 @@ JSONのみを返してください。説明文は不要です。${fewShotSection
 4. 複数案件が含まれる場合はそれぞれ分けて処理する
 
 データ解析の注意点（非常に重要）:
-- 物流業界でよく使われる略語や表記を正しく理解すること:
+- 軽貨物配送業界でよく使われる略語や表記を正しく理解すること:
   - 「発」「積地」「積込」「積み」= departureArea/departureAddress（積む場所）
   - 「着」「卸地」「卸先」「降ろし」「おろし」「納品先」= arrivalArea/arrivalAddress（降ろす場所）
-  - 「W」「ウイング」= bodyType: "ウイング"
+  - 「軽バン」「バン」= vehicleType: "軽バン"
+  - 「軽トラ」= vehicleType: "軽トラック"
   - 「冷凍」「レイトウ」= temperatureControl: "冷凍（-18℃以下）"
   - 「冷蔵」= temperatureControl: "冷蔵（0〜10℃）"
   - 「PG」「パワゲ」= bodyType: "パワーゲート付き"
-  - 「ユニック」「クレーン」= bodyType にそれぞれ対応
-  - 「4t」「4トン」= vehicleType: "4t車"
-  - 「大型」= vehicleType: "大型車"
-  - 「増トン」「増t」= vehicleType: "増トン車"
-  - 「箱」= bodyType: "箱車"
+  - 「ハイルーフ」= bodyType: "ハイルーフ"
+  - 「幌」= bodyType: "幌車"
+  - 「箱」= bodyType: "標準ボディ"
   - 「高速込」「高速込み」= highwayFee: "込み"
   - 「高速別」「高速別途」= highwayFee: "別途"
   - 「手積み」「手降ろし」「手積手降」= driverWork: "手積み手降ろし"
@@ -2323,7 +2322,7 @@ statusの意味:
           messages: [
             {
               role: "system",
-              content: `あなたは日本の運送・物流の専門家です。ユーザーが自然言語で入力した荷物情報を構造化データに変換してください。結果はJSON形式で返してください。
+              content: `あなたは日本の軽貨物配送の専門家です。ユーザーが自然言語で入力した案件情報を構造化データに変換してください。結果はJSON形式で返してください。
 
 重要: 現在の日付は${new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}です。日付が年を省略している場合は、必ず${new Date().getFullYear()}年として扱ってください。
 
@@ -2431,7 +2430,7 @@ ${cargoFieldSchema}
             messages: [
               {
                 role: "system",
-                content: `あなたは日本の運送・物流の専門家です。ユーザーが入力した荷物情報を構造化データに変換してください。
+                content: `あなたは日本の軽貨物配送の専門家です。ユーザーが入力した案件情報を構造化データに変換してください。
 入力に複数の案件が含まれている場合は配列で返してください。
 重要: 現在の日付は${new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}です。
 各案件のフォーマット: ${cargoFieldSchema}
@@ -2539,7 +2538,7 @@ JSONのみを返してください。${chatFewShotSection}`,
   "contactEmail": "メールアドレス"
 }`;
 
-      const systemPrompt = `あなたは「トラマッチ」の空車登録AIアシスタントです。日本の運送・物流に精通しています。
+      const systemPrompt = `あなたは「軽貨物マッチ」の空き車両登録AIアシスタントです。日本の軽貨物配送に精通しています。
 
 重要: 現在の日付は${new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}です。日付が年を省略している場合は、必ず${new Date().getFullYear()}年として扱ってください。過去の年を設定しないでください。
 
@@ -2550,17 +2549,15 @@ JSONのみを返してください。${chatFewShotSection}`,
 4. 複数案件が含まれる場合はそれぞれ分けて処理する
 
 データ解析の注意点（非常に重要）:
-- 物流業界でよく使われる略語や表記を正しく理解すること:
-  - 「W」「ウイング」= bodyType: "ウイング"
-  - 「冷凍」「レイトウ」= bodyType: "冷凍車"
-  - 「冷蔵」= bodyType: "冷蔵車"
+- 軽貨物配送業界でよく使われる略語や表記を正しく理解すること:
+  - 「軽バン」「バン」= vehicleType: "軽バン"
+  - 「軽トラ」= vehicleType: "軽トラック"
+  - 「冷凍」「レイトウ」= bodyType: "冷凍仕様"
+  - 「冷蔵」= bodyType: "冷蔵仕様"
   - 「PG」「パワゲ」= bodyType: "パワーゲート付き"
-  - 「ユニック」「クレーン」= bodyType にそれぞれ対応
-  - 「4t」「4トン」= vehicleType: "4t車"
-  - 「大型」= vehicleType: "大型車"
-  - 「増トン」「増t」= vehicleType: "増トン車"
-  - 「箱」= bodyType: "バン"
-  - 「平」「平ボデー」= bodyType: "平ボディ"
+  - 「ハイルーフ」= bodyType: "ハイルーフ"
+  - 「幌」= bodyType: "幌車"
+  - 「箱」= bodyType: "標準ボディ"
 - 住所から都道府県を推測すること（例: 「横浜市」→ currentArea: "神奈川"、「熊谷」→ currentArea: "埼玉"、「市川市」→ currentArea: "千葉"）
 - 日付の表記ゆれに対応（「3/5」「3月5日」「3.5」→ availableDate: "YYYY/03/05"）
 - 複数行のデータや表形式のデータも正確にパースすること
@@ -3111,7 +3108,7 @@ statusの意味:
         }
 
         if (selectedChannels.includes("email") && user.notifyEmail && user.email) {
-          const emailResult = await sendEmail(user.email, `【トラマッチ】${title}`, message);
+          const emailResult = await sendEmail(user.email, `【軽貨物マッチ】${title}`, message);
           if (emailResult.success) results.email++;
           else results.emailErrors++;
         }
@@ -3150,13 +3147,13 @@ statusの意味:
 
       if (channel === "email") {
         if (!to) return res.status(400).json({ message: "送信先メールアドレスは必須です" });
-        const result = await sendEmail(to, "【トラマッチ】テスト通知", "これはトラマッチからのテストメールです。正常に受信できています。");
+        const result = await sendEmail(to, "【軽貨物マッチ】テスト通知", "これは軽貨物マッチからのテストメールです。正常に受信できています。");
         return res.json({ success: result.success, error: result.error });
       }
 
       if (channel === "line") {
         if (!to) return res.status(400).json({ message: "LINE User IDは必須です" });
-        const result = await sendLineMessage(to, "【トラマッチ】テスト通知\n\nこれはトラマッチからのテスト通知です。正常に受信できています。");
+        const result = await sendLineMessage(to, "【軽貨物マッチ】テスト通知\n\nこれは軽貨物マッチからのテスト通知です。正常に受信できています。");
         return res.json({ success: result.success, error: result.error });
       }
 
@@ -3342,13 +3339,13 @@ statusの意味:
         messages: [
           {
             role: "system",
-            content: `あなたは物流マッチングプラットフォーム「トラマッチ」の通知テンプレート作成アシスタントです。
+            content: `あなたは軽貨物案件マッチングプラットフォーム「軽貨物マッチ」の通知テンプレート作成アシスタントです。
 以下の条件でテンプレートを作成してください：
 - 通知チャネル: ${channelLabel}
 - カテゴリ: ${categoryLabel}
 - 文体: ${toneLabel}
-- プラットフォーム名: トラマッチ
-- 業界: 物流・運送業
+- プラットフォーム名: 軽貨物マッチ
+- 業界: 軽貨物配送
 - テンプレート変数として {{会社名}}, {{ユーザー名}}, {{日付}}, {{荷物名}}, {{出発地}}, {{到着地}}, {{車両タイプ}} などが使えます
 ${isLine ? "- LINE通知は短く簡潔に（200文字程度）。件名は不要です。" : ""}
 ${isEmail ? "- メール通知にはメール件名（subject）を含めてください。" : ""}
@@ -3875,7 +3872,7 @@ JSON形式で以下を返してください（日本語で）:
           phone: lead.phone || null,
           website: lead.website || null,
           address: lead.address || null,
-          industry: lead.industry || "一般貨物/利用運送",
+          industry: lead.industry || "軽貨物配送",
           source: "manual_import",
           status: "new",
         });
@@ -3955,7 +3952,7 @@ JSON形式で以下を返してください（日本語で）:
         messages: [
           {
             role: "system",
-            content: `あなたはSEOに強い物流業界専門のコラムライターです。「トラマッチ」という求荷求車マッチングプラットフォームのコラム記事を作成してください。
+            content: `あなたはSEOに強い軽貨物配送業界専門のコラムライターです。「軽貨物マッチ」という軽貨物案件マッチングプラットフォームのコラム記事を作成してください。
 
 記事の要件：
 1. SEOに最適化されたタイトル（# 見出し）- キーワードを含む
@@ -3964,15 +3961,15 @@ JSON形式で以下を返してください（日本語で）:
   - 具体的なデータや事例を含める
   - 読者にとって実用的な情報を提供
   - 自然にキーワードを含める（キーワード密度2-3%）
-  - トラマッチのサービスを自然に紹介
+  - 軽貨物マッチのサービスを自然に紹介
 4. まとめ・結論
 
 重要な出力ルール：
 - マークダウン形式で出力してください
 - 見出しは ## や ### のマークダウン記法のみを使い、「H2:」「H3:」のようなプレフィックスは絶対に付けないでください
 - HTMLタグは使わないでください（<h2>、<h3>、<p>などは不可）
-- 正しい例: ## 求荷求車とは
-- 間違った例: ## H2: 求荷求車とは
+- 正しい例: ## 軽貨物配送とは
+- 間違った例: ## H2: 軽貨物配送とは
 
 最後にJSON形式でメタ情報を出力してください：
 ---META---
@@ -4140,7 +4137,7 @@ JSON形式で以下を返してください（日本語で）:
       }
 
       const prefectureRomaji = getPrefectureRomaji(parsed.data.prefecture);
-      const loginEmail = parsed.data.email || `agent-${prefectureRomaji}@tramatch-sinjapan.com`;
+      const loginEmail = parsed.data.email || `agent-${prefectureRomaji}@keikamotsu-match.com`;
       const defaultPassword = `agent${Date.now().toString(36)}`;
       const hashedPassword = await bcrypt.hash(defaultPassword, 10);
       const username = `agent_${prefectureRomaji}_${Date.now()}`;
@@ -4252,7 +4249,7 @@ JSON形式で以下を返してください（日本語で）:
       if (agent.userId) return res.status(400).json({ message: "この代理店にはすでにアカウントがあります" });
 
       const prefectureRomaji = getPrefectureRomaji(agent.prefecture);
-      const loginEmail = agent.email || `agent-${prefectureRomaji}@tramatch-sinjapan.com`;
+      const loginEmail = agent.email || `agent-${prefectureRomaji}@keikamotsu-match.com`;
       const defaultPassword = `agent${Date.now().toString(36)}`;
       const hashedPassword = await bcrypt.hash(defaultPassword, 10);
       const username = `agent_${prefectureRomaji}_${Date.now()}`;
@@ -4324,7 +4321,7 @@ JSON形式で以下を返してください（日本語で）:
 
       for (const agent of agentsWithoutAccount) {
         const prefectureRomaji = getPrefectureRomaji(agent.prefecture);
-        const loginEmail = agent.email || `agent-${prefectureRomaji}@tramatch-sinjapan.com`;
+        const loginEmail = agent.email || `agent-${prefectureRomaji}@keikamotsu-match.com`;
         const defaultPassword = `agent${Date.now().toString(36)}${Math.random().toString(36).slice(2, 4)}`;
         const hashedPassword = await bcrypt.hash(defaultPassword, 10);
         const username = `agent_${prefectureRomaji}_${Date.now()}`;
@@ -4520,7 +4517,7 @@ JSON形式で以下を返してください（日本語で）:
         const dueMonthStr = dueMonth > 12 ? 1 : dueMonth;
         const dueDate = `${dueYear}-${String(dueMonthStr).toString().padStart(2, "0")}-末日`;
 
-        let description = `トラマッチ プレミアムプラン月額利用料（${billingMonth}）¥5,500（税込）`;
+        let description = `軽貨物マッチ プレミアムプラン月額利用料（${billingMonth}）¥5,500（税込）`;
         if (addedUserCount > 0) {
           description += `\n追加ユーザー ${addedUserCount}名 × ¥2,750（税込） = ¥${addedUserAmount.toLocaleString()}`;
         }
@@ -4559,12 +4556,12 @@ JSON形式で以下を返してください（日本語で）:
       const invoiceResolved = await resolveEmailTemplate(
         "invoice_send",
         { companyName: invoice.companyName || "", invoiceNumber: invoice.invoiceNumber || "", billingMonth: invoice.billingMonth || "", totalAmount: invoice.totalAmount?.toLocaleString() || "0", dueDate: invoice.dueDate || "" },
-        `【トラマッチ】請求書 {{invoiceNumber}}（{{billingMonth}}）`,
+        `【軽貨物マッチ】請求書 {{invoiceNumber}}（{{billingMonth}}）`,
         ""
       );
       const result = await sendEmail(
         invoice.email,
-        invoiceResolved?.subject || `【トラマッチ】請求書（${invoice.billingMonth}）`,
+        invoiceResolved?.subject || `【軽貨物マッチ】請求書（${invoice.billingMonth}）`,
         invoiceHtml
       );
 
@@ -4597,12 +4594,12 @@ JSON形式で以下を返してください（日本語で）:
         const bulkInvoiceResolved = await resolveEmailTemplate(
           "invoice_send",
           { companyName: invoice.companyName || "", invoiceNumber: invoice.invoiceNumber || "", billingMonth: invoice.billingMonth || "", totalAmount: invoice.totalAmount?.toLocaleString() || "0", dueDate: invoice.dueDate || "" },
-          `【トラマッチ】請求書 {{invoiceNumber}}（{{billingMonth}}）`,
+          `【軽貨物マッチ】請求書 {{invoiceNumber}}（{{billingMonth}}）`,
           ""
         );
         const result = await sendEmail(
           invoice.email,
-          bulkInvoiceResolved?.subject || `【トラマッチ】請求書（${invoice.billingMonth}）`,
+          bulkInvoiceResolved?.subject || `【軽貨物マッチ】請求書（${invoice.billingMonth}）`,
           invoiceHtml
         );
 

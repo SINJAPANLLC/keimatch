@@ -54,12 +54,12 @@ function wrapInEmailTemplate(subject: string, bodyText: string): string {
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>
 <td style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:1px;text-align:center;">
-トラマッチ
+軽貨物マッチ
 </td>
 </tr>
 <tr>
 <td style="color:rgba(255,255,255,0.85);font-size:11px;text-align:center;padding-top:2px;">
-TRAMATCH
+KEIKAMOTSU MATCH
 </td>
 </tr>
 </table>
@@ -83,10 +83,10 @@ ${bodyHtml}
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-top:1px solid #e4e4e7;">
 <tr>
 <td style="padding-top:20px;color:#71717a;font-size:11px;line-height:1.6;text-align:center;">
-本メールはトラマッチから自動送信されています。<br>
+本メールは軽貨物マッチから自動送信されています。<br>
 心当たりのない場合はお手数ですが本メールを破棄してください。<br><br>
 合同会社SIN JAPAN<br>
-<a href="https://tramatch-sinjapan.com" style="color:#0d9488;text-decoration:none;">tramatch-sinjapan.com</a>
+<a href="https://keikamotsu-match.com" style="color:#0d9488;text-decoration:none;">keikamotsu-match.com</a>
 </td>
 </tr>
 </table>
@@ -111,7 +111,7 @@ export async function sendEmail(
     return { success: false, error: "メール設定が未構成です" };
   }
 
-  const from = process.env.SMTP_FROM || process.env.SMTP_USER || "noreply@tramatch-sinjapan.com";
+  const from = process.env.SMTP_FROM || process.env.SMTP_USER || "noreply@keikamotsu-match.com";
   const isAlreadyHtml = /<\/?(?:div|table|tr|td|h[1-6]|p|br|a|span|img)\b/i.test(body);
 
   try {

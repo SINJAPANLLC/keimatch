@@ -6,24 +6,24 @@ const SEND_INTERVAL_MS = 3000;
 const CRAWL_BATCH_SIZE = 50;
 
 const SEARCH_QUERIES = [
-  "一般貨物自動車運送事業 会社概要",
-  "一般貨物 運送会社 お問い合わせ",
-  "貨物利用運送事業 会社",
-  "利用運送 株式会社 連絡先",
-  "トラック運送 株式会社",
-  "運輸株式会社 会社概要",
-  "運送株式会社 お問い合わせ",
-  "一般貨物 チャーター便",
-  "長距離 運送会社 株式会社",
-  "冷凍冷蔵 運送 株式会社",
-  "物流会社 倉庫 運送",
-  "陸運 株式会社 会社概要",
-  "求車 求荷 運送会社",
-  "トラック 運輸 会社概要",
-  "貨物運送 許可 事業者",
-  "運送会社 配車 お問い合わせ",
-  "3PL 物流 株式会社",
-  "特別積合せ 運送 株式会社",
+  "軽貨物 配送 会社概要",
+  "軽貨物 運送会社 お問い合わせ",
+  "貨物軽自動車運送事業 会社",
+  "軽貨物 ドライバー 募集",
+  "軽貨物 チャーター便",
+  "軽貨物 配送 株式会社",
+  "軽貨物 宅配 業務委託",
+  "軽貨物 スポット便 配送",
+  "軽貨物 ラストマイル 配送",
+  "軽貨物 EC配送 株式会社",
+  "軽貨物 個人事業主 配送",
+  "軽バン 配送 会社概要",
+  "軽貨物 案件 マッチング",
+  "軽貨物 配送パートナー 募集",
+  "軽貨物 フードデリバリー 配送",
+  "軽貨物 冷蔵冷凍 配送",
+  "軽貨物 緊急配送 即日",
+  "軽貨物 運送 開業",
 ];
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
@@ -33,7 +33,7 @@ const FAX_REGEX = /(?:FAX|fax|Fax|ファクス|ファックス)[：:\s]*([0-9\-\
 const EXCLUDED_EMAIL_DOMAINS = [
   "example.com", "test.com", "gmail.com", "yahoo.co.jp", "hotmail.com",
   "outlook.com", "icloud.com", "googlemail.com", "yahoo.com",
-  "tramatch-sinjapan.com", "sinjapan.jp",
+  "keikamotsu-match.com", "sinjapan.jp",
 ];
 
 function isValidCompanyEmail(email: string): boolean {
@@ -45,20 +45,21 @@ function isValidCompanyEmail(email: string): boolean {
 }
 
 const STRONG_TRANSPORT_KEYWORDS = [
-  "一般貨物自動車運送事業", "一般貨物運送", "特定貨物自動車運送",
-  "貨物利用運送事業", "利用運送", "第一種利用運送", "第二種利用運送",
-  "貨物自動車運送事業法", "運送事業許可", "運送業許可",
-  "国土交通省認可", "関東運輸局", "近畿運輸局", "中部運輸局",
-  "求車", "求荷", "帰り便", "混載", "チャーター便",
+  "貨物軽自動車運送事業", "軽貨物運送", "軽貨物配送",
+  "軽貨物ドライバー", "軽貨物業務委託", "軽貨物チャーター",
+  "ラストマイル配送", "EC配送", "宅配業務委託",
+  "国土交通省届出", "運輸支局届出",
+  "スポット便", "即日配送", "軽貨物案件",
 ];
 
 const TRANSPORT_KEYWORDS = [
-  "運送", "運輸", "物流", "貨物", "トラック", "配送", "輸送", "ロジスティクス",
-  "logistics", "transport", "freight", "cargo",
-  "軽貨物", "引越", "倉庫", "陸運", "3PL",
-  "特別積合", "宅配", "急便", "エクスプレス",
-  "トレーラー", "ウイング車", "平ボディ", "冷凍車", "冷蔵車",
-  "4t", "10t", "大型車", "中型車", "配車",
+  "軽貨物", "配送", "宅配", "デリバリー", "ラストマイル",
+  "logistics", "delivery", "cargo",
+  "軽バン", "軽トラ", "軽ワゴン", "バイク便",
+  "個人事業主", "業務委託", "フリーランス",
+  "EC物流", "通販配送", "ネット通販",
+  "冷蔵配送", "冷凍配送", "チルド配送",
+  "スポット", "定期便", "ルート配送", "配車",
 ];
 
 const NON_TRANSPORT_KEYWORDS = [
@@ -129,19 +130,16 @@ function isTransportCompany(html: string, url: string): boolean {
 
 function detectIndustry(html: string): string {
   const text = getTextContent(html).toLowerCase();
-  if (text.includes("一般貨物自動車運送") || text.includes("一般貨物運送")) {
-    if (text.includes("利用運送")) return "一般貨物/利用運送";
-    return "一般貨物自動車運送事業";
-  }
-  if (text.includes("利用運送") || text.includes("貨物利用運送")) return "貨物利用運送事業";
-  if (text.includes("特別積合")) return "特別積合せ貨物運送";
+  if (text.includes("軽貨物") && text.includes("配送")) return "軽貨物配送";
+  if (text.includes("貨物軽自動車運送")) return "貨物軽自動車運送事業";
   if (text.includes("軽貨物")) return "軽貨物運送";
-  if (text.includes("引越")) return "引越運送";
-  if (text.includes("冷凍") || text.includes("冷蔵")) return "冷凍冷蔵運送";
-  if (text.includes("倉庫") && text.includes("物流")) return "倉庫/物流";
-  if (text.includes("3pl") || text.includes("ロジスティクス") || text.includes("logistics")) return "3PL/ロジスティクス";
-  if (text.includes("運送") || text.includes("運輸")) return "一般貨物/利用運送";
-  return "物流関連";
+  if (text.includes("ラストマイル") || text.includes("宅配")) return "ラストマイル配送";
+  if (text.includes("冷凍") || text.includes("冷蔵")) return "冷蔵冷凍配送";
+  if (text.includes("ec") && text.includes("配送")) return "EC配送";
+  if (text.includes("フードデリバリー") || text.includes("デリバリー")) return "フードデリバリー";
+  if (text.includes("バイク便")) return "バイク便";
+  if (text.includes("配送") || text.includes("運送")) return "軽貨物配送";
+  return "配送関連";
 }
 
 async function fetchPageContent(url: string): Promise<string> {
@@ -321,7 +319,7 @@ function extractExternalUrls(html: string, baseUrl: string): string[] {
 
 const EXCLUDED_DOMAINS = [
   "duckduckgo", "google", "youtube", "wikipedia", "yahoo", "bing",
-  "indeed", "recruit", "mynavi", "doda", "tramatch", "amazon", "facebook", "twitter",
+  "indeed", "recruit", "mynavi", "doda", "keikamotsu", "tramatch", "amazon", "facebook", "twitter",
   "instagram", "linkedin", "tiktok", "reddit", "naver", "rakuten", "goo.ne.jp",
   "baseconnect.in", "clearworks.co.jp", "wantedly", "en-gage", "hellowork",
   "mlit.go.jp", "freee.co.jp", "crowdworks", "lancers", "coconala",
@@ -471,7 +469,7 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
         const urls = await searchDuckDuckGoForUrls(fullQuery);
 
         if (urls.length === 0) {
-          const simpleQuery = `"${prefecture}" 運送 株式会社 連絡先`;
+          const simpleQuery = `"${prefecture}" 軽貨物 配送 連絡先`;
           console.log(`[Lead Crawler] Trying simple: "${simpleQuery}"`);
           const altUrls = await searchDuckDuckGoForUrls(simpleQuery);
           urls.push(...altUrls);
@@ -533,27 +531,27 @@ export async function sendDailyLeadEmails(): Promise<{ sent: number; failed: num
   const template = await storage.getAdminSetting("lead_email_subject");
   const bodyTemplate = await storage.getAdminSetting("lead_email_body");
 
-  const subject = template || "【トラマッチ】物流コスト削減と空車率改善のご提案";
+  const subject = template || "【軽貨物マッチ】配送案件マッチングと空き車両活用のご提案";
   const body = bodyTemplate || `突然のご連絡失礼いたします。
 
-私どもトラマッチは、AIを活用した求荷求車マッチングプラットフォームを運営しております。
+私ども軽貨物マッチは、AIを活用した軽貨物案件マッチングプラットフォームを運営しております。
 
-貴社の運送事業において、以下のような課題はございませんでしょうか？
+貴社の軽貨物配送事業において、以下のような課題はございませんでしょうか？
 
-・空車の有効活用ができていない
-・帰り便の荷物が見つからない
+・空き車両の有効活用ができていない
+・案件が安定的に獲得できない
 ・新規取引先の開拓に時間がかかる
-・運送コストの最適化が進まない
+・配送コストの最適化が進まない
 
-トラマッチでは、AIが自動で最適なマッチングを行い、
-空車率の削減と運送コストの最適化を実現いたします。
+軽貨物マッチでは、AIが自動で最適なマッチングを行い、
+空き車両の活用と配送コストの最適化を実現いたします。
 
 ▼ サービス詳細はこちら
-https://tramatch-sinjapan.com
+https://keikamotsu-match.com
 
 ▼ 主な特徴
 ・AI自動マッチング機能
-・リアルタイム空車情報共有
+・リアルタイム空き車両情報共有
 ・無料で始められる
 ・全国対応
 
@@ -561,9 +559,9 @@ https://tramatch-sinjapan.com
 ご不明な点がございましたら、お気軽にお問い合わせください。
 
 ─────────────────────
-トラマッチ運営事務局
-SIN JAPAN株式会社
-https://tramatch-sinjapan.com
+軽貨物マッチ運営事務局
+合同会社SIN JAPAN
+https://keikamotsu-match.com
 ─────────────────────`;
 
   const leads = await storage.getNewEmailLeadsForSending(remaining);

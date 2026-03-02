@@ -69,7 +69,7 @@ export default function Contact() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="company">会社名</Label>
-                    <Input id="company" name="company" placeholder="例: 株式会社トラマッチ" required data-testid="input-company" />
+                    <Input id="company" name="company" placeholder="例: 〇〇運送 / 個人事業主名" required data-testid="input-company" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="name">お名前</Label>

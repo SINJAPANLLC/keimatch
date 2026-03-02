@@ -504,7 +504,7 @@ export default function AdminEmailMarketing() {
                     <Input
                       value={leadEmailSubject}
                       onChange={(e) => setLeadEmailSubject(e.target.value)}
-                      placeholder="【トラマッチ】物流コスト削減のご提案"
+                      placeholder="【軽貨物マッチ】配送コスト削減のご提案"
                       data-testid="input-lead-subject"
                     />
                   </div>
@@ -626,7 +626,7 @@ export default function AdminEmailMarketing() {
             </div>
             <div>
               <Label>メール件名</Label>
-              <Input value={formSubject} onChange={(e) => setFormSubject(e.target.value)} placeholder="例: 【トラマッチ】物流コスト削減のご提案" data-testid="input-campaign-subject" />
+              <Input value={formSubject} onChange={(e) => setFormSubject(e.target.value)} placeholder="例: 【軽貨物マッチ】配送コスト削減のご提案" data-testid="input-campaign-subject" />
             </div>
             <div>
               <Label>メール本文</Label>

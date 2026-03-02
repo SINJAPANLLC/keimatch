@@ -15,9 +15,9 @@ import { useState } from "react";
 
 const CATEGORIES = [
   { key: "all", label: "すべて" },
-  { key: "kyukakyusha", label: "求荷求車・マッチング" },
-  { key: "truck-order", label: "トラック手配・荷主向け" },
-  { key: "carrier-sales", label: "運送会社の案件獲得" },
+  { key: "kyukakyusha", label: "軽貨物案件マッチング" },
+  { key: "truck-order", label: "配送依頼・荷主向け" },
+  { key: "carrier-sales", label: "ドライバーの案件獲得" },
 ];
 
 function formatDate(dateVal: string | Date) {
@@ -61,8 +61,8 @@ export default function Columns() {
   return (
     <div className="min-h-screen bg-background">
       <SeoHead
-        title="コラム記事 | トラマッチ - 求荷求車マッチングプラットフォーム"
-        description="トラマッチの物流・運送業界コラム。求荷求車、配車効率化、物流DXなど業界の最新情報とノウハウをお届けします。"
+        title="コラム記事 | 軽貨物マッチ - 軽貨物案件マッチングプラットフォーム"
+        description="軽貨物マッチの軽貨物・ラストマイル配送コラム。案件マッチング、配送効率化、軽貨物DXなど業界の最新情報とノウハウをお届けします。"
       />
       <StructuredData type="Organization" />
       <StructuredData type="WebSite" />
@@ -70,10 +70,10 @@ export default function Columns() {
       <div className="bg-primary py-12 sm:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h1 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg" data-testid="text-page-title">
-            物流・運送業界コラム
+            軽貨物・配送業界コラム
           </h1>
           <p className="text-primary-foreground/80 mt-2 text-shadow">
-            求荷求車・トラック手配・運送営業の最新ノウハウをお届けします
+            軽貨物案件マッチング・配送依頼・ドライバー営業の最新ノウハウをお届けします
           </p>
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function Columns() {
                   <Search className="w-5 h-5 text-primary" />
                   <Badge variant="default" className="text-xs">完全ガイド</Badge>
                 </div>
-                <h3 className="text-sm font-bold text-foreground mb-1">求荷求車 完全ガイド 2026</h3>
+                <h3 className="text-sm font-bold text-foreground mb-1">軽貨物配送 完全ガイド 2026</h3>
                 <p className="text-xs text-muted-foreground">仕組み・使い方・料金・比較を網羅した決定版ガイド</p>
               </CardContent>
             </Card>
@@ -101,7 +101,7 @@ export default function Columns() {
                   <TrendingUp className="w-5 h-5 text-blue-600" />
                   <Badge variant="secondary" className="text-xs">比較</Badge>
                 </div>
-                <h3 className="text-sm font-bold text-foreground mb-1">求荷求車サイト比較 2026</h3>
+                <h3 className="text-sm font-bold text-foreground mb-1">軽貨物マッチングサイト比較 2026</h3>
                 <p className="text-xs text-muted-foreground">主要サイトの特徴・料金・向き不向きを徹底比較</p>
               </CardContent>
             </Card>
@@ -113,7 +113,7 @@ export default function Columns() {
                   <Truck className="w-5 h-5 text-green-600" />
                   <Badge variant="secondary" className="text-xs">代替</Badge>
                 </div>
-                <h3 className="text-sm font-bold text-foreground mb-1">トラボックスの代わり 2026</h3>
+                <h3 className="text-sm font-bold text-foreground mb-1">他サービスからの乗り換え 2026</h3>
                 <p className="text-xs text-muted-foreground">乗り換え検討者向けのサービス選び方ガイド</p>
               </CardContent>
             </Card>
@@ -126,8 +126,8 @@ export default function Columns() {
               <CardContent className="p-4 flex items-center gap-3">
                 <Search className="w-6 h-6 text-primary shrink-0" />
                 <div>
-                  <h3 className="text-sm font-bold text-foreground">求荷求車・マッチング</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">荷物と車両のマッチングに関する記事</p>
+                  <h3 className="text-sm font-bold text-foreground">軽貨物案件マッチング</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">案件と車両のマッチングに関する記事</p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 ml-auto" />
               </CardContent>
@@ -138,8 +138,8 @@ export default function Columns() {
               <CardContent className="p-4 flex items-center gap-3">
                 <Package className="w-6 h-6 text-blue-600 shrink-0" />
                 <div>
-                  <h3 className="text-sm font-bold text-foreground">トラック手配・荷主向け</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">荷主の方向けの手配ノウハウ</p>
+                  <h3 className="text-sm font-bold text-foreground">配送依頼・荷主向け</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">荷主の方向けの配送依頼ノウハウ</p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 ml-auto" />
               </CardContent>
@@ -150,8 +150,8 @@ export default function Columns() {
               <CardContent className="p-4 flex items-center gap-3">
                 <Truck className="w-6 h-6 text-green-600 shrink-0" />
                 <div>
-                  <h3 className="text-sm font-bold text-foreground">運送会社の案件獲得</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">運送会社の営業・売上向上</p>
+                  <h3 className="text-sm font-bold text-foreground">ドライバーの案件獲得</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">軽貨物ドライバーの営業・売上向上</p>
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0 ml-auto" />
               </CardContent>

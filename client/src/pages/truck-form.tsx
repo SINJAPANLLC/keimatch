@@ -19,14 +19,10 @@ import { Link } from "wouter";
 import DashboardLayout from "@/components/dashboard-layout";
 
 const VEHICLE_TYPES = [
-  "軽車両", "1t車", "1.5t車", "2t車", "3t車", "4t車", "5t車", "6t車", "7t車", "8t車",
-  "10t車", "11t車", "13t車", "15t車", "増トン車", "大型車", "トレーラー", "フルトレーラー", "その他"
+  "軽バン", "軽トラック", "軽冷凍車", "軽冷蔵車", "軽ワゴン", "バイク便", "その他"
 ];
 const BODY_TYPES = [
-  "平ボディ", "箱車", "バン", "ウイング", "幌ウイング", "冷蔵車", "冷凍車", "冷凍冷蔵車",
-  "ダンプ", "タンクローリー", "車載車", "セルフローダー", "セーフティローダー",
-  "ユニック", "クレーン付き", "パワーゲート付き", "エアサス", "コンテナ車", "海上コンテナ",
-  "低床", "高床", "その他"
+  "標準ボディ", "ハイルーフ", "幌車", "冷蔵仕様", "冷凍仕様", "パワーゲート付き", "その他"
 ];
 const AREAS = [
   "北海道", "青森", "岩手", "宮城", "秋田", "山形", "福島",
@@ -123,8 +119,8 @@ export default function TruckForm() {
         <div className="flex items-center gap-3">
           <Truck className="w-6 h-6 text-primary-foreground" />
           <div>
-            <h1 className="text-2xl font-bold text-primary-foreground text-shadow-lg" data-testid="text-truck-form-title">{isEditMode ? "車両情報の編集" : "車両情報の掲載"}</h1>
-            <p className="text-base text-primary-foreground text-shadow">{isEditMode ? "車両情報を編集してください" : "空車の情報を入力してください"}</p>
+            <h1 className="text-2xl font-bold text-primary-foreground text-shadow-lg" data-testid="text-truck-form-title">{isEditMode ? "車両情報の編集" : "空き車両の登録"}</h1>
+            <p className="text-base text-primary-foreground text-shadow">{isEditMode ? "車両情報を編集してください" : "空き車両の情報を入力してください"}</p>
           </div>
         </div>
       </div>
@@ -140,7 +136,7 @@ export default function TruckForm() {
                   <FormItem>
                     <FormLabel>タイトル</FormLabel>
                     <FormControl>
-                      <Input placeholder="例: 10t車 関東→関西 空車あり" {...field} data-testid="input-truck-title" />
+                      <Input placeholder="例: 軽バン 関東エリア 空き車両あり" {...field} data-testid="input-truck-title" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -271,7 +267,7 @@ export default function TruckForm() {
                     <FormItem>
                       <FormLabel>最大積載量</FormLabel>
                       <FormControl>
-                        <Input placeholder="例: 10t" {...field} data-testid="input-max-weight" />
+                        <Input placeholder="例: 350kg" {...field} data-testid="input-max-weight" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -301,7 +297,7 @@ export default function TruckForm() {
                     <FormLabel>希望運賃（任意）</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="例: 80,000円"
+                        placeholder="例: 15,000円"
                         {...field}
                         value={field.value === "要相談" ? "" : (field.value || "")}
                         disabled={field.value === "要相談"}

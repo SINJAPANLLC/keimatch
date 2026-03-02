@@ -3,16 +3,16 @@ interface StructuredDataProps {
   data?: Record<string, any>;
 }
 
-const BASE_URL = "https://tramatch-sinjapan.com";
+const BASE_URL = "https://keikamotsu-match.com";
 
 const organizationData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "トラマッチ",
-  alternateName: "TRAMATCH",
+  name: "軽貨物マッチ",
+  alternateName: "KEIKAMOTSU MATCH",
   url: BASE_URL,
   logo: `${BASE_URL}/og-image.png`,
-  description: "トラマッチは運送会社と荷物を運んで欲しい会社をつなぐ国内最大級のAI求荷求車サービスです。",
+  description: "軽貨物マッチは荷主と軽貨物ドライバーをつなぐAI軽貨物案件マッチングサービスです。",
   address: {
     "@type": "PostalAddress",
     streetAddress: "中津7287",
@@ -36,8 +36,8 @@ const organizationData = {
 const webSiteData = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  name: "トラマッチ",
-  alternateName: "TRAMATCH",
+  name: "軽貨物マッチ",
+  alternateName: "KEIKAMOTSU MATCH",
   url: BASE_URL,
   potentialAction: {
     "@type": "SearchAction",
@@ -67,7 +67,7 @@ export default function StructuredData({ type, data }: StructuredDataProps) {
       jsonLd = {
         "@context": "https://schema.org",
         "@type": "Article",
-        publisher: { "@type": "Organization", name: "トラマッチ", url: BASE_URL },
+        publisher: { "@type": "Organization", name: "軽貨物マッチ", url: BASE_URL },
         ...data,
       };
       break;

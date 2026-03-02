@@ -18,10 +18,10 @@ export default function CtaBlock({ variant = "both", location, articleSlug }: Ct
   return (
     <div className="bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20 rounded-lg p-5 my-6" data-testid={`cta-block-${location}`}>
       <h3 className="text-base font-bold text-foreground mb-2">
-        トラマッチで効率的な物流を実現しませんか？
+        軽貨物マッチで効率的な配送を実現しませんか？
       </h3>
       <p className="text-sm text-muted-foreground mb-4">
-        AIマッチングで最適な荷物・車両を瞬時に見つけます。登録は無料、今すぐ始めましょう。
+        AIマッチングで最適な案件・車両を瞬時に見つけます。登録は無料、今すぐ始めましょう。
       </p>
       <div className="flex flex-col sm:flex-row gap-3">
         {(variant === "shipper" || variant === "both") && (

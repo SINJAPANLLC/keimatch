@@ -557,7 +557,7 @@ export default function AdminNotifications() {
                       {currentChannel === "email" && (
                         <div>
                           <Label className="text-xs">メール件名</Label>
-                          <Input className="mt-1" value={formSubject} onChange={e => setFormSubject(e.target.value)} placeholder="例: 【トラマッチ】ご登録ありがとうございます" data-testid="input-template-subject" />
+                          <Input className="mt-1" value={formSubject} onChange={e => setFormSubject(e.target.value)} placeholder="例: 【軽貨物マッチ】ご登録ありがとうございます" data-testid="input-template-subject" />
                         </div>
                       )}
                       <div>
@@ -594,7 +594,7 @@ export default function AdminNotifications() {
                             placeholder={
                               currentChannel === "line"
                                 ? "{{会社名}} 様\n新着荷物: {{荷物名}}\n{{出発地}}→{{到着地}}"
-                                : "{{会社名}} 様\n\nいつもトラマッチをご利用いただき..."
+                                : "{{会社名}} 様\n\nいつも軽貨物マッチをご利用いただき..."
                             }
                             data-testid="input-template-body"
                           />
@@ -604,7 +604,7 @@ export default function AdminNotifications() {
                               className="min-h-[250px] font-mono text-xs leading-relaxed"
                               value={formHtmlBody}
                               onChange={e => setFormHtmlBody(e.target.value)}
-                              placeholder={`<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: sans-serif; margin: 0; padding: 20px; }\n    .header { background: #0d9488; color: white; padding: 20px; text-align: center; }\n    .content { padding: 20px; }\n  </style>\n</head>\n<body>\n  <div class="header">\n    <h1>トラマッチ</h1>\n  </div>\n  <div class="content">\n    <p>{{会社名}} 様</p>\n    <p>いつもトラマッチをご利用いただき...</p>\n  </div>\n</body>\n</html>`}
+                              placeholder={`<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    body { font-family: sans-serif; margin: 0; padding: 20px; }\n    .header { background: #0d9488; color: white; padding: 20px; text-align: center; }\n    .content { padding: 20px; }\n  </style>\n</head>\n<body>\n  <div class="header">\n    <h1>軽貨物マッチ</h1>\n  </div>\n  <div class="content">\n    <p>{{会社名}} 様</p>\n    <p>いつも軽貨物マッチをご利用いただき...</p>\n  </div>\n</body>\n</html>`}
                               data-testid="input-template-html-body"
                             />
                             {formHtmlBody.trim() && (

@@ -13,36 +13,36 @@ function getOpenAI() {
 }
 
 const SEO_TOPICS = [
-  { topic: "求荷求車マッチングサービスの活用方法", keywords: "求荷求車, マッチング, 運送, 物流", category: "kyukakyusha" },
-  { topic: "空車を活用して売上を伸ばす方法", keywords: "空車, 空車情報, 配車, 運送会社", category: "carrier-sales" },
-  { topic: "荷主が運送会社を選ぶときのポイント", keywords: "荷主, 運送会社, 選び方, 物流", category: "truck-order" },
-  { topic: "求荷求車システムで物流コストを削減する方法", keywords: "求荷求車, コスト削減, 物流効率化", category: "kyukakyusha" },
-  { topic: "運送業界のDX化と求荷求車プラットフォーム", keywords: "物流DX, デジタル化, 求荷求車, テクノロジー", category: "kyukakyusha" },
-  { topic: "2024年問題と運送業界の対策", keywords: "2024年問題, ドライバー不足, 働き方改革, 運送", category: "carrier-sales" },
-  { topic: "共同配送のメリットとデメリット", keywords: "共同配送, コスト削減, 物流効率, 混載", category: "truck-order" },
-  { topic: "チャーター便と混載便の使い分け", keywords: "チャーター, 混載, 貸切, 積合せ", category: "truck-order" },
-  { topic: "配車計画を効率化するAI技術の活用", keywords: "配車, AI, 効率化, 自動化", category: "kyukakyusha" },
-  { topic: "トラック運送業の開業に必要な許認可", keywords: "運送業, 許認可, 一般貨物運送事業, 開業", category: "carrier-sales" },
-  { topic: "物流業界の最新トレンドと今後の展望", keywords: "物流, トレンド, 自動運転, ドローン配送", category: "kyukakyusha" },
-  { topic: "燃料費高騰時代の運送コスト管理術", keywords: "燃料費, コスト管理, 運賃, 運送", category: "carrier-sales" },
-  { topic: "運送業の安全管理と事故防止対策", keywords: "安全管理, 事故防止, デジタコ, 運行管理", category: "carrier-sales" },
-  { topic: "帰り便を活用した物流コスト削減術", keywords: "帰り便, 空車, コスト削減, 求荷求車", category: "kyukakyusha" },
-  { topic: "中小運送会社が生き残るための戦略", keywords: "中小企業, 運送会社, 経営戦略, 差別化", category: "carrier-sales" },
-  { topic: "物流倉庫の選び方と効率的な在庫管理", keywords: "倉庫, 在庫管理, 物流センター, EC物流", category: "truck-order" },
-  { topic: "求荷求車サイトの選び方と比較ポイント", keywords: "求荷求車, サイト比較, マッチング, 選び方", category: "kyukakyusha" },
-  { topic: "運送契約の基礎知識と注意点", keywords: "運送契約, 契約書, 運賃, 保険", category: "truck-order" },
-  { topic: "グリーン物流の推進と環境対策", keywords: "グリーン物流, 環境, CO2削減, エコドライブ", category: "carrier-sales" },
-  { topic: "食品輸送における温度管理のポイント", keywords: "食品輸送, 温度管理, 冷蔵, 冷凍輸送", category: "truck-order" },
-  { topic: "引越し業界と運送業の違いと共通点", keywords: "引越し, 運送, 業界比較, 許認可", category: "carrier-sales" },
-  { topic: "長距離輸送の効率化テクニック", keywords: "長距離, 輸送, 中継輸送, 効率化", category: "kyukakyusha" },
-  { topic: "荷物保険の種類と選び方ガイド", keywords: "荷物保険, 貨物保険, 運送保険, 補償", category: "truck-order" },
-  { topic: "物流業界での人材確保と定着率向上策", keywords: "人材確保, ドライバー, 採用, 定着率", category: "carrier-sales" },
-  { topic: "AIを活用した最適ルート検索の仕組み", keywords: "AI, ルート検索, 最適化, 配送計画", category: "kyukakyusha" },
-  { topic: "軽貨物運送で独立開業するステップガイド", keywords: "軽貨物, 独立, 開業, フリーランス", category: "carrier-sales" },
-  { topic: "国際物流の基礎知識とフォワーダーの役割", keywords: "国際物流, フォワーダー, 輸出入, 通関", category: "truck-order" },
-  { topic: "物流コンプライアンスと法令遵守の重要性", keywords: "コンプライアンス, 法令遵守, 運送業法, 罰則", category: "carrier-sales" },
-  { topic: "ECサイト運営者のための物流パートナー選び", keywords: "EC, 物流パートナー, フルフィルメント, 配送", category: "truck-order" },
-  { topic: "災害時の物流対策と事業継続計画", keywords: "災害, BCP, 事業継続, 緊急輸送", category: "carrier-sales" },
+  { topic: "軽貨物案件マッチングサービスの活用方法", keywords: "軽貨物, マッチング, 案件, 配送", category: "kyukakyusha" },
+  { topic: "空き車両を活用して売上を伸ばす方法", keywords: "空き車両, 軽貨物, 配車, ドライバー", category: "carrier-sales" },
+  { topic: "荷主が軽貨物ドライバーを選ぶときのポイント", keywords: "荷主, 軽貨物ドライバー, 選び方, 配送", category: "truck-order" },
+  { topic: "軽貨物マッチングで配送コストを削減する方法", keywords: "軽貨物, コスト削減, 配送効率化", category: "kyukakyusha" },
+  { topic: "軽貨物業界のDX化とマッチングプラットフォーム", keywords: "軽貨物DX, デジタル化, マッチング, テクノロジー", category: "kyukakyusha" },
+  { topic: "2024年問題と軽貨物配送業界の対策", keywords: "2024年問題, ドライバー不足, 働き方改革, 軽貨物", category: "carrier-sales" },
+  { topic: "ラストマイル配送の効率化テクニック", keywords: "ラストマイル, 配送効率, 軽貨物, EC物流", category: "truck-order" },
+  { topic: "スポット便と定期便の使い分け", keywords: "スポット便, 定期便, 軽貨物, 配送", category: "truck-order" },
+  { topic: "配車計画を効率化するAI技術の活用", keywords: "配車, AI, 効率化, 軽貨物", category: "kyukakyusha" },
+  { topic: "軽貨物運送業の開業に必要な届出と手続き", keywords: "軽貨物, 開業, 届出, 貨物軽自動車運送事業", category: "carrier-sales" },
+  { topic: "軽貨物配送業界の最新トレンドと今後の展望", keywords: "軽貨物, トレンド, EC配送, ギグワーク", category: "kyukakyusha" },
+  { topic: "燃料費高騰時代の軽貨物ドライバーのコスト管理術", keywords: "燃料費, コスト管理, 運賃, 軽貨物", category: "carrier-sales" },
+  { topic: "軽貨物配送の安全管理と事故防止対策", keywords: "安全管理, 事故防止, 軽貨物, 運行管理", category: "carrier-sales" },
+  { topic: "個人事業主として軽貨物で稼ぐためのコツ", keywords: "個人事業主, 軽貨物, 収入, フリーランス", category: "kyukakyusha" },
+  { topic: "軽貨物ドライバーが案件を安定的に獲得する方法", keywords: "軽貨物, 案件獲得, 営業, ドライバー", category: "carrier-sales" },
+  { topic: "EC物流における軽貨物配送の役割", keywords: "EC, 軽貨物, ラストマイル, 宅配", category: "truck-order" },
+  { topic: "軽貨物マッチングサイトの選び方と比較ポイント", keywords: "軽貨物, サイト比較, マッチング, 選び方", category: "kyukakyusha" },
+  { topic: "軽貨物の業務委託契約の基礎知識と注意点", keywords: "業務委託, 契約書, 運賃, 軽貨物", category: "truck-order" },
+  { topic: "軽貨物配送における環境配慮とEV化の動向", keywords: "EV, 環境, CO2削減, 軽貨物", category: "carrier-sales" },
+  { topic: "食品配送における温度管理のポイント", keywords: "食品配送, 温度管理, 冷蔵, 軽貨物", category: "truck-order" },
+  { topic: "宅配便と軽貨物チャーター便の違い", keywords: "宅配便, チャーター便, 軽貨物, 比較", category: "carrier-sales" },
+  { topic: "軽貨物ドライバーの1日のスケジュールと収入例", keywords: "軽貨物, 収入, スケジュール, 働き方", category: "kyukakyusha" },
+  { topic: "軽貨物配送の貨物保険と車両保険の選び方", keywords: "貨物保険, 車両保険, 軽貨物, 補償", category: "truck-order" },
+  { topic: "軽貨物業界での人材確保と定着率向上策", keywords: "人材確保, ドライバー, 採用, 軽貨物", category: "carrier-sales" },
+  { topic: "AIを活用した軽貨物配送の最適ルート検索", keywords: "AI, ルート検索, 最適化, 軽貨物", category: "kyukakyusha" },
+  { topic: "軽貨物で独立開業するステップガイド", keywords: "軽貨物, 独立, 開業, フリーランス", category: "carrier-sales" },
+  { topic: "フードデリバリーと軽貨物配送の違いと選び方", keywords: "フードデリバリー, 軽貨物, ギグワーク, 配送", category: "truck-order" },
+  { topic: "軽貨物配送のコンプライアンスと法令遵守", keywords: "コンプライアンス, 法令遵守, 貨物軽自動車運送事業, 届出", category: "carrier-sales" },
+  { topic: "ECサイト運営者のための軽貨物配送パートナー選び", keywords: "EC, 軽貨物, フルフィルメント, 配送パートナー", category: "truck-order" },
+  { topic: "軽貨物ドライバーのための確定申告と節税対策", keywords: "確定申告, 節税, 個人事業主, 軽貨物", category: "carrier-sales" },
 ];
 
 function generateSlug(title: string): string {
@@ -65,7 +65,7 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
       messages: [
         {
           role: "system",
-          content: `あなたはSEOに強い物流業界専門のコラムライターです。「トラマッチ」という求荷求車マッチングプラットフォームのコラム記事を作成してください。
+          content: `あなたはSEOに強い軽貨物配送業界専門のコラムライターです。「軽貨物マッチ」という軽貨物案件マッチングプラットフォームのコラム記事を作成してください。
 
 記事の要件：
 1. SEOに最適化されたタイトル（# 見出し）- キーワードを含む
@@ -74,15 +74,15 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
   - 具体的なデータや事例を含める
   - 読者にとって実用的な情報を提供
   - 自然にキーワードを含める（キーワード密度2-3%）
-  - トラマッチのサービスを自然に紹介
+  - 軽貨物マッチのサービスを自然に紹介
 4. まとめ・結論
 
 重要な出力ルール：
 - マークダウン形式で出力してください
 - 見出しは ## や ### のマークダウン記法のみを使い、「H2:」「H3:」のようなプレフィックスは絶対に付けないでください
 - HTMLタグは使わないでください（<h2>、<h3>、<p>などは不可）
-- 正しい例: ## 求荷求車とは
-- 間違った例: ## H2: 求荷求車とは
+- 正しい例: ## 軽貨物配送とは
+- 間違った例: ## H2: 軽貨物配送とは
 
 最後にJSON形式でメタ情報を出力してください：
 ---META---
@@ -90,7 +90,7 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
         },
         {
           role: "user",
-          content: `テーマ: ${selectedTopic.topic}\nキーワード: ${selectedTopic.keywords}\n備考: トラマッチのサービスを自然に紹介してください`
+          content: `テーマ: ${selectedTopic.topic}\nキーワード: ${selectedTopic.keywords}\n備考: 軽貨物マッチのサービスを自然に紹介してください`
         }
       ],
       max_tokens: 4000,
@@ -178,7 +178,7 @@ export async function runDailyArticleGeneration() {
 
 export async function pingGoogleSitemap() {
   try {
-    const baseUrl = process.env.SITE_URL || "https://tramatch-sinjapan.com";
+    const baseUrl = process.env.SITE_URL || "https://keikamotsu-match.com";
     const sitemapUrl = encodeURIComponent(`${baseUrl}/sitemap.xml`);
     const pingUrl = `https://www.google.com/ping?sitemap=${sitemapUrl}`;
     const response = await fetch(pingUrl);

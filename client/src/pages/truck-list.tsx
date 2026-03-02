@@ -41,14 +41,10 @@ const QUICK_FILTERS = [
 ];
 
 const VEHICLE_TYPES = [
-  "軽車両", "1t車", "1.5t車", "2t車", "3t車", "4t車", "5t車", "6t車", "7t車", "8t車",
-  "10t車", "11t車", "13t車", "15t車", "増トン車", "大型車", "トレーラー", "フルトレーラー", "その他"
+  "軽バン", "軽トラック", "軽冷凍車", "軽冷蔵車", "軽ワゴン", "バイク便", "その他",
 ];
 const BODY_TYPES = [
-  "平ボディ", "箱車", "バン", "ウイング", "幌ウイング", "冷蔵車", "冷凍車", "冷凍冷蔵車",
-  "ダンプ", "タンクローリー", "車載車", "セルフローダー", "セーフティローダー",
-  "ユニック", "クレーン付き", "パワーゲート付き", "エアサス", "コンテナ車", "海上コンテナ",
-  "低床", "高床", "ロング", "ワイド", "ショート", "ワイドロング", "その他"
+  "標準ボディ", "ハイルーフ", "幌車", "冷蔵仕様", "冷凍仕様", "パワーゲート付き", "その他",
 ];
 
 const PER_PAGE_OPTIONS = [10, 20, 50, 100];
@@ -211,7 +207,7 @@ table{border-collapse:collapse;width:100%;margin-bottom:16px}
 .route-side{flex:1}.route-arrow{padding:0 16px;font-size:20px;color:#999}
 .price{font-size:22px;font-weight:bold;margin-bottom:16px}
 @media print{body{margin:10px}}</style></head><body>
-<div class="header"><h1>トラマッチ 空車情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
+<div class="header"><h1>軽貨物マッチ 空き車両情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
 <h2>空車情報</h2>
 <div class="route">
 <div class="route-side"><div style="font-weight:bold;font-size:14px">${listing.currentArea}</div><div style="font-size:12px;color:#888;margin-top:4px">現在地</div></div>
@@ -345,7 +341,7 @@ ${row("保有車両台数", companyInfo?.truckCount ? `${companyInfo.truckCount}
           <h3 className="text-base font-bold text-foreground">{companyInfo?.companyName || listing.companyName}</h3>
 
           <Card className="p-3">
-            <div className="text-xs font-bold text-muted-foreground mb-3">トラマッチでの実績</div>
+            <div className="text-xs font-bold text-muted-foreground mb-3">軽貨物マッチでの実績</div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1.5 mb-1">
@@ -365,7 +361,7 @@ ${row("保有車両台数", companyInfo?.truckCount ? `${companyInfo.truckCount}
               </div>
             </div>
             <div className="text-[10px] text-muted-foreground font-bold text-right mt-2">
-              トラマッチ登録年月 {companyInfo?.registrationDate || "-"}
+              軽貨物マッチ登録年月 {companyInfo?.registrationDate || "-"}
             </div>
           </Card>
 

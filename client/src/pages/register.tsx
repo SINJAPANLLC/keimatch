@@ -8,7 +8,6 @@ import { UserPlus, Upload, FileText, X } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
-import logoImage from "@assets/IMG_0046_1771226022407.jpg";
 
 export default function Register() {
   const [, setLocation] = useLocation();
@@ -89,10 +88,10 @@ export default function Register() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <img src={logoImage} alt="TRA MATCH" className="h-10 w-auto" />
+            <span className="text-2xl font-bold text-primary">軽貨物マッチ</span>
           </div>
           <CardTitle className="text-2xl">新規登録</CardTitle>
-          <p className="text-sm text-muted-foreground">TRA MATCHのアカウントを作成</p>
+          <p className="text-sm text-muted-foreground">軽貨物マッチのアカウントを作成</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -127,7 +126,7 @@ export default function Register() {
                 type="text"
                 value={form.companyName}
                 onChange={(e) => update("companyName", e.target.value)}
-                placeholder="例: 〇〇運送株式会社"
+                placeholder="例: 〇〇運送 / 個人事業主名"
                 required
                 data-testid="input-register-company"
               />
@@ -180,7 +179,7 @@ export default function Register() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="truckCount">トラック保有台数</Label>
+              <Label htmlFor="truckCount">車両保有台数</Label>
               <Input
                 id="truckCount"
                 type="text"
@@ -191,7 +190,7 @@ export default function Register() {
               />
             </div>
             <div className="space-y-2">
-              <Label>運送事業許可証</Label>
+              <Label>貨物軽自動車運送事業届出書</Label>
               <input
                 ref={fileInputRef}
                 type="file"

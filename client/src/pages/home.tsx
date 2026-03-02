@@ -8,7 +8,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { X } from "lucide-react";
-import logoImage from "@assets/tra_match_logo_white.jpg";
 import { formatPrice, hasNumericPrice } from "@/lib/utils";
 
 const LOGO_WALL_IMAGES_ROW1 = [
@@ -211,7 +210,7 @@ function ColumnsPreviewSection() {
         <div className="flex items-center justify-between gap-4 flex-wrap mb-8">
           <div>
             <h2 className="text-2xl font-bold text-primary-foreground text-shadow-lg" data-testid="text-columns-heading">コラム記事</h2>
-            <p className="text-base text-primary-foreground mt-1 text-shadow">物流・運送業界のお役立ち情報</p>
+            <p className="text-base text-primary-foreground mt-1 text-shadow">軽貨物・ラストマイル配送のお役立ち情報</p>
           </div>
           <Link href="/columns">
             <Button variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10" data-testid="link-all-columns">
@@ -261,7 +260,7 @@ function YouTubePreviewSection() {
         <div className="flex items-center justify-between gap-4 flex-wrap mb-8">
           <div>
             <h2 className="text-2xl font-bold text-primary-foreground text-shadow-lg" data-testid="text-youtube-heading">動画コンテンツ</h2>
-            <p className="text-base text-primary-foreground mt-1 text-shadow">物流・求荷求車に関するお役立ち動画</p>
+            <p className="text-base text-primary-foreground mt-1 text-shadow">軽貨物配送に関するお役立ち動画</p>
           </div>
           <a href="https://www.youtube.com/channel/UCWXDTsh_-YDUGrT24LIjrUg" target="_blank" rel="noopener noreferrer">
             <Button variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10" data-testid="link-all-videos">
@@ -333,26 +332,26 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground leading-tight text-shadow-lg" data-testid="text-hero-title">
-              AI求荷求車サービス
+              軽貨物案件マッチングサービス
             </h1>
             <div className="mt-6 flex justify-center">
-              <img src={logoImage} alt="TRA MATCH" className="h-12 sm:h-16 w-auto" />
+              <span className="text-3xl sm:text-4xl font-bold text-primary-foreground tracking-wider text-shadow-lg">軽貨物マッチ</span>
             </div>
             <p className="mt-6 text-xl sm:text-2xl text-primary-foreground font-bold leading-relaxed text-shadow" data-testid="text-hero-subtitle">
-              AIで荷物や空きトラックを簡単登録　簡単検索
+              AIで軽貨物の案件や空き車両を簡単登録　簡単検索
             </p>
             <p className="mt-3 text-base sm:text-lg text-primary-foreground leading-relaxed max-w-xl mx-auto text-shadow">
-              空車情報・荷物情報をリアルタイムでAI登録・AI検索できます。
+              軽貨物配送の案件・空き車両情報をリアルタイムでAI登録・AI検索できます。
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/login">
                 <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm min-w-[220px] text-base" data-testid="button-hero-cargo">
-                  荷物を見てみる
+                  案件を見てみる
                 </Button>
               </Link>
               <Link href="/login">
                 <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm min-w-[220px] text-base" data-testid="button-hero-trucks">
-                  空きトラックを見てみる
+                  空き車両を見てみる
                 </Button>
               </Link>
             </div>
@@ -403,7 +402,7 @@ export default function Home() {
       <section className="py-16 sm:py-20 bg-primary">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-center mb-12 text-shadow-lg" data-testid="text-reason-title">
-            TRA MATCHが選ばれる理由
+            軽貨物マッチが選ばれる理由
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
             <div className="text-center text-shadow">
@@ -412,7 +411,7 @@ export default function Home() {
               </div>
               <h3 className="text-xl font-bold text-primary-foreground mb-2">案件がAIで簡単に見つかる</h3>
               <p className="text-base text-primary-foreground leading-relaxed">
-                豊富な荷物・車両情報の中から<br />ほしい案件を簡単に見つけ出せます
+                豊富な軽貨物案件の中から<br />ほしい配送案件を簡単に見つけ出せます
               </p>
             </div>
             <div className="text-center text-shadow">
@@ -464,7 +463,7 @@ export default function Home() {
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <Badge className="bg-yellow-400 text-yellow-900 font-bold text-sm px-4 py-1 no-default-hover-elevate no-default-active-elevate">おすすめ</Badge>
               </div>
-              <p className="text-lg font-bold text-primary mb-1">TRA MATCH</p>
+              <p className="text-lg font-bold text-primary mb-1">軽貨物マッチ</p>
               <div className="space-y-4 mt-6">
                 <div>
                   <p className="text-base text-primary mb-1">初期費用</p>
@@ -505,19 +504,19 @@ export default function Home() {
       <section className="py-16 sm:py-20 bg-primary">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-center mb-4 text-shadow-lg">サービス内容</h2>
-          <p className="text-base text-primary-foreground text-center mb-12 text-shadow">運送会社同士のマッチングサービス</p>
+          <p className="text-base text-primary-foreground text-center mb-12 text-shadow">軽貨物ドライバーと荷主のマッチングサービス</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-primary-foreground/15 rounded-md p-6 flex items-start gap-4 text-shadow">
               <div className="w-12 h-12 rounded-full bg-primary-foreground/20 flex items-center justify-center shrink-0">
                 <Package className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-primary-foreground mb-1">荷物情報のAI掲載・AI検索</h3>
+                <h3 className="text-lg font-bold text-primary-foreground mb-1">案件情報のAI掲載・AI検索</h3>
                 <p className="text-base text-primary-foreground leading-relaxed">
-                  運びたい荷物の情報を掲載し、空きトラックを持つ運送会社とマッチング。AIに投げるだけで簡単登録　簡単検索
+                  配送案件の情報を掲載し、空き車両を持つ軽貨物ドライバーとマッチング。AIに投げるだけで簡単登録　簡単検索
                 </p>
                 <Link href="/cargo" className="inline-flex items-center gap-1 mt-3 text-sm text-primary-foreground font-medium">
-                  荷物一覧を見る <ChevronRight className="w-3.5 h-3.5" />
+                  案件一覧を見る <ChevronRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
@@ -526,9 +525,9 @@ export default function Home() {
                 <Truck className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-primary-foreground mb-1">空車情報のAI掲載・AI検索</h3>
+                <h3 className="text-lg font-bold text-primary-foreground mb-1">空き車両情報のAI掲載・AI検索</h3>
                 <p className="text-base text-primary-foreground leading-relaxed">
-                  空きトラックの情報をAIで簡単掲載し、トラックを探している荷主とマッチング。効率的に荷物を見つけられます。
+                  空き車両の情報をAIで簡単掲載し、車両を探している荷主とマッチング。効率的に案件を見つけられます。
                 </p>
                 <Link href="/trucks" className="inline-flex items-center gap-1 mt-3 text-sm text-primary-foreground font-medium">
                   車両一覧を見る <ChevronRight className="w-3.5 h-3.5" />
@@ -542,7 +541,7 @@ export default function Home() {
               <div>
                 <h3 className="text-lg font-bold text-primary-foreground mb-1">会員同士の直接マッチング</h3>
                 <p className="text-base text-primary-foreground leading-relaxed">
-                  中間マージンなし。運送会社同士で直接やり取りができるため、コストを抑えた取引が可能です。
+                  中間マージンなし。ドライバーと荷主が直接やり取りできるため、コストを抑えた取引が可能です。
                 </p>
               </div>
             </div>
@@ -553,7 +552,7 @@ export default function Home() {
               <div>
                 <h3 className="text-lg font-bold text-primary-foreground mb-1">リアルタイム更新</h3>
                 <p className="text-base text-primary-foreground leading-relaxed">
-                  最新の荷物・車両情報がリアルタイムで更新。タイムリーなマッチングを実現します。
+                  最新の案件・車両情報がリアルタイムで更新。タイムリーなマッチングを実現します。
                 </p>
               </div>
             </div>
@@ -564,7 +563,7 @@ export default function Home() {
       <section className="py-12 sm:py-16 bg-primary overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-8">
           <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg">最新の荷物情報</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg">最新の案件情報</h2>
           </div>
         </div>
         {cargoListings && cargoListings.length > 0 && (
@@ -663,9 +662,9 @@ export default function Home() {
 
       <section className="py-16 sm:py-20 bg-primary">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg">TRA MATCH AIを使って<br className="sm:hidden" />業務をラクにしませんか？</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-shadow-lg">軽貨物マッチを使って<br className="sm:hidden" />業務をラクにしませんか？</h2>
           <p className="mt-4 text-primary-foreground text-lg text-shadow">
-            無料で会員登録して、荷物や空車の情報をAI掲載・AI検索できます。
+            無料で会員登録して、軽貨物の案件や空き車両の情報をAI掲載・AI検索できます。
           </p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/register">

@@ -45,9 +45,9 @@ export default function AdminSettings() {
     queryKey: ["/api/admin/notification-channels/status"],
   });
 
-  const [siteName, setSiteName] = useState("トラマッチ");
-  const [siteDescription, setSiteDescription] = useState("AI求荷求車マッチングサービス");
-  const [siteKeywords, setSiteKeywords] = useState("求荷求車, マッチング, 運送, 物流, トラック, 配車");
+  const [siteName, setSiteName] = useState("軽貨物マッチ");
+  const [siteDescription, setSiteDescription] = useState("AI軽貨物案件マッチングサービス");
+  const [siteKeywords, setSiteKeywords] = useState("軽貨物, マッチング, 配送, ラストマイル, 軽バン, 案件");
   const [approvalRequired, setApprovalRequired] = useState(true);
   const [preventConcurrentLogin, setPreventConcurrentLogin] = useState(true);
   const [permitRequired, setPermitRequired] = useState(false);
@@ -319,7 +319,7 @@ export default function AdminSettings() {
                   value={siteKeywords}
                   onChange={(e) => setSiteKeywords(e.target.value)}
                   className="mt-1"
-                  placeholder="求荷求車, マッチング, 運送, 物流"
+                  placeholder="軽貨物, マッチング, 配送, ラストマイル"
                   data-testid="input-site-keywords"
                 />
               </div>

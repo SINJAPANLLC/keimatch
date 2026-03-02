@@ -44,7 +44,7 @@ app.use(
       pool: dbPool,
       createTableIfMissing: true,
     }),
-    secret: process.env.SESSION_SECRET || "tramatch-secret-key",
+    secret: process.env.SESSION_SECRET || "keikamotsu-match-secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: {

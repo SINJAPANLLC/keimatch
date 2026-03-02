@@ -23,8 +23,8 @@ type ServiceItem = {
 
 const serviceItems: ServiceItem[] = [
   {
-    title: "運賃全額保証サービス",
-    description: "万が一の未払いリスクをカバー。安心して取引できる運賃保証サービスです。",
+    title: "配送料金保証サービス",
+    description: "万が一の未払いリスクをカバー。安心して取引できる配送料金保証サービスです。",
     icon: ShieldCheck,
   },
   {
@@ -33,8 +33,8 @@ const serviceItems: ServiceItem[] = [
     icon: Banknote,
   },
   {
-    title: "トラックリースサービス",
-    description: "初期費用を抑えて車両を導入。各種トラックのリース・レンタルサービスです。",
+    title: "車両リースサービス",
+    description: "初期費用を抑えて車両を導入。軽バン・軽トラックのリース・レンタルサービスです。",
     icon: Truck,
   },
   {
@@ -43,18 +43,18 @@ const serviceItems: ServiceItem[] = [
     icon: Warehouse,
   },
   {
-    title: "物流特化人材紹介サービス",
-    description: "ドライバー・配車担当など、物流業界に特化した人材紹介・求人サービスです。",
+    title: "軽貨物ドライバー紹介サービス",
+    description: "軽貨物ドライバー・配送スタッフなど、軽貨物業界に特化した人材紹介・求人サービスです。",
     icon: Users,
   },
   {
     title: "システム開発サービス",
-    description: "物流業務に特化したシステム開発。業務効率化のためのカスタムシステムを構築します。",
+    description: "配送業務に特化したシステム開発。業務効率化のためのカスタムシステムを構築します。",
     icon: Code,
   },
   {
     title: "M&A相談サービス",
-    description: "運送会社の事業承継・M&Aをサポート。専門アドバイザーが最適なマッチングを行います。",
+    description: "配送事業の事業承継・M&Aをサポート。専門アドバイザーが最適なマッチングを行います。",
     icon: Handshake,
   },
 ];
@@ -110,7 +110,7 @@ export default function Services() {
               <div>
                 <h3 className="text-base font-bold text-foreground" data-testid="text-sponsor-title">スポンサー募集中</h3>
                 <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
-                  トラマッチでは、物流業界を支えるパートナー企業様を募集しています。サービス掲載・広告掲載にご興味のある企業様は、お気軽にお問い合わせください。
+                  軽貨物マッチでは、軽貨物配送業界を支えるパートナー企業様を募集しています。サービス掲載・広告掲載にご興味のある企業様は、お気軽にお問い合わせください。
                 </p>
               </div>
               <Link href="/contact">

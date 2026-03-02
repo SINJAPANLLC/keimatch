@@ -555,7 +555,7 @@ function PartnersSection() {
       <CardContent className="p-4 sm:p-8 text-center">
         <UserPlus className="w-12 h-12 text-primary mx-auto mb-4" />
         <h2 className="text-lg font-bold text-foreground mb-2" data-testid="text-invite-heading">取引先を招待</h2>
-        <p className="text-sm text-muted-foreground mb-6">メールアドレスを入力して取引先をトラマッチに招待しましょう</p>
+        <p className="text-sm text-muted-foreground mb-6">メールアドレスを入力して取引先を軽貨物マッチに招待しましょう</p>
         <div className="max-w-md mx-auto">
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
@@ -1376,7 +1376,7 @@ export default function UserSettings() {
                 <CardContent className="p-4 sm:p-6">
                   <h2 className="text-base font-bold text-foreground mb-2">口座情報</h2>
                   <p className="text-sm text-muted-foreground mb-1">
-                    トラマッチからの入金先として利用されます。
+                    軽貨物マッチからの入金先として利用されます。
                   </p>
                   <p className="text-sm text-muted-foreground mb-6">
                     請求書を発行する際に、入金先として利用されます。
@@ -1549,7 +1549,7 @@ export default function UserSettings() {
                 <CardContent className="p-4 sm:p-6">
                   <h2 className="text-base font-bold text-foreground mb-4">経理連絡先</h2>
                   <p className="text-sm text-muted-foreground mb-6">
-                    トラマッチから請求・お支払いに関する確認時、実務担当者様へスムーズにご連絡するために使用します。
+                    軽貨物マッチから請求・お支払いに関する確認時、実務担当者様へスムーズにご連絡するために使用します。
                   </p>
                   <div className="space-y-4">
                     <div className="space-y-1.5">
@@ -1680,7 +1680,7 @@ export default function UserSettings() {
                             data-testid="input-line-user-id"
                           />
                           <p className="text-[11px] text-muted-foreground mt-1">
-                            トラマッチのLINE公式アカウントを友だち追加後、LINEアプリでUser IDを確認できます
+                            軽貨物マッチのLINE公式アカウントを友だち追加後、LINEアプリでUser IDを確認できます
                           </p>
                         </div>
                       )}

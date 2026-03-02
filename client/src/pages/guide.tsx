@@ -8,32 +8,32 @@ export default function Guide() {
     {
       icon: UserPlus,
       title: "1. 新規登録",
-      description: "会社情報を入力し、許可証をアップロードして新規登録を行います。管理者の承認後、ログインが可能になります。",
+      description: "事業者情報を入力し、届出書をアップロードして新規登録を行います。管理者の承認後、ログインが可能になります。",
     },
     {
       icon: Search,
-      title: "2. 荷物・空車を検索",
-      description: "AI荷物検索やAI空車検索を使って、条件に合った荷物や車両を探すことができます。",
+      title: "2. 案件・空き車両を検索",
+      description: "案件検索や空き車両検索を使って、条件に合った案件や車両を探すことができます。",
     },
     {
       icon: Package,
-      title: "3. 荷物を登録",
-      description: "運んでほしい荷物の情報（出発地、到着地、日時、荷物の種類など）を登録します。",
+      title: "3. 案件を登録",
+      description: "配送してほしい案件の情報（出発地、到着地、日時、荷物の種類など）を登録します。",
     },
     {
       icon: Truck,
-      title: "4. 空車を登録",
+      title: "4. 空き車両を登録",
       description: "空いている車両の情報（出発地、到着地、日時、車両タイプなど）を登録します。",
     },
     {
       icon: FileText,
       title: "5. マッチング・交渉",
-      description: "条件に合う荷物や車両が見つかったら、相手の企業に連絡して条件を交渉します。",
+      description: "条件に合う案件や車両が見つかったら、相手に連絡して条件を交渉します。",
     },
     {
       icon: CheckCircle,
-      title: "6. 成約・運送",
-      description: "条件が合意されたら成約となり、実際の運送が行われます。成約した荷物は「成約した荷物」ページで管理できます。",
+      title: "6. 成約・配送",
+      description: "条件が合意されたら成約となり、実際の配送が行われます。成約した案件は「成約した荷物」ページで管理できます。",
     },
   ];
 
@@ -41,7 +41,7 @@ export default function Guide() {
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold mb-3" data-testid="text-page-title">ご利用ガイド</h1>
-        <p className="text-muted-foreground text-lg">トラマッチの使い方をステップごとにご説明します</p>
+        <p className="text-muted-foreground text-lg">軽貨物マッチの使い方をステップごとにご説明します</p>
       </div>
 
       <div className="space-y-6">

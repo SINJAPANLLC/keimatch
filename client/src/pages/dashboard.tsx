@@ -46,8 +46,8 @@ function OnboardingChecklist({ progress }: { progress: OnboardingProgress }) {
     },
     {
       id: "cargo",
-      label: "荷物を登録する",
-      description: "最初の荷物情報を登録して頂くと荷物にNewバッジが付与されます",
+      label: "案件を登録する",
+      description: "最初の案件情報を登録して頂くと案件にNewバッジが付与されます",
       done: progress.cargoCount > 0,
       href: "/cargo/new",
       action: "登録する",
@@ -55,8 +55,8 @@ function OnboardingChecklist({ progress }: { progress: OnboardingProgress }) {
     },
     {
       id: "truck",
-      label: "空車を登録する",
-      description: "最初の空車情報を登録して頂くと空車にNewバッジが付与されます",
+      label: "空き車両を登録する",
+      description: "最初の空き車両情報を登録して頂くと空き車両にNewバッジが付与されます",
       done: progress.truckCount > 0,
       href: "/trucks",
       action: "登録する",
@@ -64,8 +64,8 @@ function OnboardingChecklist({ progress }: { progress: OnboardingProgress }) {
     },
     {
       id: "search",
-      label: "企業を検索する",
-      description: "取引先候補の企業を検索してみる",
+      label: "事業者を検索する",
+      description: "取引先候補の事業者を検索してみる",
       done: false,
       href: "/companies",
       action: "検索する",
@@ -225,7 +225,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between gap-4 flex-wrap mb-4">
                 <h2 className="text-base font-bold text-foreground flex items-center gap-2">
                   <Package className="w-4 h-4 text-primary" />
-                  最新の荷物情報
+                  最新の案件情報
                 </h2>
                 <Link href="/cargo">
                   <Button variant="ghost" size="sm" className="text-primary" data-testid="link-dashboard-all-cargo">
@@ -263,7 +263,7 @@ export default function Dashboard() {
                       </div>
                     ))}
                 {!cargoLoading && (!cargoListings || cargoListings.length === 0) && (
-                  <div className="py-6 text-center text-sm text-muted-foreground">荷物情報はまだありません</div>
+                  <div className="py-6 text-center text-sm text-muted-foreground">案件情報はまだありません</div>
                 )}
               </div>
             </CardContent>

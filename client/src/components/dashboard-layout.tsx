@@ -16,12 +16,12 @@ type AdminMenuGroup = {
 };
 
 const userMenuItems: MenuItem[] = [
-  { href: "/cargo", label: "AI荷物検索", icon: Sparkles },
-  { href: "/cargo/new", label: "AI荷物登録", icon: Plus },
-  { href: "/my-cargo", label: "登録した荷物", icon: FileText },
-  { href: "/completed-cargo", label: "成約した荷物", icon: CheckCircle },
-  { href: "/trucks", label: "AI空車検索", icon: Sparkles },
-  { href: "/trucks/new", label: "AI空車登録", icon: Truck },
+  { href: "/cargo", label: "案件検索", icon: Sparkles },
+  { href: "/cargo/new", label: "案件登録", icon: Plus },
+  { href: "/my-cargo", label: "登録した案件", icon: FileText },
+  { href: "/completed-cargo", label: "成約した案件", icon: CheckCircle },
+  { href: "/trucks", label: "空き車両検索", icon: Sparkles },
+  { href: "/trucks/new", label: "空き車両登録", icon: Truck },
   { href: "/companies", label: "企業検索", icon: Building },
   { href: "/payment", label: "プラン", icon: CreditCard },
   { href: "/services", label: "便利サービス", icon: Star },
@@ -155,7 +155,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
 export default function DashboardLayout({ children, noScroll }: { children: React.ReactNode; noScroll?: boolean }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(() => {
-    const saved = localStorage.getItem("tramatch_sidebar_open");
+    const saved = localStorage.getItem("keikamotsu_sidebar_open");
     return saved !== null ? saved === "true" : true;
   });
   const [location] = useLocation();
@@ -165,7 +165,7 @@ export default function DashboardLayout({ children, noScroll }: { children: Reac
   }, [location]);
 
   useEffect(() => {
-    localStorage.setItem("tramatch_sidebar_open", String(sidebarOpen));
+    localStorage.setItem("keikamotsu_sidebar_open", String(sidebarOpen));
   }, [sidebarOpen]);
 
   useEffect(() => {

@@ -104,7 +104,7 @@ table{border-collapse:collapse;width:100%;margin-bottom:16px}
 .header{text-align:center;margin-bottom:24px}
 .header h1{font-size:22px;color:#40E0D0;margin:0}
 @media print{body{margin:10px}}</style></head><body>
-<div class="header"><h1>トラマッチ 企業情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
+<div class="header"><h1>軽貨物マッチ 事業者情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
 <h2>基本情報</h2>
 <table>
 ${row("法人名・事業者名", info.companyName)}
@@ -180,7 +180,7 @@ ${row("荷物保険", detail?.cargoInsurance)}
         <h3 className="text-base font-bold text-foreground">{detail?.companyName || company.companyName}</h3>
 
         <Card className="p-3">
-          <div className="text-xs font-bold text-muted-foreground mb-3">トラマッチでの実績</div>
+          <div className="text-xs font-bold text-muted-foreground mb-3">軽貨物マッチでの実績</div>
           <div className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <div className="flex items-center justify-center gap-1.5 mb-1">
@@ -200,7 +200,7 @@ ${row("荷物保険", detail?.cargoInsurance)}
             </div>
           </div>
           <div className="text-[10px] text-muted-foreground font-bold text-right mt-2">
-            トラマッチ登録年月 {detail?.registrationDate || "-"}
+            軽貨物マッチ登録年月 {detail?.registrationDate || "-"}
           </div>
         </Card>
 

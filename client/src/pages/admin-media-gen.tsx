@@ -225,7 +225,7 @@ export default function AdminMediaGen() {
                     className="mt-2 min-h-[100px] text-sm"
                     value={videoPrompt}
                     onChange={(e) => setVideoPrompt(e.target.value)}
-                    placeholder={"動画のテーマを入力してください\n\n例:\n・物流業界のDX推進について\n・トラマッチの使い方ガイド\n・燃料費高騰時代のコスト管理術\n・食品輸送における温度管理の重要性"}
+                    placeholder={"動画のテーマを入力してください\n\n例:\n・軽貨物配送業界のDX推進について\n・軽貨物マッチの使い方ガイド\n・燃料費高騰時代のコスト管理術\n・ラストマイル配送の効率化について"}
                     data-testid="input-video-prompt"
                   />
                 </div>

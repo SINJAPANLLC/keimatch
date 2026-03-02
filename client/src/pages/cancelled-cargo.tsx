@@ -195,7 +195,7 @@ function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; 
       `<tr><td style="padding:6px 10px;font-weight:bold;white-space:nowrap;border:1px solid #ddd;background:#f9f9f9;font-size:13px;width:140px">${label}</td><td style="padding:6px 10px;border:1px solid #ddd;font-size:13px">${value || "-"}</td></tr>`;
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>荷物情報 - ${listing.companyName}</title>
 <style>body{font-family:'Hiragino Sans','Meiryo',sans-serif;margin:20px;color:#333}h2{font-size:18px;border-bottom:2px solid #40E0D0;padding-bottom:6px;margin:20px 0 12px}table{border-collapse:collapse;width:100%;margin-bottom:16px}.header{text-align:center;margin-bottom:24px}.header h1{font-size:22px;color:#40E0D0;margin:0}.route{display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid #ddd;border-radius:6px;margin-bottom:12px}.route-side{flex:1}.route-arrow{padding:0 16px;font-size:20px;color:#999}.price{font-size:22px;font-weight:bold;margin-bottom:16px}@media print{body{margin:10px}}</style></head><body>
-<div class="header"><h1>トラマッチ 荷物情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
+<div class="header"><h1>軽貨物マッチ 案件情報</h1><p style="font-size:12px;color:#888">印刷日: ${new Date().toLocaleString("ja-JP")}</p></div>
 <h2>荷物情報</h2>
 <div class="route"><div class="route-side"><div style="font-weight:bold;font-size:14px">${fmtDate(listing.desiredDate)} ${listing.departureTime && listing.departureTime !== "指定なし" ? listing.departureTime : ""}</div><div style="font-weight:bold;font-size:14px;margin-top:4px">${listing.departureArea} ${listing.departureAddress || ""}</div></div><div class="route-arrow">→</div><div class="route-side" style="text-align:right"><div style="font-weight:bold;font-size:14px">${fmtDate(listing.arrivalDate)} ${listing.arrivalTime && listing.arrivalTime !== "指定なし" ? listing.arrivalTime : ""}</div><div style="font-weight:bold;font-size:14px;margin-top:4px">${listing.arrivalArea} ${listing.arrivalAddress || ""}</div></div></div>
 <div class="price">${listing.price ? `¥${Number(listing.price).toLocaleString()}` : "要相談"} ${listing.taxType ? `(${listing.taxType})` : ""} ${listing.highwayFee ? "高速代：有" : "高速代：無"}</div>
@@ -345,7 +345,7 @@ function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; 
           <h3 className="text-base font-bold text-foreground">{companyInfo?.companyName || listing.companyName}</h3>
 
           <Card className="p-3">
-            <div className="text-xs font-bold text-muted-foreground mb-3">トラマッチでの実績</div>
+            <div className="text-xs font-bold text-muted-foreground mb-3">軽貨物マッチでの実績</div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="flex items-center justify-center gap-1.5 mb-1">
@@ -365,7 +365,7 @@ function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; 
               </div>
             </div>
             <div className="text-[10px] text-muted-foreground font-bold text-right mt-2">
-              トラマッチ登録年月 {companyInfo?.registrationDate || "-"}
+              軽貨物マッチ登録年月 {companyInfo?.registrationDate || "-"}
             </div>
           </Card>
 

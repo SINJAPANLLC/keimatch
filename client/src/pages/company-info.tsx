@@ -8,7 +8,7 @@ export default function CompanyInfo() {
     { label: "電話番号", value: "046-212-2325" },
     { label: "FAX", value: "046-212-2326" },
     { label: "メール", value: "info@sinjapan.jp" },
-    { label: "事業内容", value: "求荷求車マッチングプラットフォーム「トラマッチ」の運営" },
+    { label: "事業内容", value: "軽貨物案件マッチングプラットフォーム「軽貨物マッチ」の運営" },
   ];
 
   return (
@@ -47,9 +47,9 @@ export default function CompanyInfo() {
               ミッション
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              物流業界における求荷求車の課題を、テクノロジーの力で解決することを目指しています。
-              AIを活用した効率的なマッチングにより、荷主と運送会社の双方にとって最適な物流を実現し、
-              日本の物流業界の発展に貢献します。
+              軽貨物配送業界における案件マッチングの課題を、テクノロジーの力で解決することを目指しています。
+              AIを活用した効率的なマッチングにより、荷主と軽貨物ドライバーの双方にとって最適な配送を実現し、
+              日本のラストマイル配送の発展に貢献します。
             </p>
           </CardContent>
         </Card>
@@ -62,10 +62,10 @@ export default function CompanyInfo() {
             </h2>
             <div className="grid sm:grid-cols-2 gap-4">
               {[
-                { icon: Users, title: "AI求荷求車マッチング", desc: "荷主と運送会社をAIが最適にマッチング" },
-                { icon: MapPin, title: "全国対応", desc: "日本全国の荷物・空車情報を網羅" },
-                { icon: Calendar, title: "リアルタイム検索", desc: "最新の荷物・空車情報をリアルタイムで検索" },
-                { icon: Phone, title: "企業検索・管理", desc: "取引先の管理や企業検索が可能" },
+                { icon: Users, title: "AI案件マッチング", desc: "荷主と軽貨物ドライバーをAIが最適にマッチング" },
+                { icon: MapPin, title: "全国対応", desc: "日本全国の案件・空き車両情報を網羅" },
+                { icon: Calendar, title: "リアルタイム検索", desc: "最新の案件・空き車両情報をリアルタイムで検索" },
+                { icon: Phone, title: "事業者検索・管理", desc: "取引先の管理や事業者検索が可能" },
               ].map((service, index) => (
                 <div key={index} className="flex items-start gap-3 p-3 rounded-md bg-muted/50">
                   <service.icon className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />

@@ -276,7 +276,7 @@ function AutoPublishTab() {
             <div className="flex-1">
               <label className="text-xs text-muted-foreground mb-1 block">カスタムトピックで1本生成</label>
               <Input
-                placeholder="例: 求荷求車マッチングの始め方"
+                placeholder="例: 軽貨物案件マッチングの始め方"
                 value={customTopic}
                 onChange={(e) => setCustomTopic(e.target.value)}
                 data-testid="input-custom-topic"
@@ -300,7 +300,7 @@ function AutoPublishTab() {
               <li>• <code>YOUTUBE_OAUTH_CLIENT_SECRET</code> - YouTube投稿用</li>
               <li>• <code>YOUTUBE_OAUTH_REFRESH_TOKEN</code> - YouTube投稿用</li>
             </ul>
-            <p className="mt-2">毎日9:00（JST）に自動で3本生成・投稿されます。概要欄にはトラマッチの各ページへのリンクが自動挿入されます。</p>
+            <p className="mt-2">毎日9:00（JST）に自動で3本生成・投稿されます。概要欄には軽貨物マッチの各ページへのリンクが自動挿入されます。</p>
           </div>
         </CardContent>
       </Card>

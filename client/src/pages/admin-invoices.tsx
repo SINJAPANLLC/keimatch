@@ -228,8 +228,8 @@ tbody td:last-child { text-align: right; font-family: 'SF Mono', 'Consolas', mon
       </div>
       <div class="party">
         <div class="party-label">発行元</div>
-        <div class="party-name">TRA MATCH</div>
-        <div class="party-detail">トラマッチ運営事務局<br>info@tra-match.com</div>
+        <div class="party-name">軽貨物マッチ</div>
+        <div class="party-detail">軽貨物マッチ運営事務局<br>info@keikamotsu-match.com</div>
       </div>
     </div>
     <div class="table-wrap">
@@ -257,7 +257,7 @@ tbody td:last-child { text-align: right; font-family: 'SF Mono', 'Consolas', mon
     </div>
   </div>
   <div class="footer">
-    <span class="brand">TRA MATCH</span> — 物流マッチングプラットフォーム | &copy; ${new Date().getFullYear()} All Rights Reserved.
+    <span class="brand">軽貨物マッチ</span> — 軽貨物マッチングプラットフォーム | &copy; ${new Date().getFullYear()} All Rights Reserved.
   </div>
 </div>
 </body>

@@ -16,9 +16,9 @@ import RelatedArticles from "@/components/seo/related-articles";
 import StructuredData from "@/components/seo/structured-data";
 
 const CATEGORY_MAP: Record<string, { label: string; href: string }> = {
-  kyukakyusha: { label: "求荷求車・マッチング", href: "/column/kyukakyusha" },
-  "truck-order": { label: "トラック手配・荷主向け", href: "/column/truck-order" },
-  "carrier-sales": { label: "運送会社の案件獲得", href: "/column/carrier-sales" },
+  kyukakyusha: { label: "軽貨物案件マッチング", href: "/column/kyukakyusha" },
+  "truck-order": { label: "配送依頼・荷主向け", href: "/column/truck-order" },
+  "carrier-sales": { label: "ドライバーの案件獲得", href: "/column/carrier-sales" },
 };
 
 function formatDate(dateVal: string | Date) {
@@ -152,7 +152,7 @@ export default function ColumnDetail() {
   return (
     <div className="min-h-screen bg-background pb-16 sm:pb-0">
       <SeoHead
-        title={`${article.title} | コラム | トラマッチ`}
+        title={`${article.title} | コラム | 軽貨物マッチ`}
         description={article.metaDescription || ""}
         ogType="article"
         noindex={isNoindex}
@@ -163,8 +163,8 @@ export default function ColumnDetail() {
           headline: article.title,
           description: article.metaDescription,
           datePublished: article.createdAt,
-          url: `https://tramatch-sinjapan.com/column/${article.slug}`,
-          author: { "@type": "Organization", name: "トラマッチ" },
+          url: `https://keikamotsu-match.com/column/${article.slug}`,
+          author: { "@type": "Organization", name: "軽貨物マッチ" },
         }}
       />
 

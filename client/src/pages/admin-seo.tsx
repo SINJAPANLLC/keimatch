@@ -19,20 +19,20 @@ import type { SeoArticle } from "@shared/schema";
 import DashboardLayout from "@/components/dashboard-layout";
 
 const KEYWORD_PRESETS = [
-  { label: "求荷求車", value: "求荷求車, マッチング, 運送, 物流" },
-  { label: "空車情報", value: "空車, 空車情報, 配車, 運送会社" },
-  { label: "物流DX", value: "物流DX, デジタル化, テクノロジー, 効率化" },
-  { label: "コスト削減", value: "コスト削減, 物流費, 運賃, 効率化" },
+  { label: "軽貨物マッチング", value: "軽貨物, マッチング, 配送, ラストマイル" },
+  { label: "空き車両情報", value: "空き車両, 空き車両情報, 配送, 軽貨物ドライバー" },
+  { label: "配送DX", value: "配送DX, デジタル化, テクノロジー, 効率化" },
+  { label: "コスト削減", value: "コスト削減, 配送費, 配送料金, 効率化" },
   { label: "2024年問題", value: "2024年問題, ドライバー不足, 働き方改革" },
-  { label: "配車計画", value: "配車, AI, 自動化, 効率化" },
-  { label: "共同配送", value: "共同配送, 混載, コスト削減, 物流効率" },
-  { label: "帰り便", value: "帰り便, 空車, コスト削減, 求荷求車" },
+  { label: "配送計画", value: "配送, AI, 自動化, 効率化" },
+  { label: "共同配送", value: "共同配送, 混載, コスト削減, 配送効率" },
+  { label: "帰り便", value: "帰り便, 空き車両, コスト削減, 軽貨物マッチング" },
 ];
 
 const CATEGORY_OPTIONS = [
-  { value: "kyukakyusha", label: "求荷求車・マッチング" },
-  { value: "truck-order", label: "トラック手配・荷主向け" },
-  { value: "carrier-sales", label: "運送会社の案件獲得・営業" },
+  { value: "kyukakyusha", label: "軽貨物案件マッチング" },
+  { value: "truck-order", label: "配送依頼・荷主向け" },
+  { value: "carrier-sales", label: "ドライバーの案件獲得・営業" },
 ];
 
 export default function AdminSeo() {
@@ -147,7 +147,7 @@ export default function AdminSeo() {
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>・文字数800字未満の記事は自動でnoindex（検索エンジンに表示されない）</li>
                 <li>・記事公開時にcanonicalタグを自動設定</li>
-                <li>・カテゴリ未設定の記事は「求荷求車・マッチング」に自動分類</li>
+                <li>・カテゴリ未設定の記事は「軽貨物案件マッチング」に自動分類</li>
               </ul>
             </CardContent>
           </Card>
@@ -193,7 +193,7 @@ export default function AdminSeo() {
                   <Label htmlFor="seo-topic">記事テーマ</Label>
                   <Input
                     id="seo-topic"
-                    placeholder="例: 求荷求車サービスのメリット"
+                    placeholder="例: 軽貨物マッチングサービスのメリット"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
                     className="mt-1"
@@ -223,7 +223,7 @@ export default function AdminSeo() {
                   <Label htmlFor="seo-keywords">キーワード（カンマ区切り）</Label>
                   <Input
                     id="seo-keywords"
-                    placeholder="例: 求荷求車, マッチング, 運送"
+                    placeholder="例: 軽貨物, マッチング, 配送"
                     value={keywords}
                     onChange={(e) => setKeywords(e.target.value)}
                     className="mt-1"

@@ -12,9 +12,9 @@ export async function seedDatabase() {
       {
         username: "admin",
         password: adminPassword,
-        companyName: "トラマッチ運営",
+        companyName: "軽貨物マッチ運営",
         phone: "03-0000-0000",
-        email: "admin@tramatch-sinjapan.com",
+        email: "admin@keikamotsu-match.com",
         userType: "admin",
         role: "admin",
         approved: true,
@@ -43,7 +43,7 @@ const defaultEmailTemplates = [
     category: "auto_reply",
     channel: "email",
     name: "パスワードリセット",
-    subject: "【トラマッチ】パスワードリセットのご案内",
+    subject: "【軽貨物マッチ】パスワードリセットのご案内",
     body: `{{companyName}} 様
 
 以下のリンクからパスワードをリセットしてください。
@@ -53,22 +53,22 @@ const defaultEmailTemplates = [
 
 ※このメールに心当たりがない場合は無視してください。
 
-トラマッチ運営事務局`,
+軽貨物マッチ運営事務局`,
     triggerEvent: "password_reset",
   },
   {
     category: "auto_notification",
     channel: "email",
     name: "取引先招待",
-    subject: "【トラマッチ】取引先招待のご案内",
-    body: `{{companyName}}様よりトラマッチへの招待が届いています。
+    subject: "【軽貨物マッチ】取引先招待のご案内",
+    body: `{{companyName}}様より軽貨物マッチへの招待が届いています。
 
 {{companyName}}様があなたを取引先として招待しました。
-以下のリンクからトラマッチに登録して、取引を開始しましょう。
+以下のリンクから軽貨物マッチに登録して、取引を開始しましょう。
 
 {{registerUrl}}
 
-トラマッチ - 求荷求車マッチングプラットフォーム
+軽貨物マッチ - 軽貨物案件マッチングプラットフォーム
 {{appBaseUrl}}`,
     triggerEvent: "partner_invite",
   },
@@ -76,7 +76,7 @@ const defaultEmailTemplates = [
     category: "auto_notification",
     channel: "email",
     name: "配車依頼書（荷主向け）",
-    subject: "【トラマッチ】{{senderName}}より配車依頼書が届きました",
+    subject: "【軽貨物マッチ】{{senderName}}より配車依頼書が届きました",
     body: `{{senderName}} 様より配車依頼書が届きました。
 
 以下の内容をご確認ください。
@@ -87,8 +87,8 @@ const defaultEmailTemplates = [
   {
     category: "auto_notification",
     channel: "email",
-    name: "配車依頼書（運送会社向け）",
-    subject: "【トラマッチ】{{senderName}}より配車依頼書が届きました",
+    name: "配車依頼書（ドライバー向け）",
+    subject: "【軽貨物マッチ】{{senderName}}より配車依頼書が届きました",
     body: `{{senderName}} 様より配車依頼書が届きました。
 
 以下の内容をご確認ください。
@@ -100,8 +100,8 @@ const defaultEmailTemplates = [
     category: "auto_notification",
     channel: "email",
     name: "新着案件通知",
-    subject: "【トラマッチ】新しい荷物が登録されました",
-    body: `新しい荷物案件が登録されました。
+    subject: "【軽貨物マッチ】新しい案件が登録されました",
+    body: `新しい案件が登録されました。
 
 出発地: {{departureArea}}
 到着地: {{arrivalArea}}
@@ -109,18 +109,18 @@ const defaultEmailTemplates = [
 重量: {{weight}}
 登録会社: {{companyName}}
 
-トラマッチにログインして詳細をご確認ください。
+軽貨物マッチにログインして詳細をご確認ください。
 {{appBaseUrl}}
 
-トラマッチ運営事務局`,
+軽貨物マッチ運営事務局`,
     triggerEvent: "cargo_new",
   },
   {
     category: "auto_notification",
     channel: "email",
-    name: "新着空車通知",
-    subject: "【トラマッチ】新しい空車が登録されました",
-    body: `新しい空車情報が登録されました。
+    name: "新着空き車両通知",
+    subject: "【軽貨物マッチ】新しい空き車両が登録されました",
+    body: `新しい空き車両情報が登録されました。
 
 現在地: {{currentArea}}
 行先: {{destinationArea}}
@@ -128,17 +128,17 @@ const defaultEmailTemplates = [
 積載量: {{maxWeight}}
 登録会社: {{companyName}}
 
-トラマッチにログインして詳細をご確認ください。
+軽貨物マッチにログインして詳細をご確認ください。
 {{appBaseUrl}}
 
-トラマッチ運営事務局`,
+軽貨物マッチ運営事務局`,
     triggerEvent: "truck_new",
   },
   {
     category: "auto_notification",
     channel: "email",
     name: "アカウント承認通知",
-    subject: "【トラマッチ】アカウントが承認されました",
+    subject: "【軽貨物マッチ】アカウントが承認されました",
     body: `{{companyName}} 様
 
 ご登録ありがとうございます。
@@ -147,11 +147,11 @@ const defaultEmailTemplates = [
 
 {{appBaseUrl}}/login
 
-トラマッチでは、荷物の登録・検索、空車情報の登録・検索など、物流マッチングに必要な機能をすべてご利用いただけます。
+軽貨物マッチでは、案件の登録・検索、空き車両情報の登録・検索など、軽貨物マッチングに必要な機能をすべてご利用いただけます。
 
 ご不明な点がございましたら、お気軽にお問い合わせください。
 
-トラマッチ運営事務局
+軽貨物マッチ運営事務局
 合同会社SIN JAPAN`,
     triggerEvent: "user_approved",
   },
@@ -159,10 +159,10 @@ const defaultEmailTemplates = [
     category: "auto_notification",
     channel: "email",
     name: "請求書送信",
-    subject: "【トラマッチ】請求書 {{invoiceNumber}}（{{billingMonth}}）",
+    subject: "【軽貨物マッチ】請求書 {{invoiceNumber}}（{{billingMonth}}）",
     body: `{{companyName}} 御中
 
-いつもトラマッチをご利用いただきありがとうございます。
+いつも軽貨物マッチをご利用いただきありがとうございます。
 請求書をお送りいたします。
 
 請求書番号: {{invoiceNumber}}
@@ -173,7 +173,7 @@ const defaultEmailTemplates = [
 ※請求書の詳細データはシステムより自動挿入されます。
 
 合同会社SIN JAPAN
-トラマッチ運営事務局`,
+軽貨物マッチ運営事務局`,
     triggerEvent: "invoice_send",
   },
 ];

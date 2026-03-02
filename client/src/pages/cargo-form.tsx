@@ -23,23 +23,16 @@ import { ja } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 
 const VEHICLE_TYPES = [
-  "軽車両", "1t車", "1.5t車", "2t車", "3t車", "4t車", "5t車", "6t車",
-  "7t車", "8t車", "10t車", "11t車", "13t車", "15t車",
-  "増トン車", "大型車", "トレーラー", "フルトレーラー", "その他"
+  "軽バン", "軽トラック", "軽冷凍車", "軽冷蔵車", "軽ワゴン", "バイク便", "その他"
 ];
 const BODY_TYPES = [
-  "平ボディ", "バン", "箱車", "ウイング", "幌ウイング", "冷蔵車", "冷凍車", "冷凍冷蔵車",
-  "ダンプ", "タンクローリー", "車載車", "セルフローダー", "セーフティローダー",
-  "ユニック", "クレーン付き", "パワーゲート付き", "エアサス",
-  "コンテナ車", "海上コンテナ", "低床", "高床",
-  "ショート", "ロング", "ワイド", "ワイドロング",
-  "その他"
+  "標準ボディ", "ハイルーフ", "幌車", "冷蔵仕様", "冷凍仕様", "パワーゲート付き", "その他"
 ];
 const TEMP_CONTROLS = ["指定なし", "常温", "冷蔵（0〜10℃）", "冷凍（-18℃以下）", "定温"];
 const HIGHWAY_FEE_OPTIONS = ["込み", "別途", "高速代なし"];
 const TRANSPORT_TYPE_OPTIONS = ["スポット", "定期"];
 const CONSOLIDATION_OPTIONS = ["不可", "可能"];
-const DRIVER_WORK_OPTIONS = ["手積み手降ろし", "フォークリフト", "クレーン", "ゲート車", "パレット", "作業なし", "その他"];
+const DRIVER_WORK_OPTIONS = ["手積み手降ろし", "台車使用", "エレベーター有", "階段搬入", "設置作業あり", "その他"];
 const LOADING_METHODS = ["パレット", "バラ積み", "段ボール", "フレコン", "その他"];
 const TIME_OPTIONS = ["指定なし", "午前中", "午後", "夕方以降", "終日可", "0:00", "1:00", "2:00", "3:00", "4:00", "5:00", "6:00", "7:00", "8:00", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
 const URGENCY_OPTIONS = ["通常", "至急"];
@@ -74,8 +67,8 @@ const SELECT_FIELD_OPTIONS: Record<string, string[]> = {
 
 const FIELD_ALIASES: Record<string, Record<string, string>> = {
   highwayFee: { "あり": "込み", "なし": "高速代なし", "高速代あり": "込み", "高速代込み": "込み", "高速代別途": "別途" },
-  driverWork: { "作業なし（車上渡し）": "作業なし", "車上渡し": "作業なし" },
-  bodyType: { "箱": "箱車" },
+  driverWork: { "作業なし（車上渡し）": "その他", "車上渡し": "その他" },
+  bodyType: { "箱": "標準ボディ" },
 };
 
 function findBestMatch(value: string, options: string[], fieldName?: string): string {
@@ -172,8 +165,8 @@ export default function CargoForm() {
       id: "welcome",
       role: "assistant",
       content: isEditMode
-        ? "荷物情報を編集できます。フォームの内容を変更して「更新する」ボタンを押してください。"
-        : "荷物登録のお手伝いをします！\n\n荷物の情報をテキストで貼り付けるか、ファイルをアップロードしてください。運賃の相談もできます。\n\n例：「3月5日に横浜から大阪まで食品10トンを冷凍車で運びたい」",
+        ? "案件情報を編集できます。フォームの内容を変更して「更新する」ボタンを押してください。"
+        : "案件登録のお手伝いをします！\n\n案件の情報をテキストで貼り付けるか、ファイルをアップロードしてください。運賃の相談もできます。\n\n例：「3月5日に横浜から大阪まで小荷物20個を軽バンで届けたい」",
       status: "chatting",
     },
   ]);
@@ -617,7 +610,7 @@ export default function CargoForm() {
         <div className="bg-primary px-3 sm:px-4 py-2.5 sm:py-3 flex items-center gap-2 sm:gap-3 shrink-0">
           <Package className="w-5 h-5 text-primary-foreground" />
           <div className="flex-1 min-w-0">
-            <h1 className="text-base sm:text-lg font-bold text-primary-foreground text-shadow-lg truncate" data-testid="text-cargo-form-title">{isEditMode ? "荷物情報の編集" : "AI荷物登録"}</h1>
+            <h1 className="text-base sm:text-lg font-bold text-primary-foreground text-shadow-lg truncate" data-testid="text-cargo-form-title">{isEditMode ? "案件情報の編集" : "AI案件登録"}</h1>
             <p className="text-[10px] sm:text-xs text-primary-foreground/80 text-shadow">AIアシスタントが登録をサポートします</p>
           </div>
           <div className="flex lg:hidden gap-1">
@@ -876,7 +869,7 @@ export default function CargoForm() {
                     <FormField control={form.control} name="title" render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-xs">タイトル（任意）</FormLabel>
-                        <FormControl><Input placeholder="例: 東京→大阪 食品 10t" {...field} className="h-8 text-xs" data-testid="input-cargo-title" /></FormControl>
+                        <FormControl><Input placeholder="例: 東京→大阪 小荷物 軽バン" {...field} className="h-8 text-xs" data-testid="input-cargo-title" /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -1020,7 +1013,7 @@ export default function CargoForm() {
                           <FormField control={form.control} name="weight" render={({ field }) => (
                             <FormItem>
                               <FormLabel className="text-xs">重量</FormLabel>
-                              <FormControl><Input placeholder="例: 5t" {...field} className="h-8 text-xs" data-testid="input-weight" /></FormControl>
+                              <FormControl><Input placeholder="例: 100kg" {...field} className="h-8 text-xs" data-testid="input-weight" /></FormControl>
                               <FormMessage />
                             </FormItem>
                           )} />
@@ -1029,7 +1022,7 @@ export default function CargoForm() {
                           <FormField control={form.control} name="packageCount" render={({ field }) => (
                             <FormItem>
                               <FormLabel className="text-xs">個数</FormLabel>
-                              <FormControl><Input placeholder="例: 20パレット" {...field} value={field.value || ""} className="h-8 text-xs" data-testid="input-package-count" /></FormControl>
+                              <FormControl><Input placeholder="例: 20個" {...field} value={field.value || ""} className="h-8 text-xs" data-testid="input-package-count" /></FormControl>
                               <FormMessage />
                             </FormItem>
                           )} />
