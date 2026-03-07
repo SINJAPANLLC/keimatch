@@ -1,9 +1,9 @@
 import { storage } from "./storage";
 import { sendEmail } from "./notification-service";
 
-const DAILY_SEND_LIMIT = 500;
-const SEND_INTERVAL_MS = 2000;
-const CRAWL_BATCH_SIZE = 300;
+const DAILY_SEND_LIMIT = 1000;
+const SEND_INTERVAL_MS = 1200;
+const CRAWL_BATCH_SIZE = 500;
 
 const SEARCH_QUERIES = [
   "軽貨物 配送 会社概要",
@@ -40,6 +40,39 @@ const SEARCH_QUERIES = [
   "軽貨物 共同配送 会社概要",
   "軽貨物 倉庫 配送 一貫",
   "軽貨物 ハンドキャリー 会社",
+  "軽貨物 求人 ドライバー 配送",
+  "軽貨物 運送 事業者 一覧",
+  "軽貨物 配送 パートナー企業",
+  "軽貨物 配送 業者 おすすめ",
+  "軽貨物 配送 会社 評判",
+  "軽貨物 開業 サポート 会社",
+  "軽貨物 配送 委託 企業",
+  "軽貨物 配送 マッチング 会社",
+  "軽貨物 配送 業務提携",
+  "軽貨物 運送 法人 配送",
+  "軽貨物 宅配 事業 法人",
+  "軽貨物 配送 下請け 募集",
+  "軽貨物 傭車 募集",
+  "軽貨物 協力会社 募集",
+  "配送ドライバー 業務委託 軽貨物",
+  "置き配 配送 軽貨物 会社",
+  "通販 配送 軽貨物 業者",
+  "出前 配送 軽貨物",
+  "家具配送 軽貨物 設置",
+  "家電配送 軽貨物 会社",
+  "引越し 単身 軽貨物",
+  "書類配送 軽貨物 即日",
+  "検体輸送 軽貨物 医療",
+  "花 配送 軽貨物",
+  "ケータリング 配送 軽貨物",
+  "ペット輸送 軽貨物",
+  "カーゴ 軽貨物 会社概要",
+  "PickGo 軽貨物",
+  "ハコベル 軽貨物",
+  "Amazon Flex 軽貨物 配送",
+  "軽貨物 配送 地域密着",
+  "軽貨物 個人事業 開業 配送",
+  "軽貨物 黒ナンバー 配送 会社",
 ];
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
@@ -202,6 +235,23 @@ function extractContactInfo(html: string): { emails: string[]; phones: string[];
   return { emails: emails.slice(0, 5), phones: phones.slice(0, 3), faxes: Array.from(faxSet).slice(0, 3) };
 }
 
+function extractInternalLinks(html: string, baseUrl: string): string[] {
+  const links: string[] = [];
+  try {
+    const origin = new URL(baseUrl).origin;
+    const hrefPattern = /href=["']([^"'#]+)["']/gi;
+    let match;
+    while ((match = hrefPattern.exec(html)) !== null) {
+      let href = match[1];
+      if (href.startsWith("/")) href = origin + href;
+      if (href.startsWith(origin) && !href.includes("javascript:") && !href.endsWith(".pdf") && !href.endsWith(".jpg") && !href.endsWith(".png")) {
+        if (!links.includes(href) && href !== baseUrl) links.push(href);
+      }
+    }
+  } catch {}
+  return links.slice(0, 10);
+}
+
 function extractCompanyName(html: string, url: string): string {
   const titleMatch = html.match(/<title[^>]*>(.*?)<\/title>/i);
   if (titleMatch) {
@@ -217,7 +267,13 @@ async function findEmailOnRelatedPages(baseUrl: string): Promise<{ emails: strin
   try {
     const urlObj = new URL(baseUrl);
     const origin = urlObj.origin;
-    const relatedPaths = ["/contact", "/contact/", "/company/", "/about/", "/access/", "/inquiry/"];
+    const relatedPaths = [
+      "/contact", "/contact/", "/company/", "/about/", "/access/", "/inquiry/",
+      "/info", "/info/", "/corp/", "/corporate/", "/ask/", "/form/",
+      "/contact.html", "/company.html", "/about.html", "/inquiry.html",
+      "/toiawase/", "/otoiawase/", "/mail/", "/mail.html",
+      "/profile/", "/gaiyou/", "/kaisyagaiyou/",
+    ];
     for (const path of relatedPaths) {
       const relatedUrl = origin + path;
       if (relatedUrl === baseUrl) continue;
@@ -229,8 +285,31 @@ async function findEmailOnRelatedPages(baseUrl: string): Promise<{ emails: strin
           return info;
         }
       }
-      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r => setTimeout(r, 300));
     }
+
+    const mainHtml = await fetchPageContent(baseUrl);
+    if (mainHtml) {
+      const internalLinks = extractInternalLinks(mainHtml, baseUrl);
+      const contactLinks = internalLinks.filter(link => {
+        const lower = link.toLowerCase();
+        return lower.includes("contact") || lower.includes("company") || lower.includes("about")
+          || lower.includes("inquiry") || lower.includes("toiawase") || lower.includes("mail")
+          || lower.includes("info") || lower.includes("gaiyou") || lower.includes("ask");
+      });
+      for (const link of contactLinks.slice(0, 5)) {
+        const html = await fetchPageContent(link);
+        if (html && html.length > 500) {
+          const info = extractContactInfo(html);
+          if (info.emails.length > 0) {
+            console.log(`[Lead Crawler] Found email via internal link: ${link}`);
+            return info;
+          }
+        }
+        await new Promise(r => setTimeout(r, 300));
+      }
+    }
+
     return null;
   } catch {
     return null;
@@ -249,6 +328,15 @@ export async function crawlLeadsFromUrl(url: string): Promise<number> {
 
   let { emails, phones, faxes } = extractContactInfo(html);
   const companyName = extractCompanyName(html, url);
+
+  try {
+    const domain = new URL(url).hostname;
+    const existingByDomain = await storage.getEmailLeadByDomain(domain);
+    if (existingByDomain) {
+      console.log(`[Lead Crawler] Skipped (domain already exists): ${domain}`);
+      return 0;
+    }
+  } catch {}
 
   if (emails.length === 0) {
     const relatedInfo = await findEmailOnRelatedPages(url);
@@ -294,10 +382,19 @@ const DIRECTORY_SOURCES = [
   "https://transport-guide.jp/company/",
   "https://www.trabox.ne.jp/company/",
   "https://www.butsuryu.or.jp/member/",
-  "https://www.nittsu.co.jp/",
   "https://lnews.jp/logistics-company/",
   "https://www.e-logit.com/companylist/",
   "https://www.logistics.jp/company/",
+  "https://www.keikamotsu.com/",
+  "https://driver-job.jp/",
+  "https://www.k-kasha.com/",
+  "https://cargo-navi.jp/",
+  "https://www.haisou-navi.com/",
+  "https://www.driverstand.com/",
+  "https://www.kurumatch.com/",
+  "https://pickgo.town/",
+  "https://hacobell.com/",
+  "https://www.keikamotsu-navi.com/",
 ];
 
 const PREFECTURES = [
@@ -466,13 +563,10 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
   const limit = maxCount || CRAWL_BATCH_SIZE;
 
   const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
-  const todaysQueries = shuffled.slice(0, 10);
+  const todaysQueries = shuffled.slice(0, 15);
 
-  const prefStart = Math.floor(Math.random() * PREFECTURES.length);
-  const todaysPrefectures: string[] = [];
-  for (let i = 0; i < 10; i++) {
-    todaysPrefectures.push(PREFECTURES[(prefStart + i) % PREFECTURES.length]);
-  }
+  const shuffledPrefs = [...PREFECTURES].sort(() => Math.random() - 0.5);
+  const todaysPrefectures = shuffledPrefs.slice(0, 20);
 
   for (const query of todaysQueries) {
     if (totalFound >= limit) break;
@@ -650,15 +744,111 @@ URL: https://keimatch-sinjapan.com
   return { sent, failed };
 }
 
+export async function retryFailedLeads(): Promise<{ sent: number; failed: number }> {
+  const template = await storage.getAdminSetting("lead_email_subject");
+  const bodyTemplate = await storage.getAdminSetting("lead_email_body");
+  const subject = template || "軽貨物の案件獲得・空き車両活用でお困りではありませんか？｜ケイマッチ";
+  const body = bodyTemplate || "";
+
+  const failedLeads = await storage.getFailedEmailLeadsForRetry(50);
+  if (failedLeads.length === 0) return { sent: 0, failed: 0 };
+
+  console.log(`[Lead Retry] Retrying ${failedLeads.length} failed leads...`);
+  let sent = 0;
+  let failed = 0;
+
+  for (const lead of failedLeads) {
+    if (!lead.email) continue;
+    try {
+      const personalizedBody = (body || subject).replace(/\{company\}/g, lead.companyName);
+      const result = await sendEmail(lead.email, subject, personalizedBody);
+      if (result.success) {
+        await storage.updateEmailLead(lead.id, { status: "sent", sentAt: new Date(), sentSubject: subject });
+        sent++;
+      } else {
+        await storage.updateEmailLead(lead.id, { status: "permanently_failed" });
+        failed++;
+      }
+    } catch {
+      await storage.updateEmailLead(lead.id, { status: "permanently_failed" });
+      failed++;
+    }
+    await new Promise(r => setTimeout(r, SEND_INTERVAL_MS));
+  }
+
+  console.log(`[Lead Retry] Complete: sent=${sent}, failed=${failed}`);
+  return { sent, failed };
+}
+
+export async function sendFollowUpEmails(): Promise<{ sent: number }> {
+  const followUpSubject = "【再送】軽貨物の案件・空き車両活用をお手伝いします｜ケイマッチ";
+  const followUpBody = await storage.getAdminSetting("lead_followup_body");
+  const defaultFollowUp = `{company}
+ご担当者様
+
+先日は突然のご連絡、失礼いたしました。
+軽貨物案件マッチングサービス「ケイマッチ」の運営事務局でございます。
+
+その後、軽貨物の案件獲得や空き車両の活用について、
+お困りごとはございませんでしょうか？
+
+ケイマッチでは現在、全機能を無料でご利用いただけます。
+
+▼ 30秒で無料登録
+https://keimatch-sinjapan.com/register
+
+ご不明な点がございましたら、
+本メールへのご返信にてお気軽にお問い合わせください。
+
+━━━━━━━━━━━━━━━━━━━━
+ケイマッチ運営事務局
+合同会社SIN JAPAN
+〒243-0303 神奈川県愛甲郡愛川町中津7287
+TEL: 046-212-2325
+URL: https://keimatch-sinjapan.com
+━━━━━━━━━━━━━━━━━━━━
+
+※配信停止をご希望の場合は本メールへご返信ください。`;
+
+  const body = followUpBody || defaultFollowUp;
+
+  const sentLeads = await storage.getSentLeadsForFollowUp(100, 3);
+  if (sentLeads.length === 0) {
+    console.log("[Lead FollowUp] No leads ready for follow-up");
+    return { sent: 0 };
+  }
+
+  let sent = 0;
+  for (const lead of sentLeads) {
+    if (!lead.email) continue;
+    try {
+      const personalizedBody = body.replace(/\{company\}/g, lead.companyName);
+      const result = await sendEmail(lead.email, followUpSubject, personalizedBody);
+      if (result.success) {
+        await storage.updateEmailLead(lead.id, { status: "followed_up", sentAt: new Date() });
+        sent++;
+      }
+    } catch {
+    }
+    await new Promise(r => setTimeout(r, SEND_INTERVAL_MS));
+  }
+
+  console.log(`[Lead FollowUp] Complete: sent=${sent}`);
+  return { sent };
+}
+
 export function scheduleLeadCrawler() {
-  const CRAWL_HOURS = [6, 12, 20];
-  const SEND_HOURS = [9, 15];
+  const CRAWL_HOURS = [5, 8, 12, 16, 21];
+  const SEND_HOURS = [9, 11, 14, 17];
+  const RETRY_HOURS = [10];
+  const FOLLOWUP_HOURS = [13];
 
   setInterval(async () => {
     const now = new Date();
     const jstHour = (now.getUTCHours() + 9) % 24;
+    const minute = now.getMinutes();
 
-    if (CRAWL_HOURS.includes(jstHour) && now.getMinutes() === 0) {
+    if (CRAWL_HOURS.includes(jstHour) && minute === 0) {
       console.log(`[Lead Crawler] Starting crawl (${jstHour}:00 JST)...`);
       try {
         await crawlLeadsWithAI();
@@ -667,7 +857,7 @@ export function scheduleLeadCrawler() {
       }
     }
 
-    if (SEND_HOURS.includes(jstHour) && now.getMinutes() === 0) {
+    if (SEND_HOURS.includes(jstHour) && minute === 0) {
       console.log(`[Lead Email] Starting send (${jstHour}:00 JST)...`);
       try {
         await sendDailyLeadEmails();
@@ -675,9 +865,27 @@ export function scheduleLeadCrawler() {
         console.error("[Lead Email] Send failed:", err);
       }
     }
+
+    if (RETRY_HOURS.includes(jstHour) && minute === 0) {
+      console.log(`[Lead Retry] Starting retry (${jstHour}:00 JST)...`);
+      try {
+        await retryFailedLeads();
+      } catch (err) {
+        console.error("[Lead Retry] Retry failed:", err);
+      }
+    }
+
+    if (FOLLOWUP_HOURS.includes(jstHour) && minute === 0) {
+      console.log(`[Lead FollowUp] Starting follow-up (${jstHour}:00 JST)...`);
+      try {
+        await sendFollowUpEmails();
+      } catch (err) {
+        console.error("[Lead FollowUp] Follow-up failed:", err);
+      }
+    }
   }, 60000);
 
   const now = new Date();
   const jstHour = (now.getUTCHours() + 9) % 24;
-  console.log(`[Lead Crawler] Scheduled: crawl at ${CRAWL_HOURS.join(",")}時 JST, send at ${SEND_HOURS.join(",")}時 JST (now: ${jstHour}時 JST)`);
+  console.log(`[Lead Crawler] Scheduled: crawl=${CRAWL_HOURS.join(",")}時, send=${SEND_HOURS.join(",")}時, retry=${RETRY_HOURS.join(",")}時, followup=${FOLLOWUP_HOURS.join(",")}時 JST (now: ${jstHour}時)`);
 }

@@ -218,6 +218,9 @@ export interface IStorage {
   deleteEmailLead(id: string): Promise<boolean>;
   getNewEmailLeadsForSending(limit: number): Promise<EmailLead[]>;
   getTodaySentLeadCount(): Promise<number>;
+  getFailedEmailLeadsForRetry(limit: number): Promise<EmailLead[]>;
+  getSentLeadsForFollowUp(limit: number, daysAfterSent: number): Promise<EmailLead[]>;
+  getEmailLeadByDomain(domain: string): Promise<EmailLead | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1262,6 +1265,36 @@ export class DatabaseStorage implements IStorage {
     const [result] = await db.select({ count: sql<number>`count(*)::int` }).from(emailLeads)
       .where(and(eq(emailLeads.status, "sent"), gte(emailLeads.sentAt, today)));
     return result?.count || 0;
+  }
+
+  async getFailedEmailLeadsForRetry(limit: number): Promise<EmailLead[]> {
+    return db.select().from(emailLeads)
+      .where(and(
+        eq(emailLeads.status, "failed"),
+        sql`${emailLeads.email} IS NOT NULL AND ${emailLeads.email} != ''`
+      ))
+      .orderBy(emailLeads.createdAt)
+      .limit(limit);
+  }
+
+  async getSentLeadsForFollowUp(limit: number, daysAfterSent: number): Promise<EmailLead[]> {
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysAfterSent);
+    return db.select().from(emailLeads)
+      .where(and(
+        eq(emailLeads.status, "sent"),
+        sql`${emailLeads.sentAt} IS NOT NULL AND ${emailLeads.sentAt} < ${cutoffDate}`,
+        sql`${emailLeads.email} IS NOT NULL AND ${emailLeads.email} != ''`
+      ))
+      .orderBy(emailLeads.sentAt)
+      .limit(limit);
+  }
+
+  async getEmailLeadByDomain(domain: string): Promise<EmailLead | undefined> {
+    const [lead] = await db.select().from(emailLeads)
+      .where(sql`${emailLeads.email} LIKE ${'%@' + domain}`)
+      .limit(1);
+    return lead;
   }
 }
 
