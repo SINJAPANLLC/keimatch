@@ -6,73 +6,59 @@ const SEND_INTERVAL_MS = 1200;
 const CRAWL_BATCH_SIZE = 500;
 
 const SEARCH_QUERIES = [
-  "軽貨物 配送 会社概要",
-  "軽貨物 運送会社 お問い合わせ",
-  "貨物軽自動車運送事業 会社",
-  "軽貨物 ドライバー 募集",
-  "軽貨物 チャーター便",
-  "軽貨物 配送 株式会社",
-  "軽貨物 宅配 業務委託",
-  "軽貨物 スポット便 配送",
-  "軽貨物 ラストマイル 配送",
-  "軽貨物 EC配送 株式会社",
-  "軽貨物 個人事業主 配送",
-  "軽バン 配送 会社概要",
-  "軽貨物 案件 マッチング",
-  "軽貨物 配送パートナー 募集",
-  "軽貨物 フードデリバリー 配送",
-  "軽貨物 冷蔵冷凍 配送",
-  "軽貨物 緊急配送 即日",
-  "軽貨物 運送 開業",
-  "軽貨物 配送代行 会社",
-  "軽貨物 企業配送 法人",
-  "軽貨物 ルート配送 募集",
-  "軽貨物 即日配送 会社概要",
-  "軽貨物 物流 アウトソーシング",
-  "軽貨物 配送委託 パートナー",
-  "軽貨物 引越し 赤帽",
-  "軽貨物 ネットスーパー 配送",
-  "軽貨物 医薬品 配送",
-  "バイク便 即日配送 会社",
-  "軽貨物 定期便 契約",
-  "軽貨物 夜間配送 会社",
-  "軽貨物 長距離 チャーター",
-  "軽貨物 共同配送 会社概要",
-  "軽貨物 倉庫 配送 一貫",
-  "軽貨物 ハンドキャリー 会社",
-  "軽貨物 求人 ドライバー 配送",
-  "軽貨物 運送 事業者 一覧",
-  "軽貨物 配送 パートナー企業",
-  "軽貨物 配送 業者 おすすめ",
-  "軽貨物 配送 会社 評判",
-  "軽貨物 開業 サポート 会社",
-  "軽貨物 配送 委託 企業",
-  "軽貨物 配送 マッチング 会社",
-  "軽貨物 配送 業務提携",
-  "軽貨物 運送 法人 配送",
-  "軽貨物 宅配 事業 法人",
-  "軽貨物 配送 下請け 募集",
-  "軽貨物 傭車 募集",
-  "軽貨物 協力会社 募集",
-  "配送ドライバー 業務委託 軽貨物",
-  "置き配 配送 軽貨物 会社",
-  "通販 配送 軽貨物 業者",
-  "出前 配送 軽貨物",
-  "家具配送 軽貨物 設置",
-  "家電配送 軽貨物 会社",
-  "引越し 単身 軽貨物",
-  "書類配送 軽貨物 即日",
-  "検体輸送 軽貨物 医療",
-  "花 配送 軽貨物",
-  "ケータリング 配送 軽貨物",
-  "ペット輸送 軽貨物",
-  "カーゴ 軽貨物 会社概要",
-  "PickGo 軽貨物",
-  "ハコベル 軽貨物",
-  "Amazon Flex 軽貨物 配送",
-  "軽貨物 配送 地域密着",
-  "軽貨物 個人事業 開業 配送",
-  "軽貨物 黒ナンバー 配送 会社",
+  "軽貨物 配送 会社概要 メール",
+  "軽貨物 運送会社 お問い合わせ メールアドレス",
+  "貨物軽自動車運送事業 会社 連絡先",
+  "軽貨物 ドライバー 募集 会社概要",
+  "軽貨物 チャーター便 株式会社",
+  "軽貨物 配送 株式会社 info@",
+  "軽貨物 宅配 業務委託 会社概要",
+  "軽貨物 スポット便 配送 連絡先",
+  "軽貨物 ラストマイル 配送 株式会社",
+  "軽貨物 EC配送 株式会社 会社概要",
+  "軽バン 配送 会社概要 連絡先",
+  "軽貨物 配送パートナー 募集 会社概要",
+  "軽貨物 冷蔵冷凍 配送 会社概要",
+  "軽貨物 緊急配送 即日 株式会社",
+  "軽貨物 配送代行 会社 メール",
+  "軽貨物 企業配送 法人 会社概要",
+  "軽貨物 ルート配送 株式会社 連絡先",
+  "軽貨物 即日配送 会社概要 メール",
+  "軽貨物 配送委託 パートナー 連絡先",
+  "軽貨物 引越し 赤帽 連絡先",
+  "バイク便 即日配送 会社 メール",
+  "軽貨物 定期便 契約 会社概要",
+  "軽貨物 夜間配送 会社 連絡先",
+  "軽貨物 共同配送 会社概要 メール",
+  "軽貨物 求人 ドライバー 会社概要",
+  "軽貨物 運送 事業者 連絡先",
+  "軽貨物 配送 業者 会社概要",
+  "軽貨物 開業 サポート 会社 連絡先",
+  "軽貨物 配送 委託 企業 メール",
+  "軽貨物 傭車 募集 連絡先",
+  "軽貨物 協力会社 募集 会社概要",
+  "配送ドライバー 業務委託 軽貨物 会社概要",
+  "家具配送 軽貨物 設置 会社概要",
+  "家電配送 軽貨物 会社 連絡先",
+  "引越し 単身 軽貨物 会社概要",
+  "軽貨物 黒ナンバー 配送 会社 連絡先",
+  "軽貨物 配送 地域密着 会社概要",
+  "運送会社 軽貨物 info@ co.jp",
+  "配送業者 軽貨物 会社概要 電話 メール",
+  "軽貨物運送 株式会社 会社概要",
+  "軽貨物 配送業者 一覧 連絡先",
+  "赤帽 引越し 配送 連絡先 メール",
+  "バイク便 会社 連絡先 メール",
+  "即日配送 軽貨物 会社 お問い合わせ",
+  "宅配代行 軽貨物 会社概要 連絡先",
+  "ネット通販 配送 軽貨物 会社概要",
+  "出前配送 軽貨物 会社 連絡先",
+  "検体輸送 軽貨物 医療 会社概要",
+  "花 配送 軽貨物 会社 連絡先",
+  "軽貨物 個人事業 開業 配送 会社概要",
+  "運送業 軽貨物 会社一覧 メール",
+  "配送会社 軽貨物 問い合わせ先",
+  "軽貨物 物流 会社 メールアドレス",
 ];
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
@@ -143,12 +129,22 @@ function getTextContent(html: string): string {
     .substring(0, 8000);
 }
 
+const URL_TRANSPORT_KEYWORDS = [
+  "transport", "logistics", "delivery", "cargo", "kamotsu",
+  "unso", "haisou", "takuhai", "exp", "express",
+  "logi", "freight", "moving", "hikkoshi",
+];
+
 function isTransportCompany(html: string, url: string): boolean {
   if (isPortalSite(url)) return false;
 
   const textContent = getTextContent(html);
   const lowerText = textContent.toLowerCase();
   const lowerUrl = url.toLowerCase();
+
+  for (const kw of URL_TRANSPORT_KEYWORDS) {
+    if (lowerUrl.includes(kw)) return true;
+  }
 
   let strongScore = 0;
   for (const kw of STRONG_TRANSPORT_KEYWORDS) {
@@ -172,7 +168,7 @@ function isTransportCompany(html: string, url: string): boolean {
     }
   }
 
-  if (transportScore < 2) return false;
+  if (transportScore < 1) return false;
   if (nonTransportScore >= transportScore) return false;
   return true;
 }
@@ -268,15 +264,13 @@ async function findEmailOnRelatedPages(baseUrl: string): Promise<{ emails: strin
     const urlObj = new URL(baseUrl);
     const origin = urlObj.origin;
     const relatedPaths = [
-      "/contact", "/contact/", "/company/", "/about/", "/access/", "/inquiry/",
-      "/info", "/info/", "/corp/", "/corporate/", "/ask/", "/form/",
-      "/contact.html", "/company.html", "/about.html", "/inquiry.html",
-      "/toiawase/", "/otoiawase/", "/mail/", "/mail.html",
-      "/profile/", "/gaiyou/", "/kaisyagaiyou/",
+      "/contact", "/company/", "/about/", "/inquiry/",
+      "/info/", "/company.html", "/contact.html",
+      "/gaiyou/", "/overview/",
     ];
-    for (const path of relatedPaths) {
+    const pathPromises = relatedPaths.map(async (path) => {
       const relatedUrl = origin + path;
-      if (relatedUrl === baseUrl) continue;
+      if (relatedUrl === baseUrl) return null;
       const html = await fetchPageContent(relatedUrl);
       if (html && html.length > 500) {
         const info = extractContactInfo(html);
@@ -285,8 +279,11 @@ async function findEmailOnRelatedPages(baseUrl: string): Promise<{ emails: strin
           return info;
         }
       }
-      await new Promise(r => setTimeout(r, 300));
-    }
+      return null;
+    });
+    const pathResults = await Promise.all(pathPromises);
+    const foundResult = pathResults.find(r => r !== null);
+    if (foundResult) return foundResult;
 
     const mainHtml = await fetchPageContent(baseUrl);
     if (mainHtml) {
@@ -590,10 +587,10 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
           const found = await crawlLeadsFromUrl(url);
           totalFound += found;
           if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${url}`);
-          await new Promise(r => setTimeout(r, 1500));
+          await new Promise(r => setTimeout(r, 800));
         }
 
-        await new Promise(r => setTimeout(r, 2000));
+        await new Promise(r => setTimeout(r, 1000));
       } catch (err) {
         console.error(`[Lead Crawler] Search failed for "${query}":`, err);
       }
