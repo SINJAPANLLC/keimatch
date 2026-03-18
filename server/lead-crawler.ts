@@ -375,23 +375,96 @@ export async function crawlLeadsFromUrl(url: string): Promise<number> {
 
 const DIRECTORY_SOURCES = [
   "https://www.jta.or.jp/member/",
-  "https://www.logi-today.com/company-list",
   "https://transport-guide.jp/company/",
-  "https://www.trabox.ne.jp/company/",
-  "https://www.butsuryu.or.jp/member/",
   "https://lnews.jp/logistics-company/",
-  "https://www.e-logit.com/companylist/",
-  "https://www.logistics.jp/company/",
   "https://www.keikamotsu.com/",
   "https://driver-job.jp/",
-  "https://www.k-kasha.com/",
   "https://cargo-navi.jp/",
-  "https://www.haisou-navi.com/",
-  "https://www.driverstand.com/",
-  "https://www.kurumatch.com/",
-  "https://pickgo.town/",
-  "https://hacobell.com/",
   "https://www.keikamotsu-navi.com/",
+  "https://kkamotsu-navi.co.jp/",
+  "https://www.haisou.jp/",
+  "https://logistar.jp/",
+  "https://www.akabou.jp/",
+];
+
+const DIRECT_COMPANY_PAGES = [
+  "https://hokkaido.akabou.jp/",
+  "https://aomori.akabou.jp/",
+  "https://iwate.akabou.jp/",
+  "https://miyagi.akabou.jp/",
+  "https://akita.akabou.jp/",
+  "https://yamagata.akabou.jp/",
+  "https://fukushima.akabou.jp/",
+  "https://ibaraki.akabou.jp/",
+  "https://tochigi.akabou.jp/",
+  "https://gunma.akabou.jp/",
+  "https://saitama.akabou.jp/",
+  "https://chiba.akabou.jp/",
+  "https://tokyo.akabou.jp/",
+  "https://kanagawa.akabou.jp/",
+  "https://niigata.akabou.jp/",
+  "https://toyama.akabou.jp/",
+  "https://ishikawa.akabou.jp/",
+  "https://fukui.akabou.jp/",
+  "https://yamanashi.akabou.jp/",
+  "https://nagano.akabou.jp/",
+  "https://gifu.akabou.jp/",
+  "https://shizuoka.akabou.jp/",
+  "https://aichi.akabou.jp/",
+  "https://mie.akabou.jp/",
+  "https://shiga.akabou.jp/",
+  "https://kyoto.akabou.jp/",
+  "https://osaka.akabou.jp/",
+  "https://hyogo.akabou.jp/",
+  "https://nara.akabou.jp/",
+  "https://wakayama.akabou.jp/",
+  "https://tottori.akabou.jp/",
+  "https://shimane.akabou.jp/",
+  "https://okayama.akabou.jp/",
+  "https://hiroshima.akabou.jp/",
+  "https://yamaguchi.akabou.jp/",
+  "https://tokushima.akabou.jp/",
+  "https://kagawa.akabou.jp/",
+  "https://ehime.akabou.jp/",
+  "https://kochi.akabou.jp/",
+  "https://fukuoka.akabou.jp/",
+  "https://saga.akabou.jp/",
+  "https://nagasaki.akabou.jp/",
+  "https://kumamoto.akabou.jp/",
+  "https://oita.akabou.jp/",
+  "https://miyazaki.akabou.jp/",
+  "https://kagoshima.akabou.jp/",
+  "https://okinawa.akabou.jp/",
+  "https://kkamotsu-navi.co.jp/category1/%E5%8C%97%E6%B5%B7%E9%81%93/",
+  "https://kkamotsu-navi.co.jp/category1/%E6%9D%B1%E4%BA%AC/",
+  "https://kkamotsu-navi.co.jp/category1/%E5%A4%A7%E9%98%AA/",
+  "https://kkamotsu-navi.co.jp/category1/%E6%84%9B%E7%9F%A5/",
+  "https://kkamotsu-navi.co.jp/category1/%E7%A6%8F%E5%B2%A1/",
+  "https://kkamotsu-navi.co.jp/category1/%E7%A5%9E%E5%A5%88%E5%B7%9D/",
+  "https://kkamotsu-navi.co.jp/category1/%E5%9F%BC%E7%8E%89/",
+  "https://kkamotsu-navi.co.jp/category1/%E5%8D%83%E8%91%89/",
+  "https://kkamotsu-navi.co.jp/category1/%E5%85%B5%E5%BA%AB/",
+  "https://kkamotsu-navi.co.jp/category1/%E5%BA%83%E5%B3%B6/",
+  "https://www.akitaken-akabou.co.jp/",
+  "https://www.akabou.jp/shop/list/pref/1/",
+  "https://www.akabou.jp/shop/list/pref/2/",
+  "https://www.akabou.jp/shop/list/pref/3/",
+  "https://www.akabou.jp/shop/list/pref/4/",
+  "https://www.akabou.jp/shop/list/pref/5/",
+  "https://www.akabou.jp/shop/list/pref/6/",
+  "https://www.akabou.jp/shop/list/pref/7/",
+  "https://www.akabou.jp/shop/list/pref/8/",
+  "https://www.akabou.jp/shop/list/pref/9/",
+  "https://www.akabou.jp/shop/list/pref/10/",
+  "https://www.akabou.jp/shop/list/pref/11/",
+  "https://www.akabou.jp/shop/list/pref/12/",
+  "https://www.akabou.jp/shop/list/pref/13/",
+  "https://www.akabou.jp/shop/list/pref/14/",
+  "https://www.akabou.jp/shop/list/pref/23/",
+  "https://www.akabou.jp/shop/list/pref/27/",
+  "https://www.akabou.jp/shop/list/pref/28/",
+  "https://www.akabou.jp/shop/list/pref/34/",
+  "https://www.akabou.jp/shop/list/pref/40/",
 ];
 
 const PREFECTURES = [
@@ -559,44 +632,35 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
   let totalSearched = 0;
   const limit = maxCount || CRAWL_BATCH_SIZE;
 
-  const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
-  const todaysQueries = shuffled.slice(0, 15);
-
-  const shuffledPrefs = [...PREFECTURES].sort(() => Math.random() - 0.5);
-  const todaysPrefectures = shuffledPrefs.slice(0, 20);
-
-  for (const query of todaysQueries) {
+  // Phase 1: Direct company pages (no search engine needed)
+  const shuffledDirect = [...DIRECT_COMPANY_PAGES].sort(() => Math.random() - 0.5);
+  for (const pageUrl of shuffledDirect) {
     if (totalFound >= limit) break;
-    for (const prefecture of todaysPrefectures) {
-      if (totalFound >= limit) break;
-      try {
-        const fullQuery = `${prefecture} ${query}`;
-        console.log(`[Lead Crawler] Searching: "${fullQuery}"`);
-        const urls = await searchDuckDuckGoForUrls(fullQuery);
-
-        if (urls.length === 0) {
-          const simpleQuery = `"${prefecture}" 軽貨物 配送 連絡先`;
-          console.log(`[Lead Crawler] Trying simple: "${simpleQuery}"`);
-          const altUrls = await searchDuckDuckGoForUrls(simpleQuery);
-          urls.push(...altUrls);
-        }
-
-        for (const url of urls) {
-          if (totalFound >= limit) break;
-          totalSearched++;
-          const found = await crawlLeadsFromUrl(url);
-          totalFound += found;
-          if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${url}`);
-          await new Promise(r => setTimeout(r, 800));
-        }
-
-        await new Promise(r => setTimeout(r, 1000));
-      } catch (err) {
-        console.error(`[Lead Crawler] Search failed for "${query}":`, err);
+    try {
+      console.log(`[Lead Crawler] Direct crawl: ${pageUrl}`);
+      const html = await fetchPageContent(pageUrl);
+      if (!html) continue;
+      const companyUrls = extractExternalUrls(html, pageUrl);
+      const internalLinks = extractInternalLinks(html, pageUrl);
+      const allUrls = [...companyUrls, ...internalLinks.filter(u => {
+        const l = u.toLowerCase();
+        return l.includes("company") || l.includes("member") || l.includes("list") || l.includes("company") || l.includes("kaisha");
+      })];
+      console.log(`[Lead Crawler] Found ${allUrls.length} links from ${pageUrl}`);
+      for (const compUrl of allUrls.slice(0, 20)) {
+        if (totalFound >= limit) break;
+        totalSearched++;
+        const found = await crawlLeadsFromUrl(compUrl);
+        totalFound += found;
+        if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${compUrl}`);
+        await new Promise(r => setTimeout(r, 500));
       }
+    } catch (err) {
+      console.error(`[Lead Crawler] Direct crawl failed for ${pageUrl}:`, err);
     }
   }
 
+  // Phase 2: Directory sources
   if (totalFound < limit) {
     const shuffledDirs = [...DIRECTORY_SOURCES].sort(() => Math.random() - 0.5);
     for (const dirUrl of shuffledDirs) {
@@ -607,17 +671,47 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
         if (!dirHtml) continue;
         const companyUrls = extractExternalUrls(dirHtml, dirUrl);
         console.log(`[Lead Crawler] Found ${companyUrls.length} company links from directory`);
-        const shuffledCompanies = companyUrls.sort(() => Math.random() - 0.5).slice(0, 15);
-        for (const compUrl of shuffledCompanies) {
+        for (const compUrl of companyUrls.slice(0, 20)) {
           if (totalFound >= limit) break;
           totalSearched++;
           const found = await crawlLeadsFromUrl(compUrl);
           totalFound += found;
           if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${compUrl}`);
-          await new Promise(r => setTimeout(r, 1500));
+          await new Promise(r => setTimeout(r, 500));
         }
       } catch (err) {
         console.error(`[Lead Crawler] Directory crawl failed:`, err);
+      }
+    }
+  }
+
+  // Phase 3: Search engine (fallback only)
+  if (totalFound < limit) {
+    const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
+    const todaysQueries = shuffled.slice(0, 5);
+    const shuffledPrefs = [...PREFECTURES].sort(() => Math.random() - 0.5);
+    const todaysPrefectures = shuffledPrefs.slice(0, 5);
+
+    for (const query of todaysQueries) {
+      if (totalFound >= limit) break;
+      for (const prefecture of todaysPrefectures) {
+        if (totalFound >= limit) break;
+        try {
+          const fullQuery = `${prefecture} ${query}`;
+          console.log(`[Lead Crawler] Searching: "${fullQuery}"`);
+          const urls = await searchDuckDuckGoForUrls(fullQuery);
+          for (const url of urls) {
+            if (totalFound >= limit) break;
+            totalSearched++;
+            const found = await crawlLeadsFromUrl(url);
+            totalFound += found;
+            if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${url}`);
+            await new Promise(r => setTimeout(r, 800));
+          }
+          await new Promise(r => setTimeout(r, 2000));
+        } catch (err) {
+          console.error(`[Lead Crawler] Search failed:`, err);
+        }
       }
     }
   }

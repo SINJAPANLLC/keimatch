@@ -135,11 +135,11 @@ export default function AlternativeTrabox() {
                 ["API連携", "一部あり", "開発中"],
                 ["運営歴", "長い", "新しい"],
                 ["登録ドライバー数", "多い", "成長中"],
-              ].map(([item, trabox, tramatch], i) => (
+              ].map(([item, trabox, keiMatch], i) => (
                 <tr key={i}>
                   <td className="border p-3 font-medium">{item}</td>
                   <td className="border p-3 text-center">{trabox}</td>
-                  <td className="border p-3 text-center bg-primary/5">{tramatch}</td>
+                  <td className="border p-3 text-center bg-primary/5">{keiMatch}</td>
                 </tr>
               ))}
             </tbody>

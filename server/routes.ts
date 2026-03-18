@@ -991,7 +991,7 @@ export async function registerRoutes(
     try {
       const currentUser = await storage.getUser(req.session.userId as string);
       if (currentUser && currentUser.plan !== "premium" && currentUser.plan !== "premium_full" && currentUser.role !== "admin") {
-        return res.status(403).json({ message: "AI荷物登録にはβ版プレミアムプランへの加入が必要です" });
+        return res.status(403).json({ message: "AI案件登録にはβ版プレミアムプランへの加入が必要です" });
       }
       const bodyWithDefaults = {
         ...req.body,
