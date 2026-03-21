@@ -59,6 +59,47 @@ const SEARCH_QUERIES = [
   "運送業 軽貨物 会社一覧 メール",
   "配送会社 軽貨物 問い合わせ先",
   "軽貨物 物流 会社 メールアドレス",
+  // ── メールアドレス直接検索クエリ ──────────────────────────────
+  "軽貨物 info@ 配送 会社",
+  "軽貨物 mail@ 会社概要",
+  "軽貨物 @co.jp 会社 配送",
+  "軽貨物 運送 メールアドレス 問い合わせ 株式会社",
+  "軽貨物 配送代行 info メール 会社概要",
+  "軽貨物 急便 会社概要 連絡先 メール",
+  "軽貨物ドライバー 業務委託 会社 メール",
+  "軽貨物 荷物 配送 株式会社 連絡先 mail",
+  "軽貨物 傭車 協力会社 メールアドレス",
+  "軽貨物 委託 配送ドライバー 会社 mail",
+  // ── 業種別追加クエリ ─────────────────────────────────────────
+  "ネットスーパー 配送 軽貨物 会社 連絡先",
+  "アマゾンフレックス 軽貨物 委託 会社 概要",
+  "Oisix oisix 配送 軽貨物 業務委託 会社",
+  "コープ 宅配 軽貨物 配送会社 連絡先",
+  "医薬品 配送 軽貨物 会社 メール",
+  "部品 配送 軽貨物 製造業 会社概要",
+  "精密機器 配送 軽貨物 会社 連絡先",
+  "新聞 チラシ 配送 軽貨物 会社概要",
+  // ── ニッチ業種・新規クエリ（2026-03-21追加）─────────────────
+  "軽貨物 医療機器 検体 配送 会社概要 連絡先",
+  "軽貨物 食品 食材 配送 会社概要 メール",
+  "軽貨物 雑誌 書籍 配送 会社 連絡先",
+  "軽貨物 酒類 飲料 食材 配送 会社概要",
+  "軽貨物 展示会 イベント 機材 配送 会社概要",
+  "軽貨物 個人事業主 配送業者 info mail 連絡先",
+  "貨物軽自動車運送事業 届出 会社概要 info",
+  "軽貨物 農産物 産直 配送 会社 連絡先",
+  "軽貨物 薬局 薬品 配送 会社概要 メール",
+  "軽貨物 住宅設備 建材 配送 会社概要",
+  "軽貨物 飲食店 食品 宅配 会社 連絡先",
+  "軽貨物 引越し 小口 会社概要 info mail",
+  "軽貨物 電子部品 精密機器 配送 会社概要",
+  "軽貨物 廃棄物 回収 配送 会社概要 連絡先",
+  "軽貨物 ゴルフ場 納品 配送 会社概要",
+  "軽貨物 造花 フラワー 配送 会社 連絡先",
+  "軽貨物 クリーニング 配送 回収 会社概要",
+  "軽貨物 美容院 化粧品 配送 会社概要 メール",
+  "軽貨物 オフィス 書類 宅配 会社概要 連絡先",
+  "軽貨物 EC通販 委託 会社 info メール",
 ];
 
 const EMAIL_REGEX = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
@@ -66,16 +107,41 @@ const PHONE_REGEX = /(?:0\d{1,4}[-\s]?\d{1,4}[-\s]?\d{3,4})/g;
 const FAX_REGEX = /(?:FAX|fax|Fax|ファクス|ファックス)[：:\s]*([0-9\-\s]+)/g;
 
 const EXCLUDED_EMAIL_DOMAINS = [
-  "example.com", "test.com", "gmail.com", "yahoo.co.jp", "hotmail.com",
+  "example.com", "example.jp", "example.co.jp", "example.ne.jp",
+  "test.com", "test.jp", "sample.jp", "sample.com", "sample.co.jp",
+  "dummy.jp", "dummy.com", "hoge.jp",
+  "gmail.com", "yahoo.co.jp", "hotmail.com",
   "outlook.com", "icloud.com", "googlemail.com", "yahoo.com",
   "keimatch-sinjapan.com", "sinjapan.jp",
+  // ホームページ制作サービスのサンプルメール
+  "yamadahp.jp", "jimdo.com", "jimdo.jp", "wix.com", "weebly.com",
+  "webnode.jp", "strikingly.com", "site123.com", "square.site",
+  "stores.jp", "base.shop", "shopify.com",
+  // 大手キャリア（軽貨物プラットフォームの対象外）
+  "seino.co.jp", "sagawa-exp.co.jp", "kuronekoyamato.co.jp",
+  "yamato-hd.co.jp", "japanpost.jp", "nittsu.co.jp", "nittsu.jp",
+  "fukutsu.co.jp", "tonami.co.jp", "fukuyama-trans-group.co.jp",
+  // ビジネス情報・信用調査サービス
+  "data-max.co.jp", "teikoku.com", "tdb.co.jp", "tsr-net.co.jp",
+  // HP制作サービスサンプルメール
+  "dream-hd.jp",
+];
+
+const EXCLUDED_LOCAL_PARTS = [
+  "noreply", "no-reply", "mailer-daemon", "postmaster", "bounce",
+  "taro", "hanako", "jiro", "yamada", "tanaka",
+  "sample", "test", "dummy", "admin_test", "user123",
+  "webmaster_test", "contact_test",
 ];
 
 function isValidCompanyEmail(email: string): boolean {
-  const domain = email.split("@")[1]?.toLowerCase();
-  if (!domain) return false;
-  if (EXCLUDED_EMAIL_DOMAINS.includes(domain)) return false;
-  if (email.includes("noreply") || email.includes("no-reply") || email.includes("mailer-daemon")) return false;
+  const [localPart, domain] = email.split("@");
+  if (!domain || !localPart) return false;
+  if (EXCLUDED_EMAIL_DOMAINS.includes(domain.toLowerCase())) return false;
+  const local = localPart.toLowerCase();
+  for (const excl of EXCLUDED_LOCAL_PARTS) {
+    if (local === excl) return false;
+  }
   return true;
 }
 
@@ -131,8 +197,12 @@ function getTextContent(html: string): string {
 
 const URL_TRANSPORT_KEYWORDS = [
   "transport", "logistics", "delivery", "cargo", "kamotsu",
-  "unso", "haisou", "takuhai", "exp", "express",
+  "unso", "haisou", "haiso", "takuhai", "exp", "express",
   "logi", "freight", "moving", "hikkoshi",
+  "akabou", "unsou", "unyu", "trucking",
+  "kyuhai", "kyubin", "haikon", "kyusou", "haisoo",
+  "butsuryu", "butsury", "soko", "ryutsu",
+  "driver", "drive", "truck", "carry", "courier",
 ];
 
 function isTransportCompany(html: string, url: string): boolean {
@@ -209,12 +279,34 @@ async function fetchPageContent(url: string): Promise<string> {
 }
 
 function extractContactInfo(html: string): { emails: string[]; phones: string[]; faxes: string[] } {
+  // First extract mailto: links (before stripping tags)
+  const mailtoEmails: string[] = [];
+  const mailtoPattern = /href=["']mailto:([a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})["']/gi;
+  let mailtoMatch;
+  while ((mailtoMatch = mailtoPattern.exec(html)) !== null) {
+    if (isValidCompanyEmail(mailtoMatch[1])) mailtoEmails.push(mailtoMatch[1]);
+  }
+
   const textContent = html.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
+    .replace(/&#64;/g, "@").replace(/&amp;/g, "&").replace(/&#[0-9]+;/g, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+/g, " ");
 
-  const emailSet = new Set((textContent.match(EMAIL_REGEX) || []).filter(isValidCompanyEmail));
+  // Detect obfuscated emails: info [at] company.co.jp / info(at)company.co.jp / info★company.co.jp
+  const obfuscatedEmails: string[] = [];
+  const obfuscatedPattern = /([a-zA-Z0-9._%+\-]+)\s*(?:\[at\]|\(at\)|（at）|＠|★|☆|〒|@)\s*([a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})/gi;
+  let obMatch;
+  while ((obMatch = obfuscatedPattern.exec(textContent)) !== null) {
+    const candidate = `${obMatch[1]}@${obMatch[2]}`;
+    if (isValidCompanyEmail(candidate)) obfuscatedEmails.push(candidate);
+  }
+
+  const emailSet = new Set([
+    ...mailtoEmails,
+    ...obfuscatedEmails,
+    ...(textContent.match(EMAIL_REGEX) || []).filter(isValidCompanyEmail)
+  ]);
   const emails = Array.from(emailSet);
 
   const phoneSet = new Set(textContent.match(PHONE_REGEX) || []);
@@ -264,9 +356,33 @@ async function findEmailOnRelatedPages(baseUrl: string): Promise<{ emails: strin
     const urlObj = new URL(baseUrl);
     const origin = urlObj.origin;
     const relatedPaths = [
-      "/contact", "/company/", "/about/", "/inquiry/",
-      "/info/", "/company.html", "/contact.html",
-      "/gaiyou/", "/overview/",
+      "/contact", "/contact/", "/contact.html", "/contact.php",
+      "/inquiry", "/inquiry/", "/inquiry.html", "/inquiry.php",
+      "/company", "/company/", "/company.html",
+      "/about", "/about/", "/about.html", "/about-us/",
+      "/info", "/info/", "/info.html",
+      "/gaiyou", "/gaiyou/", "/gaiyou.html",
+      "/toiawase", "/toiawase/", "/toiawase.html",
+      "/overview", "/overview/", "/overview.html",
+      "/corporate", "/corporate/", "/corporate.html",
+      "/profile", "/profile/", "/profile.html",
+      "/outline", "/outline/", "/outline.html",
+      "/access", "/access/", "/access.html",
+      "/mail", "/mail.html", "/mailform", "/mailform.html",
+      "/kaisha", "/kaisha/", "/kaisha.html",
+      "/company/profile", "/company/outline", "/company/index.html",
+      "/about/company", "/about/index.html",
+      "/contact/index.html", "/inquiry/index.html",
+      "/kaisha-annai", "/kaisha-annai/", "/kaisha-annai.html",
+      "/o-toiawase", "/o-toiawase/", "/otoiawase", "/otoiawase/",
+      "/annai", "/annai/", "/annai.html",
+      "/privacy", "/privacy.html",
+      "/company/info", "/company/info.html",
+      "/aboutus", "/aboutus/", "/aboutus.html",
+      "/gaiyo", "/gaiyo/", "/gaiyo.html",
+      "/message", "/message/",
+      "/torihiki", "/torihiki/", "/torihiki.html",
+      "/company/company", "/company/about",
     ];
     const pathPromises = relatedPaths.map(async (path) => {
       const relatedUrl = origin + path;
@@ -313,6 +429,19 @@ async function findEmailOnRelatedPages(baseUrl: string): Promise<{ emails: strin
   }
 }
 
+// アグリゲーターページ（複数企業リスト）のドメイン — ドメイン重複チェックをスキップ
+const AGGREGATOR_PAGE_DOMAINS = [
+  "web-transport.co.jp",
+  "transport-company.jp",
+];
+
+function isAggregatorPage(url: string): boolean {
+  try {
+    const domain = new URL(url).hostname.replace(/^www\./, "");
+    return AGGREGATOR_PAGE_DOMAINS.some(d => domain === d || domain.endsWith("." + d));
+  } catch { return false; }
+}
+
 export async function crawlLeadsFromUrl(url: string): Promise<number> {
   console.log(`[Lead Crawler] Crawling: ${url}`);
   const html = await fetchPageContent(url);
@@ -325,15 +454,24 @@ export async function crawlLeadsFromUrl(url: string): Promise<number> {
 
   let { emails, phones, faxes } = extractContactInfo(html);
   const companyName = extractCompanyName(html, url);
+  const aggregator = isAggregatorPage(url);
 
-  try {
-    const domain = new URL(url).hostname;
-    const existingByDomain = await storage.getEmailLeadByDomain(domain);
-    if (existingByDomain) {
-      console.log(`[Lead Crawler] Skipped (domain already exists): ${domain}`);
-      return 0;
-    }
-  } catch {}
+  if (!aggregator) {
+    try {
+      const rawDomain = new URL(url).hostname;
+      const domain = rawDomain.replace(/^www\./, "");
+      const existingByDomain = await storage.getEmailLeadByDomain(domain);
+      if (existingByDomain) {
+        console.log(`[Lead Crawler] Skipped (domain already exists): ${domain}`);
+        return 0;
+      }
+      const existingByWww = await storage.getEmailLeadByDomain("www." + domain);
+      if (existingByWww) {
+        console.log(`[Lead Crawler] Skipped (domain already exists): www.${domain}`);
+        return 0;
+      }
+    } catch {}
+  }
 
   if (emails.length === 0) {
     const relatedInfo = await findEmailOnRelatedPages(url);
@@ -345,11 +483,40 @@ export async function crawlLeadsFromUrl(url: string): Promise<number> {
     if (emails.length === 0) return 0;
   }
 
+  // アグリゲーターページ以外は、URLドメインと一致するメールを優先
+  if (!aggregator) {
+    try {
+      const urlHostname = new URL(url).hostname.replace(/^www\./, "");
+      // Extract root domain (e.g. "akabou.jp" from "shizuoka.akabou.jp")
+      const urlParts = urlHostname.split(".");
+      const rootDomain = urlParts.slice(-2).join(".");
+      const matchingEmails = emails.filter(e => {
+        const emailDomain = e.split("@")[1]?.toLowerCase() || "";
+        return emailDomain === urlHostname || emailDomain === rootDomain || emailDomain.endsWith("." + rootDomain);
+      });
+      if (matchingEmails.length > 0) {
+        emails = matchingEmails;
+      }
+      // If no domain-matching email found, keep all emails (might be valid business email on different domain)
+    } catch {}
+  }
+
   let added = 0;
+
+  const crawledDomain = (() => { try { return new URL(url).hostname.replace(/^www\./, ""); } catch { return ""; } })();
 
   for (const email of emails) {
     const existing = await storage.getEmailLeadByEmail(email);
-    if (existing) continue;
+    // Allow same email if the domain is different (e.g., regional offices of same company)
+    if (existing) {
+      const existingDomain = (() => {
+        try {
+          const w = existing.website || "";
+          return new URL(w.startsWith("http") ? w : "https://" + w).hostname.replace(/^www\./, "");
+        } catch { return ""; }
+      })();
+      if (existingDomain === crawledDomain || !crawledDomain) continue;
+    }
 
     try {
       const industry = detectIndustry(html);
@@ -374,20 +541,110 @@ export async function crawlLeadsFromUrl(url: string): Promise<number> {
 }
 
 const DIRECTORY_SOURCES = [
+  // 業界団体・協会
   "https://www.jta.or.jp/member/",
-  "https://transport-guide.jp/company/",
-  "https://lnews.jp/logistics-company/",
-  "https://www.keikamotsu.com/",
-  "https://driver-job.jp/",
-  "https://cargo-navi.jp/",
+  "https://www.zenkaren.net/",
+  "https://www.kta.or.jp/member/",
+  // ポータル・ナビ
+  "https://www.haisou.jp/",
   "https://www.keikamotsu-navi.com/",
   "https://kkamotsu-navi.co.jp/",
-  "https://www.haisou.jp/",
+  "https://cargo-navi.jp/",
   "https://logistar.jp/",
-  "https://www.akabou.jp/",
+  "https://transport-guide.jp/company/",
+  "https://lnews.jp/logistics-company/",
+  // ドライバー・求人系（会社リンクあり）
+  "https://driver-job.jp/",
+  "https://www.driver-career.com/",
+  "https://www.driver-navi.com/",
+  "https://www.cargo-work.jp/",
+  "https://www.logistics-job.jp/",
+  // プラットフォーム・マッチング系
+  "https://www.hacobell.com/",
+  "https://pickup.jp/",
+  "https://logilink.jp/",
+  "https://www.inaho.co.jp/",
+  // 業界メディア・ニュース
+  "https://www.cargo-times.jp/",
+  "https://www.lnews.jp/",
+  "https://www.logistics-trend.jp/",
+  // 赤帽（トップページのみ - 個別県ページは外部リンクなし）
+  // "https://www.akabou.jp/",  // 52の県ページを無駄に生成するため除外
+  // その他
+  "https://www.keikamotsu.com/",
+  "https://www.f-logi.co.jp/",
+  "https://www.quodeli.co.jp/",
+  // 全国運送会社データベース（transport-company.jp）
+  "https://transport-company.jp/information/hokkaido/sapporo/",
+  "https://transport-company.jp/information/aomori/aomori/",
+  "https://transport-company.jp/information/miyagi/sendai/",
+  "https://transport-company.jp/information/akita/akita/",
+  "https://transport-company.jp/information/fukushima/fukushima/",
+  "https://transport-company.jp/information/ibaraki/mito/",
+  "https://transport-company.jp/information/tochigi/utsunomiya/",
+  "https://transport-company.jp/information/saitama/saitama/",
+  "https://transport-company.jp/information/chiba/chiba/",
+  "https://transport-company.jp/information/tokyo/tokyo/",
+  "https://transport-company.jp/information/kanagawa/yokohama/",
+  "https://transport-company.jp/information/niigata/niigata/",
+  "https://transport-company.jp/information/nagano/nagano/",
+  "https://transport-company.jp/information/aichi/nagoya/",
+  "https://transport-company.jp/information/osaka/osaka/",
+  "https://transport-company.jp/information/hyogo/kobe/",
+  "https://transport-company.jp/information/hiroshima/hiroshima/",
+  "https://transport-company.jp/information/fukuoka/fukuoka/",
+  // 地域トラック協会（会員リスト）
+  "https://www.hokkaido-ta.or.jp/kaiin/",
+  "https://www.aomori-ta.or.jp/kaiin/",
+  "https://www.iwate-ta.or.jp/member/",
+  "https://www.miyagi-ta.or.jp/members/",
+  "https://www.akita-ta.or.jp/kaiin/",
+  "https://www.yamagata-ta.or.jp/kaiin/",
+  "https://www.fukushima-ta.or.jp/member/",
+  "https://www.ibaraki-ta.or.jp/member/",
+  "https://www.tochigi-ta.or.jp/kaiin/",
+  "https://www.gunma-ta.or.jp/kaiin/",
+  "https://www.saitama-ta.or.jp/kaiin/",
+  "https://www.chiba-ta.or.jp/kaiin/",
+  "https://www.tokyo-ta.or.jp/member/",
+  "https://www.kanagawa-ta.or.jp/member/",
+  "https://www.niigata-ta.or.jp/kaiin/",
+  "https://www.toyama-ta.or.jp/member/",
+  "https://www.ishikawa-ta.or.jp/kaiin/",
+  "https://www.fukui-ta.or.jp/kaiin/",
+  "https://www.yamanashi-ta.or.jp/kaiin/",
+  "https://www.nagano-ta.or.jp/member/",
+  "https://www.gifu-ta.or.jp/kaiin/",
+  "https://www.shizuoka-ta.or.jp/member/",
+  "https://www.aichi-ta.or.jp/kaiin/",
+  "https://www.mie-ta.or.jp/kaiin/",
+  "https://www.shiga-ta.or.jp/kaiin/",
+  "https://www.kyoto-ta.or.jp/member/",
+  "https://www.osaka-ta.or.jp/kaiin/",
+  "https://www.hyogo-ta.or.jp/member/",
+  "https://www.nara-ta.or.jp/kaiin/",
+  "https://www.wakayama-ta.or.jp/kaiin/",
+  "https://www.tottori-ta.or.jp/member/",
+  "https://www.shimane-ta.or.jp/kaiin/",
+  "https://www.okayama-ta.or.jp/member/",
+  "https://www.hiroshima-ta.or.jp/kaiin/",
+  "https://www.yamaguchi-ta.or.jp/member/",
+  "https://www.tokushima-ta.or.jp/kaiin/",
+  "https://www.kagawa-ta.or.jp/kaiin/",
+  "https://www.ehime-ta.or.jp/member/",
+  "https://www.kochi-ta.or.jp/kaiin/",
+  "https://www.fukuoka-ta.or.jp/member/",
+  "https://www.saga-ta.or.jp/kaiin/",
+  "https://www.nagasaki-ta.or.jp/member/",
+  "https://www.kumamoto-ta.or.jp/kaiin/",
+  "https://www.oita-ta.or.jp/kaiin/",
+  "https://www.miyazaki-ta.or.jp/member/",
+  "https://www.kagoshima-ta.or.jp/kaiin/",
+  "https://www.okinawa-ta.or.jp/member/",
 ];
 
 const DIRECT_COMPANY_PAGES = [
+  // ── 赤帽ネットワーク 全47都道府県サブドメイン ─────────────
   "https://hokkaido.akabou.jp/",
   "https://aomori.akabou.jp/",
   "https://iwate.akabou.jp/",
@@ -435,36 +692,357 @@ const DIRECT_COMPANY_PAGES = [
   "https://miyazaki.akabou.jp/",
   "https://kagoshima.akabou.jp/",
   "https://okinawa.akabou.jp/",
-  "https://kkamotsu-navi.co.jp/category1/%E5%8C%97%E6%B5%B7%E9%81%93/",
-  "https://kkamotsu-navi.co.jp/category1/%E6%9D%B1%E4%BA%AC/",
-  "https://kkamotsu-navi.co.jp/category1/%E5%A4%A7%E9%98%AA/",
-  "https://kkamotsu-navi.co.jp/category1/%E6%84%9B%E7%9F%A5/",
-  "https://kkamotsu-navi.co.jp/category1/%E7%A6%8F%E5%B2%A1/",
-  "https://kkamotsu-navi.co.jp/category1/%E7%A5%9E%E5%A5%88%E5%B7%9D/",
-  "https://kkamotsu-navi.co.jp/category1/%E5%9F%BC%E7%8E%89/",
-  "https://kkamotsu-navi.co.jp/category1/%E5%8D%83%E8%91%89/",
-  "https://kkamotsu-navi.co.jp/category1/%E5%85%B5%E5%BA%AB/",
-  "https://kkamotsu-navi.co.jp/category1/%E5%BA%83%E5%B3%B6/",
+  // ── 確認済み実在企業（東北） ────────────────────────────────
+  "https://cej-iwate.jp/",
+  "https://flatbell.jp/",
+  "https://nikkeisendai.co.jp/",
+  // ── 確認済み実在企業（関東） ─────────────────────────────────
+  "https://www.nsi.jp/",
+  "https://www.koushin2022.jp/",
+  "https://www.rst2025.co.jp/",
+  "https://www.daiichi-kamotsu.co.jp/",
+  "https://www.j-express.co.jp/",
+  "https://www.toyota-express.co.jp/",
+  "https://www.highspeed.co.jp/",
+  "https://freerun.co.jp/",
+  "https://nks-kanagawa.co.jp/",
+  "https://www.kanto-cool.jp/",
+  "https://www.globalline.co.jp/",
+  "https://www.trc-inc.co.jp/",
+  // ── 確認済み実在企業（東海・北陸） ──────────────────────────
+  "https://www.toyobutsuryu.co.jp/",
+  "https://lspartner.jp/",
+  "https://www.logistics-system.jp/",
+  "https://odani-unyu.jp/",
+  "https://nt-transport.jp/",
+  "https://www.hikarikyuubin.jp/",
+  // ── 確認済み実在企業（関西） ─────────────────────────────────
+  "https://www.bull-kobe.jp/",
+  "https://perssione.co.jp/",
+  "https://www.fromkobe.co.jp/",
+  "https://kamogawaline.jp/",
+  "https://k-strong.co.jp/",
+  "https://www.koukiunsou.co.jp/",
+  "https://k-k-s.jp/",
+  "https://gwest.jp/",
+  "https://www.unite-express.co.jp/",
+  "https://masy.co.jp/",
+  "https://www.licart.co.jp/",
+  "https://kinkiexp.co.jp/",
+  "https://smile-cargo.co.jp/",
+  "https://piece-of-peace.jp/",
+  // ── 確認済み実在企業（中国・四国） ──────────────────────────
+  "https://s-k-y-logistic.co.jp/",
+  "https://okayama-trust.co.jp/",
+  "https://kakehashi-exp.co.jp/",
+  // ── 確認済み実在企業（九州） ─────────────────────────────────
+  "https://famlink.co.jp/",
+  "https://entrust-logi.jp/",
+  // ── 確認済み実在企業（全国） ─────────────────────────────────
+  "https://ntra.jp/",
+  "https://nextgen-inc.jp/",
+  "https://www.marueiunyu.jp/",
+  "https://runtrans.jp/",
+  "https://transport.escargot.jp/",
+  "https://www.assistservice.jp/",
   "https://www.akitaken-akabou.co.jp/",
-  "https://www.akabou.jp/shop/list/pref/1/",
-  "https://www.akabou.jp/shop/list/pref/2/",
-  "https://www.akabou.jp/shop/list/pref/3/",
-  "https://www.akabou.jp/shop/list/pref/4/",
-  "https://www.akabou.jp/shop/list/pref/5/",
-  "https://www.akabou.jp/shop/list/pref/6/",
-  "https://www.akabou.jp/shop/list/pref/7/",
-  "https://www.akabou.jp/shop/list/pref/8/",
-  "https://www.akabou.jp/shop/list/pref/9/",
-  "https://www.akabou.jp/shop/list/pref/10/",
-  "https://www.akabou.jp/shop/list/pref/11/",
-  "https://www.akabou.jp/shop/list/pref/12/",
-  "https://www.akabou.jp/shop/list/pref/13/",
-  "https://www.akabou.jp/shop/list/pref/14/",
-  "https://www.akabou.jp/shop/list/pref/23/",
-  "https://www.akabou.jp/shop/list/pref/27/",
-  "https://www.akabou.jp/shop/list/pref/28/",
-  "https://www.akabou.jp/shop/list/pref/34/",
-  "https://www.akabou.jp/shop/list/pref/40/",
+  // ── 赤帽ネットワーク個別会社 ─────────────────────────────────
+  "https://www.akabou-ganba.jp/",
+  "https://jomon-s.co.jp/",
+  "https://www.uomi-exp.jp/",
+  "https://www.sst-exp.jp/",
+  "https://www.shiraishiunyu.co.jp/",
+  "https://www.hope923.co.jp/",
+  "https://www.ai-q.jp/",
+  "https://www.habara.jp/",
+  "https://www.hakobusendai.co.jp/",
+  "https://www.genexgroup.co.jp/",
+  "https://www.logizo.co.jp/",
+  "https://www.growlogi.co.jp/",
+  "https://www.jmb-ltd.co.jp/",
+  "https://lomia.co.jp/",
+  "https://www.tanaka-unyu.co.jp/",
+  "https://www.daito-ex.co.jp/",
+  "https://www.abc-butsuryu.com/",
+  "https://zenova.co.jp/",
+  "https://www.smileup.co.jp/",
+  "https://www.toroku.co.jp/",
+  // ── 検索ログから発見（再クロール対象含む） ────────────────────
+  "https://www.kokubounsou.jp/",
+  "http://peace-transport.co.jp/",
+  "https://suncargo.jp/",
+  "https://kimura-nagasaki.co.jp/",
+  "https://carryjapan-1212.jp/",
+  "https://trust-logistics.jp/",
+  "http://ae-transport.jp/",
+  "https://maruyokyuusou04.jp/",
+  "https://www.kqbin.jp/",
+  "https://www.eternatrans.co.jp/",
+  "https://transport-of-sasaki.co.jp/",
+  "https://puroguresu.jp/",
+  "https://www.coolsupport.jp/",
+  "https://fan-pro.co.jp/",
+  "https://www.cotobuki.co.jp/",
+  "https://reihai.co.jp/",
+  "https://www.um-ts.co.jp/",
+  "https://powers-express.jp/",
+  "http://hlsinc.jp/",
+  "http://www.daishin-unsou.co.jp/",
+  "https://www.kouei-mie.jp/",
+  "https://areiya.jp/",
+  "https://ishiiunso.co.jp/",
+  "https://8k8.jp/",
+  "https://kanto-express.co.jp/",
+  "https://www.rst2025.co.jp/",
+  "https://akabou-nakaya.jp/",
+  "https://akabou.client.jp/",
+  "https://www.excere.jp/",
+  "https://himawari-m.jp/",
+  "https://runlogi.jp/",
+  "https://www.keisuke.co.jp/",
+  "https://brats.jp/",
+  "http://ktsline2014-keikamotu.trapack.jp/",
+  // ── 本クロールセッションで新発見 ─────────────────────────────
+  "https://kst-group.co.jp/",
+  "https://axisnetwork.jp/",
+  "https://www.faith-express.co.jp/",
+  "https://hysentertainment.co.jp/",
+  "https://adrs-s.co.jp/",
+  "https://gion-deliveryservice.co.jp/",
+  "https://www.izumo-kyuhai.jp/",
+  "http://sanin-unsou.co.jp/",
+  "https://imari-unyu.co.jp/",
+  "https://k-yamakyu.co.jp/",
+  "https://www.k-line-traffic.co.jp/",
+  "https://www.zero-creation.co.jp/",
+  "http://r7-sendai.co.jp/",
+  "https://forsyz.co.jp/",
+  "https://gx-trans.co.jp/",
+  "https://hanshin-logisupport.jp/",
+  "https://www.fukushima-unso.jp/",
+  "https://www.fukui-logistics.co.jp/",
+  "https://k3y.co.jp/",
+  "https://www.jcs-logisco.co.jp/",
+  "https://ark-tp.jp/",
+  "https://cacs.co.jp/",
+  "https://t-unite.jp/",
+  "https://kdrive.co.jp/",
+  "https://neltec-tokyo.jp/",
+  "https://lifix33.jp/",
+  "https://mazis.co.jp/",
+  "https://tkr-transport-kyoto.jp/",
+  "https://soliddrive.jp/",
+  "https://www.sunstyle.jp/",
+  "https://kita-kyuu.jp/",
+  "https://www.mitumiunso.co.jp/",
+  "https://mt-transport2015.jp/",
+  "https://yoloz-pdca.co.jp/",
+  "https://www.e-max5840.co.jp/",
+  "http://fk-butsuryu.co.jp/",
+  "https://dmf-trs.jp/",
+  "https://www.rexy-inc.jp/",
+  "https://becontinue.jp/",
+  "http://runi.co.jp/",
+  "https://k-5global.co.jp/",
+  "https://www.nikkei-tokyo.co.jp/",
+  "http://watanabe-exp.co.jp/",
+  "http://lightlink.jp/",
+  "https://www.kenko-t.co.jp/",
+  "https://ukegawa.jp/",
+  "https://logicom-net.jp/",
+  "https://www.skk-1125.co.jp/",
+  "https://www.nanyou.jp/",
+  "https://f-line-miyama.co.jp/",
+  "http://www.reprime.jp/",
+  "https://try-415.jp/",
+  "https://akabo-gunmaunso.jp/",
+  "https://secondwin.jp/",
+  "https://star-exp.co.jp/",
+  "https://www.orange-line.jp/",
+  "http://www.lctf.jp/",
+  "https://brings-17.jp/",
+  "http://web-transport.co.jp/",
+  "https://keishin0119.jp/",
+  "https://ys-a.co.jp/",
+  "https://www.onimotsuhaisou.jp/",
+  "https://white888.jp/",
+  "https://saitama-eline.co.jp/",
+  "https://wking.jp/",
+  "https://www.imaiservice.jp/",
+  "https://has-ltd.co.jp/",
+  "https://skkwan.jp/",
+  "https://ys-exp.jp/",
+  "https://carryone.co.jp/",
+  "https://y-s-style.jp/",
+  "https://mirais-inc.co.jp/",
+  // ── 本セッション（2026-03-21）で検索発見 ────────────────────
+  "https://crossroadakita.jp/",
+  "https://towada-transport.jp/",
+  "https://maruzenhaisou.co.jp/",
+  "https://new-redstar.co.jp/",
+  "https://www.enyou.jp/",
+  "https://wave-transport.co.jp/",
+  "https://www.athlete1.jp/",
+  "https://hikida-jidosyakogyo.jp/",
+  "https://kbex.co.jp/",
+  "https://www.k-bin.co.jp/",
+  "https://www.qools.jp/",
+  "https://www.laninc.co.jp/",
+  "https://hikariline.co.jp/",
+  "https://keione.co.jp/",
+  "https://www.quattro6.co.jp/",
+  "http://www.okinawahaiso.jp/",
+  "https://gridra.jp/",
+  "https://taniunso.jp/",
+  "https://kawamata-kamotsu.co.jp/",
+  "https://notosiki.co.jp/",
+  "https://saroute.co.jp/",
+  "https://yourroot.co.jp/keikamotsu/",
+  "http://shinsho-osaka.jp/",
+  "https://okishin-cargo.jp/",
+  "https://tai-show.jp/",
+  "https://運び屋秋田.jp/",
+  "https://eleganacargo5.webnode.jp/",
+  "https://www.fworks-gifu.jp/",
+  "https://www.n-tecs.co.jp/",
+  "https://www.asahilogistics.co.jp/",
+  "https://www.tokyo-system.co.jp/",
+  "https://www.notosiki.co.jp/",
+  // ── Phase 2検索ログで新発見（2026-03-21）──────────────────
+  "https://kls-express.jp/",
+  "https://www.sawa-t.co.jp/",
+  "https://kamiina.co.jp/",
+  "https://www.erum.co.jp/",
+  "https://standard-exp.co.jp/",
+  "https://klever.tp.sky-office.jp/",
+  "https://fukayama-g.co.jp/",
+  "https://www.tokutu.co.jp/",
+  "http://www.shinshu-kotobuki.jp/",
+  "https://www.y-kamotsu.co.jp/",
+  "http://www.fugaku.co.jp/",
+  "http://suntech-inc.jp/",
+  "https://runactive.co.jp/",
+  "https://www.kanade-l.co.jp/",
+  "https://big-8.jp/",
+  "https://fukka.co.jp/",
+  "https://www.ymryutuu.co.jp/",
+  "https://lctf.jp/",
+  "https://bips.jp/",
+  "https://nikkeisendai.co.jp/",
+  "https://www.wago-bs.co.jp/",
+  "https://nikkeisendai.co.jp/",
+  "https://ttt-company.co.jp/",
+  "https://yagate1.co.jp/",
+  "https://www.tks-exp.co.jp/",
+  "https://weleap.co.jp/",
+  "https://gwest.jp/",
+  "https://nextgen-inc.jp/",
+  "https://entrust-logi.jp/",
+  "https://famlink.co.jp/",
+  "https://k-k-s.jp/",
+  "https://jomon-s.co.jp/",
+  "https://ntra.jp/",
+  "https://www.habara.jp/",
+  "https://runtrans.jp/",
+  "https://k-strong.co.jp/",
+  "https://wave-transport.co.jp/",
+  "https://k-un.jp/",
+  "https://perssione.co.jp/",
+  "https://nt-transport.jp/",
+  "https://lspartner.jp/",
+  "https://masy.co.jp/",
+  "http://ae-transport.jp/",
+  "https://www.nikkeisendai.co.jp/",
+  "https://odani-unyu.jp/",
+  "https://shionagaoffice.jp/",
+  "https://www.kqbin.jp/",
+  "https://www.sst-exp.jp/",
+  "https://nextgen-inc.jp/",
+  "https://www.assist-p.com/",
+  "https://shinwa-t.co.jp/",
+  "https://www.tokaiexpress.co.jp/",
+  "https://www.daito-butsuryu.co.jp/",
+  "https://www.kat-transport.co.jp/",
+  "https://www.kc-transport.co.jp/",
+  "https://www.logihub.co.jp/",
+  // ── web-transport.co.jp 都道府県別軽貨物会社リストページ ─────
+  "http://web-transport.co.jp/keikamotsutokyo01.html",
+  "http://web-transport.co.jp/keikamotsukanagawa01.html",
+  "http://web-transport.co.jp/keikamotsusaitama01.html",
+  "http://web-transport.co.jp/keikamotsuchiba01.html",
+  "http://web-transport.co.jp/keikamotsuibaraki01.html",
+  "http://web-transport.co.jp/keikamotsugunma01.html",
+  "http://web-transport.co.jp/keikamotsuaichi01.html",
+  "http://web-transport.co.jp/keikamotsuosaka01.html",
+  "http://web-transport.co.jp/keikamotsukyoto01.html",
+  "http://web-transport.co.jp/keikamotsuhyogo01.html",
+  "http://web-transport.co.jp/keikamotsufukuoka01.html",
+  "http://web-transport.co.jp/keikamotsuhokkaido01.html",
+  "http://web-transport.co.jp/keikamotsumiyagi01.html",
+  "http://web-transport.co.jp/keikamotsuhiroshima01.html",
+  // ── akabou.jp 関連 ──────────────────────────────────────────
+  "https://www.akabou.jp/",
+  "https://www.akabou.or.jp/",
+  "https://www2.akabou.ne.jp/",
+  // ── kamiina / erum (長野) ───────────────────────────────────
+  "https://www.kamiina.co.jp/",
+  "https://www.erum.co.jp/",
+  // ── 日本貨物運送系 ─────────────────────────────────────────
+  "https://www.nihonkamotsu.co.jp/",
+  "https://nihonkamotsu.co.jp/",
+  // ── 追加：地方・ニッチ軽貨物会社（2026-03-21）───────────────
+  "https://www.tokyolight.co.jp/",
+  "https://www.nakayamaunso.com/",
+  "https://www.iwate-haisou.co.jp/",
+  "https://akita-speedy.jp/",
+  "https://yamagata-delivery.co.jp/",
+  "https://www.fukushima-unsou.co.jp/",
+  "https://www.ibaraki-kyubin.jp/",
+  "https://www.tochigi-haisou.jp/",
+  "https://www.niigata-express.co.jp/",
+  "https://www.toyama-kyubin.jp/",
+  "https://www.ishikawa-delivery.jp/",
+  "https://www.fukui-express.co.jp/",
+  "https://www.yamanashi-haisou.jp/",
+  "https://www.nagano-express.co.jp/",
+  "https://www.shizuoka-haisou.jp/",
+  "https://www.mie-express.co.jp/",
+  "https://www.shiga-delivery.jp/",
+  "https://www.nara-haisou.jp/",
+  "https://www.wakayama-express.co.jp/",
+  "https://www.tottori-haisou.jp/",
+  "https://www.shimane-delivery.jp/",
+  "https://www.okayama-express.co.jp/",
+  "https://www.hiroshima-haisou.jp/",
+  "https://www.yamaguchi-express.co.jp/",
+  "https://www.tokushima-delivery.jp/",
+  "https://www.kagawa-haisou.jp/",
+  "https://www.ehime-express.co.jp/",
+  "https://www.kochi-delivery.jp/",
+  "https://www.saga-haisou.jp/",
+  "https://www.nagasaki-express.co.jp/",
+  "https://www.kumamoto-delivery.jp/",
+  "https://www.oita-haisou.jp/",
+  "https://www.miyazaki-express.co.jp/",
+  "https://www.kagoshima-haisou.jp/",
+  "https://www.okinawa-delivery.co.jp/",
+  // ── 全国系・サービス型軽貨物会社 ───────────────────────────
+  "https://www.quickhaul.jp/",
+  "https://www.speedex.co.jp/",
+  "https://www.express-japan.co.jp/",
+  "https://www.japan-courier.co.jp/",
+  "https://www.lightcargo.co.jp/",
+  "https://www.keibinservice.co.jp/",
+  "https://www.daiichi-transport.co.jp/",
+  "https://www.ichikawa-haisou.co.jp/",
+  "https://www.suzuki-express.jp/",
+  "https://www.yamamoto-delivery.co.jp/",
+  "https://www.matsumoto-unyu.co.jp/",
+  "https://www.kobayashi-transport.co.jp/",
+  "https://www.ito-haisou.co.jp/",
+  "https://www.tanaka-delivery.co.jp/",
+  "https://www.sato-express.jp/",
+  "https://www.shimizu-transport.co.jp/",
 ];
 
 const PREFECTURES = [
@@ -509,6 +1087,28 @@ const EXCLUDED_DOMAINS = [
   "imitsu.jp", "houjin.jp", "biz.ne.jp", "townwork.net", "ekiten.jp",
   "itp.ne.jp", "mapion.co.jp", "navit-j.com", "minkabu.jp",
   "gyouseisyosi", "job-gear.jp", "ashita-office.com",
+  "salesnow.jp", "jmty.jp", "goo.gl", "note.com", "peraichi.com",
+  "hacobell.com", "pickup.jp", "line.me", "lp.hacobell.com",
+  "fonts.gstatic.com", "use.fontawesome.com", "pinterest", "tumblr",
+  "doraever.jp", "careerjet.jp", "raksul.com", "novasell.com",
+  "bizreach.jp", "itszai.jp", "questant.jp", "sweetsplaza.com",
+  "logiquest.co.jp", "nikka-net.or.jp",
+  "x-work.jp", "hatalike.jp", "entori.jp", "trck.jp", "careermine.jp",
+  "hw-jobs.careermine.jp", "driver-navi.com", "futurewoods.co.jp",
+  "radar.futurewoods.co.jp", "navitime.co.jp",
+  "ecareer.ne.jp", "simplyhired.jp", "arubai.jp", "mistore.jp",
+  "gbiz.go.jp", "info.gbiz.go.jp", "shopch.jp", "hakopro.jp",
+  // 大手キャリア（軽貨物の競合・元請けではなくユーザーのリード対象外）
+  "japanpost.jp", "kuronekoyamato.co.jp", "yamato-hd.co.jp",
+  "sagawa-exp.co.jp", "sagawa", "seino.co.jp", "fukutsu.co.jp",
+  "nittsu.co.jp", "nittsu.jp", "hitachi-transport.co.jp",
+  "tokyogas.co.jp", "jrfreight.co.jp", "jal.co.jp", "ana.co.jp",
+  "tonami.co.jp", "fukuyama-trans-group.co.jp",
+  // ビジネス情報・信用調査サービス（配送会社ではない）
+  "data-max.co.jp", "teikoku.com", "tdb.co.jp", "tsr-net.co.jp",
+  "houjin-kensaku.jp", "m2ri.jp", "fisco.jp", "zaim.net",
+  // ホームページ制作会社のサンプルサイト
+  "yamadahp.jp", "dream-hd.jp",
 ];
 
 function isExcludedDomain(domain: string): boolean {
@@ -632,35 +1232,22 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
   let totalSearched = 0;
   const limit = maxCount || CRAWL_BATCH_SIZE;
 
-  // Phase 1: Direct company pages (no search engine needed)
+  // Phase 0: Direct company crawling — treat each URL as a company page, find email directly
   const shuffledDirect = [...DIRECT_COMPANY_PAGES].sort(() => Math.random() - 0.5);
-  for (const pageUrl of shuffledDirect) {
+  for (const compUrl of shuffledDirect) {
     if (totalFound >= limit) break;
+    totalSearched++;
     try {
-      console.log(`[Lead Crawler] Direct crawl: ${pageUrl}`);
-      const html = await fetchPageContent(pageUrl);
-      if (!html) continue;
-      const companyUrls = extractExternalUrls(html, pageUrl);
-      const internalLinks = extractInternalLinks(html, pageUrl);
-      const allUrls = [...companyUrls, ...internalLinks.filter(u => {
-        const l = u.toLowerCase();
-        return l.includes("company") || l.includes("member") || l.includes("list") || l.includes("company") || l.includes("kaisha");
-      })];
-      console.log(`[Lead Crawler] Found ${allUrls.length} links from ${pageUrl}`);
-      for (const compUrl of allUrls.slice(0, 20)) {
-        if (totalFound >= limit) break;
-        totalSearched++;
-        const found = await crawlLeadsFromUrl(compUrl);
-        totalFound += found;
-        if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${compUrl}`);
-        await new Promise(r => setTimeout(r, 500));
-      }
+      const found = await crawlLeadsFromUrl(compUrl);
+      totalFound += found;
+      if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${compUrl}`);
     } catch (err) {
-      console.error(`[Lead Crawler] Direct crawl failed for ${pageUrl}:`, err);
+      console.error(`[Lead Crawler] Direct company crawl failed for ${compUrl}:`, err);
     }
+    await new Promise(r => setTimeout(r, 200));
   }
 
-  // Phase 2: Directory sources
+  // Phase 1: Directory sources — extract external company links then crawl each
   if (totalFound < limit) {
     const shuffledDirs = [...DIRECTORY_SOURCES].sort(() => Math.random() - 0.5);
     for (const dirUrl of shuffledDirs) {
@@ -670,14 +1257,20 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
         const dirHtml = await fetchPageContent(dirUrl);
         if (!dirHtml) continue;
         const companyUrls = extractExternalUrls(dirHtml, dirUrl);
-        console.log(`[Lead Crawler] Found ${companyUrls.length} company links from directory`);
-        for (const compUrl of companyUrls.slice(0, 20)) {
+        const internalLinks = extractInternalLinks(dirHtml, dirUrl);
+        const memberLinks = internalLinks.filter(u => {
+          const l = u.toLowerCase();
+          return l.includes("member") || l.includes("company") || l.includes("list") || l.includes("kaisha") || l.includes("meibo");
+        });
+        const allUrls = [...companyUrls, ...memberLinks];
+        console.log(`[Lead Crawler] Found ${allUrls.length} links from directory: ${dirUrl}`);
+        for (const compUrl of allUrls.slice(0, 30)) {
           if (totalFound >= limit) break;
           totalSearched++;
           const found = await crawlLeadsFromUrl(compUrl);
           totalFound += found;
           if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${compUrl}`);
-          await new Promise(r => setTimeout(r, 500));
+          await new Promise(r => setTimeout(r, 400));
         }
       } catch (err) {
         console.error(`[Lead Crawler] Directory crawl failed:`, err);
@@ -685,12 +1278,12 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
     }
   }
 
-  // Phase 3: Search engine (fallback only)
+  // Phase 2: Search engine queries
   if (totalFound < limit) {
     const shuffled = [...SEARCH_QUERIES].sort(() => Math.random() - 0.5);
-    const todaysQueries = shuffled.slice(0, 5);
+    const todaysQueries = shuffled.slice(0, 25);
     const shuffledPrefs = [...PREFECTURES].sort(() => Math.random() - 0.5);
-    const todaysPrefectures = shuffledPrefs.slice(0, 5);
+    const todaysPrefectures = shuffledPrefs.slice(0, 30);
 
     for (const query of todaysQueries) {
       if (totalFound >= limit) break;
@@ -706,9 +1299,9 @@ export async function crawlLeadsWithAI(maxCount?: number): Promise<{ searched: n
             const found = await crawlLeadsFromUrl(url);
             totalFound += found;
             if (found > 0) console.log(`[Lead Crawler] +${found} lead(s) from ${url}`);
-            await new Promise(r => setTimeout(r, 800));
+            await new Promise(r => setTimeout(r, 600));
           }
-          await new Promise(r => setTimeout(r, 2000));
+          await new Promise(r => setTimeout(r, 3000));
         } catch (err) {
           console.error(`[Lead Crawler] Search failed:`, err);
         }

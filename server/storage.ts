@@ -1292,7 +1292,7 @@ export class DatabaseStorage implements IStorage {
 
   async getEmailLeadByDomain(domain: string): Promise<EmailLead | undefined> {
     const [lead] = await db.select().from(emailLeads)
-      .where(sql`${emailLeads.email} LIKE ${'%@' + domain}`)
+      .where(sql`${emailLeads.email} LIKE ${'%@' + domain} OR ${emailLeads.website} LIKE ${'%://' + domain + '%'} OR ${emailLeads.website} LIKE ${'%://www.' + domain + '%'}`)
       .limit(1);
     return lead;
   }
