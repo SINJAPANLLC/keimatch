@@ -125,6 +125,12 @@ const EXCLUDED_EMAIL_DOMAINS = [
   "data-max.co.jp", "teikoku.com", "tdb.co.jp", "tsr-net.co.jp",
   // HP制作サービスサンプルメール
   "dream-hd.jp",
+  // 求人・HR系サービスのサンプルメール
+  "guidepost.co.jp", "doda.jp", "mynavi.jp", "rikunabi.com",
+  // 個人向けMVNO・キャリア（ビジネスメールではない）
+  "mineo.jp", "uqmobile.jp", "y-mobile.jp", "nifty.com",
+  // その他サンプル系
+  "sample.jp", "sample.co.jp", "sample.com", "sample.ne.jp",
 ];
 
 const EXCLUDED_LOCAL_PARTS = [
@@ -135,9 +141,16 @@ const EXCLUDED_LOCAL_PARTS = [
 ];
 
 function isValidCompanyEmail(email: string): boolean {
-  const [localPart, domain] = email.split("@");
+  const atIdx = email.indexOf("@");
+  if (atIdx < 1) return false;
+  const localPart = email.substring(0, atIdx);
+  const domain = email.substring(atIdx + 1).toLowerCase();
   if (!domain || !localPart) return false;
-  if (EXCLUDED_EMAIL_DOMAINS.includes(domain.toLowerCase())) return false;
+  // 二重ドット・先頭/末尾ドットなど不正フォーマット
+  if (localPart.includes("..") || localPart.startsWith(".") || localPart.endsWith(".")) return false;
+  // 短すぎるローカルパート
+  if (localPart.length < 2) return false;
+  if (EXCLUDED_EMAIL_DOMAINS.includes(domain)) return false;
   const local = localPart.toLowerCase();
   for (const excl of EXCLUDED_LOCAL_PARTS) {
     if (local === excl) return false;
@@ -271,8 +284,32 @@ async function fetchPageContent(url: string): Promise<string> {
     });
     clearTimeout(timeout);
     if (!res.ok) return "";
-    const text = await res.text();
-    return text;
+
+    // Charset検出: Content-Typeヘッダー → HTML meta → デフォルトUTF-8
+    const contentType = res.headers.get("content-type") || "";
+    const ctMatch = contentType.match(/charset=([a-zA-Z0-9_-]+)/i);
+    let charset = ctMatch ? ctMatch[1].toLowerCase() : "";
+
+    const buf = await res.arrayBuffer();
+    const bytes = new Uint8Array(buf);
+
+    // charsetがまだ不明ならHTML先頭512バイトを検索
+    if (!charset) {
+      const head = new TextDecoder("utf-8", { fatal: false }).decode(bytes.slice(0, 512));
+      const metaMatch = head.match(/charset=["']?([a-zA-Z0-9_-]+)/i);
+      if (metaMatch) charset = metaMatch[1].toLowerCase();
+    }
+
+    // Shift-JIS系の文字セットを正規化
+    const isShiftJis = ["shift_jis", "shift-jis", "sjis", "x-sjis", "windows-31j", "cp932", "ms932"].includes(charset);
+    if (isShiftJis) {
+      try {
+        return new TextDecoder("shift_jis", { fatal: false }).decode(bytes);
+      } catch {
+        return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+      }
+    }
+    return new TextDecoder("utf-8", { fatal: false }).decode(bytes);
   } catch {
     return "";
   }

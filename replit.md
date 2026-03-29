@@ -27,7 +27,7 @@ Ensure all UI/UX changes align with the established design system (turquoise/tea
 - **SEO Column Articles**: 軽貨物関連の自動SEO記事生成
 - **Payment Integration**: Square Web Payments SDK
 - **YouTube Integration**: 動画取得・表示・自動生成
-- **Email Marketing & Lead Crawler**: 軽貨物事業者向けリード生成
+- **Email Marketing & Lead Crawler**: 軽貨物事業者向けリード生成（Neon DB共有、365件超 ※VPS本番DBと同一）
 - **LP Generation**: ランディングページ作成・公開
 
 **Design System**: Turquoise/teal theme with shadcn/ui components.
