@@ -110,8 +110,8 @@ const EXCLUDED_EMAIL_DOMAINS = [
   "example.com", "example.jp", "example.co.jp", "example.ne.jp",
   "test.com", "test.jp", "sample.jp", "sample.com", "sample.co.jp",
   "dummy.jp", "dummy.com", "hoge.jp",
-  "gmail.com", "yahoo.co.jp", "hotmail.com",
-  "outlook.com", "icloud.com", "googlemail.com", "yahoo.com",
+  "gmail.com", "yahoo.co.jp", "yahoo.ne.jp", "yahoo.com", "hotmail.com",
+  "outlook.com", "icloud.com", "googlemail.com",
   "keimatch-sinjapan.com", "sinjapan.jp",
   // ホームページ制作サービスのサンプルメール
   "yamadahp.jp", "jimdo.com", "jimdo.jp", "wix.com", "weebly.com",
@@ -400,8 +400,10 @@ function extractInternalLinks(html: string, baseUrl: string): string[] {
     let match;
     while ((match = hrefPattern.exec(html)) !== null) {
       let href = match[1];
+      // プロトコル相対URL（//cdn.example.com）は外部リンクとして除外
+      if (href.startsWith("//")) continue;
       if (href.startsWith("/")) href = origin + href;
-      if (href.startsWith(origin) && !href.includes("javascript:") && !href.endsWith(".pdf") && !href.endsWith(".jpg") && !href.endsWith(".png")) {
+      if (href.startsWith(origin) && !href.includes("javascript:") && !href.endsWith(".pdf") && !href.endsWith(".jpg") && !href.endsWith(".png") && !href.endsWith(".css") && !href.endsWith(".js")) {
         if (!links.includes(href) && href !== baseUrl) links.push(href);
       }
     }
@@ -501,7 +503,6 @@ async function findEmailOnRelatedPages(baseUrl: string): Promise<{ emails: strin
 // アグリゲーターページ（複数企業リスト）のドメイン — ドメイン重複チェックをスキップ
 const AGGREGATOR_PAGE_DOMAINS = [
   "web-transport.co.jp",
-  "transport-company.jp",
 ];
 
 function isAggregatorPage(url: string): boolean {
@@ -644,24 +645,7 @@ const DIRECTORY_SOURCES = [
   "https://www.f-logi.co.jp/",
   "https://www.quodeli.co.jp/",
   // 全国運送会社データベース（transport-company.jp）
-  "https://transport-company.jp/information/hokkaido/sapporo/",
-  "https://transport-company.jp/information/aomori/aomori/",
-  "https://transport-company.jp/information/miyagi/sendai/",
-  "https://transport-company.jp/information/akita/akita/",
-  "https://transport-company.jp/information/fukushima/fukushima/",
-  "https://transport-company.jp/information/ibaraki/mito/",
-  "https://transport-company.jp/information/tochigi/utsunomiya/",
-  "https://transport-company.jp/information/saitama/saitama/",
-  "https://transport-company.jp/information/chiba/chiba/",
-  "https://transport-company.jp/information/tokyo/tokyo/",
-  "https://transport-company.jp/information/kanagawa/yokohama/",
-  "https://transport-company.jp/information/niigata/niigata/",
-  "https://transport-company.jp/information/nagano/nagano/",
-  "https://transport-company.jp/information/aichi/nagoya/",
-  "https://transport-company.jp/information/osaka/osaka/",
-  "https://transport-company.jp/information/hyogo/kobe/",
-  "https://transport-company.jp/information/hiroshima/hiroshima/",
-  "https://transport-company.jp/information/fukuoka/fukuoka/",
+  // transport-company.jp はJS動的生成のため除外（WP内部リンクしか返さない）
   // 地域トラック協会（会員リスト）
   "https://www.hokkaido-ta.or.jp/kaiin/",
   "https://www.aomori-ta.or.jp/kaiin/",
