@@ -131,6 +131,17 @@ const EXCLUDED_EMAIL_DOMAINS = [
   "mineo.jp", "uqmobile.jp", "y-mobile.jp", "nifty.com",
   // その他サンプル系
   "sample.jp", "sample.co.jp", "sample.com", "sample.ne.jp",
+  // 携帯キャリアメール（個人用）
+  "docomo.ne.jp", "ezweb.ne.jp", "softbank.ne.jp", "ymobile.ne.jp",
+  "emobile.ne.jp", "willcom.com", "kddi.com",
+  // ISPメール（個人/家庭用プロバイダー）— 企業メールではない
+  "ocn.ne.jp", "biglobe.ne.jp", "dion.ne.jp", "nifty.ne.jp",
+  "eonet.ne.jp", "infoweb.ne.jp", "mbn.or.jp", "mctv.ne.jp",
+  "clovernet.ne.jp", "tiki.ne.jp", "tvt.ne.jp", "wakwak.com",
+  "dti.ne.jp", "plala.or.jp", "people-i.ne.jp", "nns.ne.jp",
+  "tcn.ne.jp", "jcom.home.ne.jp", "bb.excite.co.jp",
+  // 政府・自治体メール（営業対象外）
+  "lg.jp",
 ];
 
 const EXCLUDED_LOCAL_PARTS = [
@@ -151,6 +162,27 @@ function isValidCompanyEmail(email: string): boolean {
   // 短すぎるローカルパート
   if (localPart.length < 2) return false;
   if (EXCLUDED_EMAIL_DOMAINS.includes(domain)) return false;
+  // ISPサブドメイン除外: xxx.ocn.ne.jp, xxx.biglobe.ne.jp など
+  const ISP_SUFFIXES = [
+    ".ocn.ne.jp", ".biglobe.ne.jp", ".dion.ne.jp", ".eonet.ne.jp",
+    ".plala.or.jp", ".nifty.ne.jp", ".mctv.ne.jp", ".clovernet.ne.jp",
+    ".tiki.ne.jp", ".tvt.ne.jp", ".dti.ne.jp", ".people-i.ne.jp",
+    ".miracle.ne.jp", ".cup.ocn.ne.jp", ".juno.ocn.ne.jp",
+    ".helen.ocn.ne.jp", ".sirius.ocn.ne.jp", ".wonder.ocn.ne.jp",
+    ".snow.ocn.ne.jp", ".earth.ocn.ne.jp", ".bridge.ocn.ne.jp",
+    ".po.people-i.ne.jp", ".dolphin.ocn.ne.jp", ".wing.ocn.ne.jp",
+    ".poem.ocn.ne.jp", ".triton.ocn.ne.jp", ".eos.ocn.ne.jp",
+    ".bronze.ocn.ne.jp", ".samba.ocn.ne.jp", ".mirror.ocn.ne.jp",
+    ".key.ocn.ne.jp", ".io.ocn.ne.jp", ".cyber.ocn.ne.jp",
+    ".knd.biglobe.ne.jp", ".mvd.biglobe.ne.jp", ".muc.biglobe.ne.jp",
+    ".pref.aichi.lg.jp", ".pref.nagasaki.lg.jp",
+  ];
+  if (ISP_SUFFIXES.some(suffix => domain.endsWith(suffix))) return false;
+  // 政府・自治体メール（.lg.jp, .go.jp）
+  if (domain.endsWith(".lg.jp") || domain.endsWith(".go.jp")) return false;
+  // 不正フォーマット: ドメインの中に別ドメインが入っている (e.g. toyota-express.co.jp.ne.jp)
+  if ((domain.match(/\.co\.jp/g) || []).length > 1) return false;
+  if (domain.split(".").length > 5) return false;
   const local = localPart.toLowerCase();
   for (const excl of EXCLUDED_LOCAL_PARTS) {
     if (local === excl) return false;
@@ -1146,6 +1178,15 @@ const EXCLUDED_DOMAINS = [
   "houjin-kensaku.jp", "m2ri.jp", "fisco.jp", "zaim.net",
   // ホームページ制作会社のサンプルサイト
   "yamadahp.jp", "dream-hd.jp",
+  // ブックマーク・SNS・CDN（クロール対象外）
+  "hatena.ne.jp", "b.hatena.ne.jp", "hatenablog.com",
+  "xserver.jp", "xserver.ne.jp", "s.w.org",
+  "googleapis.com", "googletagmanager.com", "gstatic.com",
+  "bootstrapcdn.com", "maxcdn.bootstrapcdn.com",
+  "fontawesome.com", "cloudflare.com", "jsdelivr.net",
+  "wp.com", "wordpress.com", "wordpress.org",
+  // 政府・自治体
+  ".lg.jp", ".go.jp", "mlit.go.jp", "nta.go.jp", "pref.",
 ];
 
 function isExcludedDomain(domain: string): boolean {
