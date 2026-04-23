@@ -1584,7 +1584,7 @@ URL: https://keimatch-sinjapan.com
 }
 
 export function scheduleLeadCrawler() {
-  const CRAWL_HOURS = [5, 8, 12, 16, 21];
+  const CRAWL_HOURS = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]; // 2時間ごと・12回/日
   const SEND_HOURS = [9, 11, 14, 17];
   const RETRY_HOURS = [10];
   const FOLLOWUP_HOURS = [13];
