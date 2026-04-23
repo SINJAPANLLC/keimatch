@@ -1093,6 +1093,42 @@ export async function registerRoutes(
       const acceptedByUserId = status === "completed" ? req.session.userId as string : undefined;
       const updated = await storage.updateCargoStatus(cargoId, status, acceptedByUserId);
       res.json(updated);
+
+      // 成約時メール通知（バックグラウンド）
+      if (status === "completed") {
+        setImmediate(async () => {
+          try {
+            const cargoVars = {
+              departure: listing.departureArea || "",
+              arrival: listing.arrivalArea || "",
+              cargoType: listing.cargoType || "",
+              weight: listing.weight || "",
+            };
+            // 荷物オーナーへ「成約されました」通知
+            const owner = await storage.getUser(listing.userId);
+            if (owner && owner.notifyEmail && owner.email && isEmailConfigured() && !isAgentAutoEmail(owner.email)) {
+              const resolved = await resolveEmailTemplate(
+                "cargo_completed",
+                cargoVars,
+                "【KEI MATCH】あなたの案件が成約されました",
+                `おめでとうございます！あなたの案件が成約されました。\n\n出発地: ${listing.departureArea}\n到着地: ${listing.arrivalArea}\n荷物種類: ${listing.cargoType}\n\nKEI MATCHにログインして詳細をご確認ください。`
+              );
+              if (resolved) await sendEmail(owner.email, resolved.subject, resolved.body);
+            }
+            // 成約したユーザーへ確認通知
+            const acceptor = await storage.getUser(req.session.userId as string);
+            if (acceptor && acceptor.notifyEmail && acceptor.email && isEmailConfigured() && !isAgentAutoEmail(acceptor.email)) {
+              await sendEmail(
+                acceptor.email,
+                "【KEI MATCH】案件の成約が完了しました",
+                `案件の成約が完了しました。\n\n出発地: ${listing.departureArea}\n到着地: ${listing.arrivalArea}\n荷物種類: ${listing.cargoType}\n\nKEI MATCHにログインして詳細をご確認ください。`
+              );
+            }
+          } catch (err) {
+            console.error("Cargo completed email failed:", err);
+          }
+        });
+      }
     } catch (error) {
       res.status(500).json({ message: "荷物ステータスの更新に失敗しました" });
     }
