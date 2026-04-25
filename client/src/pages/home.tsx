@@ -403,7 +403,7 @@ export default function Home() {
       <section className="py-16 sm:py-20 bg-primary">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-primary-foreground text-center mb-12 text-shadow-lg" data-testid="text-reason-title">
-            軽貨物マッチが選ばれる理由
+            KEI MATCHが選ばれる理由
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
             <div className="text-center text-shadow">
