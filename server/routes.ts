@@ -57,6 +57,27 @@ async function resolveEmailTemplate(
   };
 }
 
+async function resolveLineTemplate(
+  triggerEvent: string,
+  variables: Record<string, string>,
+  defaultBody: string
+): Promise<string> {
+  try {
+    const allTemplates = await db.select().from(notificationTemplates)
+      .where(and(
+        eq(notificationTemplates.channel, "line"),
+        eq(notificationTemplates.triggerEvent, triggerEvent),
+      ));
+    if (allTemplates.length > 0) {
+      const active = allTemplates.find(t => t.isActive);
+      if (active) return replaceTemplateVariables(active.body, variables);
+    }
+  } catch (err) {
+    console.error(`LINE template lookup failed for ${triggerEvent}:`, err);
+  }
+  return replaceTemplateVariables(defaultBody, variables);
+}
+
 function isAgentAutoEmail(email: string): boolean {
   return /^agent-[a-z]+@keikamotsu/.test(email);
 }
@@ -271,6 +292,24 @@ export async function registerRoutes(
           }
         } catch (err) {
           console.error("Welcome email failed:", err);
+        }
+
+        // 管理者への新規登録通知
+        if (isEmailConfigured()) {
+          try {
+            const userType = parsed.data.userType === "carrier" ? "軽貨物会社" : "荷主";
+            const adminSubject = `【KEI MATCH】新規会員登録がありました：${parsed.data.companyName || parsed.data.email}`;
+            const adminBody = `新規ユーザーが会員登録しました。承認をお願いします。\n\n` +
+              `■ 会社名：${parsed.data.companyName || "-"}\n` +
+              `■ メール：${parsed.data.email}\n` +
+              `■ 担当者：${parsed.data.contactName || "-"}\n` +
+              `■ 区分：${userType}\n` +
+              `■ 登録日時：${new Date().toLocaleString("ja-JP")}\n\n` +
+              `▶ 管理画面でユーザーを承認する\n${appBaseUrl}/admin/users`;
+            await sendEmail("info@sinjapan.jp", adminSubject, adminBody);
+          } catch (err) {
+            console.error("Admin registration notification email failed:", err);
+          }
         }
       });
     } catch (error) {
@@ -1045,6 +1084,9 @@ export async function registerRoutes(
             arrivalArea: listing.arrivalArea || "",
             cargoType: listing.cargoType || "",
             weight: listing.weight || "",
+            price: listing.price ? `${listing.price}円（税別）` : "要相談",
+            desiredDate: listing.desiredDate || "",
+            vehicleType: listing.vehicleType || "",
             companyName: currentUser?.companyName || "",
             appBaseUrl,
           };
@@ -1129,31 +1171,60 @@ export async function registerRoutes(
       if (status === "completed") {
         setImmediate(async () => {
           try {
-            const cargoVars = {
-              departure: listing.departureArea || "",
-              arrival: listing.arrivalArea || "",
+            const host = req.get("host") || "";
+            const protocol = host.includes("localhost") ? "http" : "https";
+            const appBaseUrl = `${protocol}://${host}`;
+            const owner = await storage.getUser(listing.userId);
+            const acceptor = await storage.getUser(req.session.userId as string);
+            const priceStr = listing.price ? `${listing.price}円（税別）` : "要相談";
+            const desiredDateStr = listing.desiredDate || "";
+            const cargoVars: Record<string, string> = {
+              departureArea: listing.departureArea || "",
+              arrivalArea: listing.arrivalArea || "",
               cargoType: listing.cargoType || "",
               weight: listing.weight || "",
+              price: priceStr,
+              desiredDate: desiredDateStr,
+              ownerCompanyName: owner?.companyName || "",
+              carrierCompanyName: acceptor?.companyName || "",
+              cargoNumber: listing.cargoNumber ? String(listing.cargoNumber) : "",
+              appBaseUrl,
             };
-            // 荷物オーナーへ「成約されました」通知
-            const owner = await storage.getUser(listing.userId);
+            // 荷物オーナー（荷主）へ「成約されました」通知
             if (owner && owner.notifyEmail && owner.email && isEmailConfigured() && !isAgentAutoEmail(owner.email)) {
+              const defaultShipperBody = `おめでとうございます！あなたの案件が成約されました。\n\n` +
+                `■ 区間：${listing.departureArea} → ${listing.arrivalArea}\n` +
+                `■ 荷種：${listing.cargoType || ""}\n` +
+                `■ 重量：${listing.weight || ""}\n` +
+                `■ 運賃：${priceStr}\n` +
+                `■ 希望日：${desiredDateStr}\n` +
+                `■ 運送会社：${acceptor?.companyName || ""}\n\n` +
+                `KEI MATCHにログインして詳細をご確認ください。\n${appBaseUrl}/completed-cargo`;
               const resolved = await resolveEmailTemplate(
-                "cargo_completed",
+                "cargo_completed_shipper",
                 cargoVars,
                 "【KEI MATCH】あなたの案件が成約されました",
-                `おめでとうございます！あなたの案件が成約されました。\n\n出発地: ${listing.departureArea}\n到着地: ${listing.arrivalArea}\n荷物種類: ${listing.cargoType}\n\nKEI MATCHにログインして詳細をご確認ください。`
+                defaultShipperBody
               );
               if (resolved) await sendEmail(owner.email, resolved.subject, resolved.body);
             }
-            // 成約したユーザーへ確認通知
-            const acceptor = await storage.getUser(req.session.userId as string);
+            // 成約した運送会社（受注者）へ確認通知
             if (acceptor && acceptor.notifyEmail && acceptor.email && isEmailConfigured() && !isAgentAutoEmail(acceptor.email)) {
-              await sendEmail(
-                acceptor.email,
+              const defaultCarrierBody = `案件の成約が完了しました。\n\n` +
+                `■ 区間：${listing.departureArea} → ${listing.arrivalArea}\n` +
+                `■ 荷種：${listing.cargoType || ""}\n` +
+                `■ 重量：${listing.weight || ""}\n` +
+                `■ 運賃：${priceStr}\n` +
+                `■ 希望日：${desiredDateStr}\n` +
+                `■ 荷主：${owner?.companyName || ""}\n\n` +
+                `KEI MATCHにログインして詳細をご確認ください。\n${appBaseUrl}/completed-cargo`;
+              const resolved = await resolveEmailTemplate(
+                "cargo_completed_carrier",
+                cargoVars,
                 "【KEI MATCH】案件の成約が完了しました",
-                `案件の成約が完了しました。\n\n出発地: ${listing.departureArea}\n到着地: ${listing.arrivalArea}\n荷物種類: ${listing.cargoType}\n\nKEI MATCHにログインして詳細をご確認ください。`
+                defaultCarrierBody
               );
+              if (resolved) await sendEmail(acceptor.email, resolved.subject, resolved.body);
             }
           } catch (err) {
             console.error("Cargo completed email failed:", err);
@@ -1492,6 +1563,8 @@ export async function registerRoutes(
             destinationArea: listing.destinationArea || "",
             vehicleType: listing.vehicleType || "",
             maxWeight: listing.maxWeight || "",
+            price: listing.price ? `${listing.price}円（税別）` : "要相談",
+            availableDate: listing.availableDate || "",
             companyName: user?.companyName || "",
             appBaseUrl,
           };
@@ -3399,12 +3472,15 @@ statusの意味:
       {
         triggerEvent: "cargo_new",
         name: "新着案件通知",
-        description: "新しい荷物が登録された際に全ユーザーへ送信されるメール",
+        description: "新しい荷物が登録された際に全ユーザーへ送信されるメール（運賃・日程・車種も使用可能）",
         variables: [
           { key: "departureArea", label: "出発地" },
           { key: "arrivalArea", label: "到着地" },
           { key: "cargoType", label: "荷物種類" },
           { key: "weight", label: "重量" },
+          { key: "price", label: "運賃" },
+          { key: "desiredDate", label: "希望日" },
+          { key: "vehicleType", label: "希望車種" },
           { key: "companyName", label: "登録会社名" },
           { key: "appBaseUrl", label: "サイトURL" },
         ],
@@ -3412,15 +3488,57 @@ statusの意味:
       {
         triggerEvent: "truck_new",
         name: "新着空き車両通知",
-        description: "新しい空き車両が登録された際に全ユーザーへ送信されるメール",
+        description: "新しい空き車両が登録された際に全ユーザーへ送信されるメール（希望運賃・日程も使用可能）",
         variables: [
           { key: "currentArea", label: "現在地" },
           { key: "destinationArea", label: "行先" },
           { key: "vehicleType", label: "車両タイプ" },
           { key: "maxWeight", label: "積載量" },
+          { key: "price", label: "希望運賃" },
+          { key: "availableDate", label: "乗車可能日" },
           { key: "companyName", label: "登録会社名" },
           { key: "appBaseUrl", label: "サイトURL" },
         ],
+      },
+      {
+        triggerEvent: "cargo_completed_shipper",
+        name: "成約完了通知（荷主向け）",
+        description: "案件が成約された際に荷主へ送信されるメール",
+        variables: [
+          { key: "departureArea", label: "出発地" },
+          { key: "arrivalArea", label: "到着地" },
+          { key: "cargoType", label: "荷物種類" },
+          { key: "weight", label: "重量" },
+          { key: "price", label: "運賃" },
+          { key: "desiredDate", label: "希望日" },
+          { key: "carrierCompanyName", label: "運送会社名" },
+          { key: "ownerCompanyName", label: "荷主会社名" },
+          { key: "cargoNumber", label: "荷物番号" },
+          { key: "appBaseUrl", label: "サイトURL" },
+        ],
+      },
+      {
+        triggerEvent: "cargo_completed_carrier",
+        name: "成約完了通知（受注者向け）",
+        description: "案件を成約した際に運送会社（受注者）へ送信されるメール",
+        variables: [
+          { key: "departureArea", label: "出発地" },
+          { key: "arrivalArea", label: "到着地" },
+          { key: "cargoType", label: "荷物種類" },
+          { key: "weight", label: "重量" },
+          { key: "price", label: "運賃" },
+          { key: "desiredDate", label: "希望日" },
+          { key: "ownerCompanyName", label: "荷主会社名" },
+          { key: "carrierCompanyName", label: "運送会社名" },
+          { key: "cargoNumber", label: "荷物番号" },
+          { key: "appBaseUrl", label: "サイトURL" },
+        ],
+      },
+      {
+        triggerEvent: "line_friend_add",
+        name: "LINE友達追加メッセージ",
+        description: "公式LINEを友達追加した際に自動送信されるメッセージ（LINEチャンネルで設定）",
+        variables: [],
       },
       {
         triggerEvent: "user_welcome",
@@ -5113,10 +5231,10 @@ JSON形式で以下を返してください（日本語で）:
             "【KEI MATCH】おかえりなさい！\nLINE通知を再開しました🎉\n\n新着案件・空き車両が登録されたらすぐにお知らせします。"
           );
         } else {
-          // 新規フォロー：メールアドレスを要求
-          await lineReply(event.replyToken,
-            "【KEI MATCH】友だち追加ありがとうございます！🚐\n\nアカウントを連携してLINE通知を受け取りましょう。\n\nKEI MATCHに登録済みの\n📧 メールアドレスをこのトークに送信してください。"
-          );
+          // 新規フォロー：DBテンプレートから解決、なければデフォルト
+          const defaultFollowMsg = "【KEI MATCH】友だち追加ありがとうございます！🚐\n\nアカウントを連携してLINE通知を受け取りましょう。\n\nKEI MATCHに登録済みの\n📧 メールアドレスをこのトークに送信してください。";
+          const followMsg = await resolveLineTemplate("line_friend_add", {}, defaultFollowMsg);
+          await lineReply(event.replyToken, followMsg);
         }
       }
 
