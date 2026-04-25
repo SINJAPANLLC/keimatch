@@ -1055,6 +1055,11 @@ export async function registerRoutes(
                   console.error(`Cargo new email failed for ${u.email}:`, emailErr);
                 }
               }
+
+              if (u.notifyLine && u.lineUserId && isLineConfigured()) {
+                const lineMsg = `【KEI MATCH】新着案件🚚\n\n${listing.departureArea} → ${listing.arrivalArea}\n${listing.cargoType || ""}　${listing.weight || ""}\n\n${appBaseUrl}/cargo`;
+                sendLineMessage(u.lineUserId, lineMsg).catch(() => {});
+              }
             }
           }
         } catch (bgErr) {
@@ -1486,6 +1491,11 @@ export async function registerRoutes(
                 } catch (emailErr) {
                   console.error(`Truck new email failed for ${u.email}:`, emailErr);
                 }
+              }
+
+              if (u.notifyLine && u.lineUserId && isLineConfigured()) {
+                const lineMsg = `【KEI MATCH】新着空き車両🚐\n\n${listing.currentArea} → ${listing.destinationArea}\n${listing.vehicleType || ""}　${listing.maxWeight || ""}\n\n${appBaseUrl}/trucks`;
+                sendLineMessage(u.lineUserId, lineMsg).catch(() => {});
               }
             }
           }
@@ -4983,11 +4993,13 @@ JSON形式で以下を返してください（日本語で）:
         }
       }
 
-      // テキストメッセージ受信：IDを返答
+      // テキストメッセージ受信
       if (event.type === "message" && event.message?.type === "text") {
         const text = (event.message.text || "").trim();
+        const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+
+        // 「ID」送信 → LINE User IDを返答
         if (text === "ID" || text === "id" || text === "ＩＤ" || text === "マイID") {
-          const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
           if (token) {
             await fetch("https://api.line.me/v2/bot/message/reply", {
               method: "POST",
@@ -4995,6 +5007,33 @@ JSON形式で以下を返してください（日本語で）:
               body: JSON.stringify({
                 replyToken: event.replyToken,
                 messages: [{ type: "text", text: `あなたのLINE User ID:\n${lineUserId}\n\nKEI MATCHの設定画面に入力してください。` }]
+              })
+            });
+          }
+        }
+
+        // メールアドレス送信 → DB照合してアカウント連携
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(text)) {
+          const matchedUser = await storage.getUserByEmail(text.toLowerCase());
+          let replyText = "";
+          if (matchedUser) {
+            // すでに別のLINEアカウントが連携済みの場合は上書き
+            await storage.updateUserProfile(matchedUser.id, {
+              lineUserId,
+              notifyLine: true,
+            });
+            replyText = `✅ 連携完了！\n${matchedUser.companyName || matchedUser.username} さんのアカウントとLINEを連携しました。\n\n今後、新着案件や新着空き車両の通知をLINEでお送りします。`;
+          } else {
+            replyText = `❌ 該当するアカウントが見つかりませんでした。\n\nKEI MATCHに登録済みのメールアドレスを送信してください。\n（例: example@example.com）`;
+          }
+          if (token) {
+            await fetch("https://api.line.me/v2/bot/message/reply", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                replyToken: event.replyToken,
+                messages: [{ type: "text", text: replyText }]
               })
             });
           }
