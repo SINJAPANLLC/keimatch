@@ -882,6 +882,12 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/public/line-config", (_req, res) => {
+    const basicId = process.env.LINE_BOT_BASIC_ID || "";
+    const configured = isLineConfigured() && !!basicId;
+    res.json({ basicId, configured });
+  });
+
   app.get("/api/public/counts", async (_req, res) => {
     try {
       const [activeCargo, activeTrucks] = await Promise.all([
