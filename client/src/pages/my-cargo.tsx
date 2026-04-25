@@ -2,7 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Package, MapPin, Trash2, Plus, ArrowUpDown, ArrowRight, Clock, CircleDot, Eye, CheckCircle2, XCircle, Building2, Phone, Mail, DollarSign, FileText, Loader2, Circle, X, ChevronLeft, ChevronRight, Navigation, Truck, Pencil, Download, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Package, Trash2, Plus, ArrowUpDown, ArrowRight, Clock, CircleDot, Eye, CheckCircle2, XCircle, Building2, Phone, Mail, FileText, Loader2, Circle, X, ChevronLeft, ChevronRight, Truck, Pencil, Download, Search, Save } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { CargoListing } from "@shared/schema";
@@ -14,6 +15,16 @@ import DashboardLayout from "@/components/dashboard-layout";
 import { formatPrice } from "@/lib/utils";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Textarea } from "@/components/ui/textarea";
+
+const AREAS = ["北海道","青森","岩手","宮城","秋田","山形","福島","茨城","栃木","群馬","埼玉","千葉","東京","神奈川","新潟","富山","石川","福井","山梨","長野","岐阜","静岡","愛知","三重","滋賀","京都","大阪","兵庫","奈良","和歌山","鳥取","島根","岡山","広島","山口","徳島","香川","愛媛","高知","福岡","佐賀","長崎","熊本","大分","宮崎","鹿児島","沖縄"];
+const VEHICLE_TYPES_E = ["軽バン","軽トラック","軽冷凍車","軽冷蔵車","軽ワゴン","バイク便","その他"];
+const BODY_TYPES_E = ["標準ボディ","ハイルーフ","幌車","冷蔵仕様","冷凍仕様","パワーゲート付き","その他"];
+const TIME_OPTIONS_E = ["指定なし","午前中","午後","夕方以降","終日可","0:00","1:00","2:00","3:00","4:00","5:00","6:00","7:00","8:00","9:00","10:00","11:00","12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00","24:00"];
+const TEMP_CONTROLS_E = ["指定なし","常温","冷蔵（0〜10℃）","冷凍（-18℃以下）","定温"];
+const HIGHWAY_FEE_E = ["込み","別途","高速代なし"];
+const TRANSPORT_TYPE_E = ["スポット","定期"];
+const CONSOLIDATION_E = ["不可","可能"];
+const DRIVER_WORK_E = ["手積み手降ろし","台車使用","エレベーター有","階段搬入","設置作業あり","その他"];
 
 const STATUS_FILTERS = [
   { label: "全て", value: "all" },
@@ -131,16 +142,44 @@ type CompanyInfo = {
   truckCount3m: number;
 };
 
-function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; onClose: () => void }) {
-  const [panelTab, setPanelTab] = useState<"cargo" | "company">("cargo");
+function CargoDetailPanel({ listing, onClose, defaultTab = "cargo" }: { listing: CargoListing | null; onClose: () => void; defaultTab?: "cargo" | "company" | "edit" }) {
+  const [panelTab, setPanelTab] = useState<"cargo" | "company" | "edit">(defaultTab);
   const [noteText, setNoteText] = useState("");
   const [noteSaved, setNoteSaved] = useState(false);
   const noteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { toast } = useToast();
+  const [editForm, setEditForm] = useState<Partial<CargoListing>>({});
+  const [editSaved, setEditSaved] = useState(false);
 
   useEffect(() => {
     setNoteText(listing?.privateNote || "");
     setNoteSaved(false);
+    if (listing) {
+      setEditForm({
+        departureArea: listing.departureArea || "",
+        departureAddress: listing.departureAddress || "",
+        arrivalArea: listing.arrivalArea || "",
+        arrivalAddress: listing.arrivalAddress || "",
+        desiredDate: listing.desiredDate || "",
+        departureTime: listing.departureTime || "",
+        arrivalDate: listing.arrivalDate || "",
+        arrivalTime: listing.arrivalTime || "",
+        cargoType: listing.cargoType || "",
+        weight: listing.weight || "",
+        vehicleType: listing.vehicleType || "",
+        bodyType: listing.bodyType || "",
+        temperatureControl: listing.temperatureControl || "",
+        price: listing.price || "",
+        highwayFee: listing.highwayFee || "",
+        transportType: listing.transportType || "",
+        consolidation: listing.consolidation || "",
+        driverWork: listing.driverWork || "",
+        description: listing.description || "",
+        contactPerson: listing.contactPerson || "",
+        paymentDate: listing.paymentDate || "",
+      });
+      setEditSaved(false);
+    }
   }, [listing?.id]);
 
   const saveNoteMutation = useMutation({
@@ -172,6 +211,21 @@ function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; 
     },
   });
 
+  const updateCargoMutation = useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<CargoListing> }) => {
+      await apiRequest("PATCH", `/api/cargo/${id}`, data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/my-cargo"] });
+      setEditSaved(true);
+      setTimeout(() => setEditSaved(false), 2500);
+      toast({ title: "保存しました", description: "案件情報を更新しました" });
+    },
+    onError: () => {
+      toast({ title: "エラー", description: "更新に失敗しました", variant: "destructive" });
+    },
+  });
+
   const { data: companyInfo } = useQuery<CompanyInfo>({
     queryKey: ["/api/companies", listing?.userId],
     enabled: !!listing?.userId,
@@ -186,8 +240,8 @@ function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; 
   }, [onClose]);
 
   useEffect(() => {
-    setPanelTab("cargo");
-  }, [listing?.id]);
+    setPanelTab(defaultTab);
+  }, [listing?.id, defaultTab]);
 
   const handlePrint = () => {
     if (!listing) return;
@@ -256,6 +310,13 @@ function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; 
               data-testid="tab-company-info"
             >
               企業情報
+            </button>
+            <button
+              onClick={() => setPanelTab("edit")}
+              className={`px-3 py-1.5 text-sm font-bold rounded-md transition-colors ${panelTab === "edit" ? "text-primary border border-primary bg-primary/5" : "text-muted-foreground"}`}
+              data-testid="tab-edit"
+            >
+              編集
             </button>
           </div>
           <div className="flex items-center gap-1">
@@ -343,7 +404,7 @@ function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; 
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <div className="flex items-center gap-1.5">
               {listing.transportType && (
-                <Badge variant="outline" className={`text-xs ${listing.transportType === "スポット" ? "border-blue-300 text-blue-600" : listing.transportType === "定期" ? "border-primary/30 text-primary" : ""}`}>{listing.transportType}</Badge>
+                <Badge variant="outline" className="text-xs text-foreground">{listing.transportType}</Badge>
               )}
               <Badge variant="default">{listing.status === "active" ? "募集中" : listing.status === "completed" ? "成約済" : "終了"}</Badge>
             </div>
@@ -381,6 +442,163 @@ function CargoDetailPanel({ listing, onClose }: { listing: CargoListing | null; 
               {saveNoteMutation.isPending ? "保存中..." : "メモを保存"}
             </Button>
           </div>
+        </div>
+      ) : panelTab === "edit" ? (
+        <div className="p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-bold text-foreground">案件情報の編集</h3>
+            {editSaved && <span className="text-xs text-green-600 font-bold">保存しました ✓</span>}
+          </div>
+
+          <div className="space-y-3">
+            <div className="text-xs font-bold text-muted-foreground border-b border-border pb-1">発着地</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">発地（都道府県）</label>
+                <Select value={editForm.departureArea || ""} onValueChange={v => setEditForm(f => ({...f, departureArea: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{AREAS.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">着地（都道府県）</label>
+                <Select value={editForm.arrivalArea || ""} onValueChange={v => setEditForm(f => ({...f, arrivalArea: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{AREAS.map(a => <SelectItem key={a} value={a}>{a}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">発地詳細</label>
+                <Input className="h-8 text-xs" value={editForm.departureAddress || ""} onChange={e => setEditForm(f => ({...f, departureAddress: e.target.value}))} placeholder="市区町村以下" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">着地詳細</label>
+                <Input className="h-8 text-xs" value={editForm.arrivalAddress || ""} onChange={e => setEditForm(f => ({...f, arrivalAddress: e.target.value}))} placeholder="市区町村以下" />
+              </div>
+            </div>
+
+            <div className="text-xs font-bold text-muted-foreground border-b border-border pb-1 pt-1">日時</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">発日</label>
+                <Input className="h-8 text-xs" value={editForm.desiredDate || ""} onChange={e => setEditForm(f => ({...f, desiredDate: e.target.value}))} placeholder="YYYY/MM/DD" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">発時間</label>
+                <Select value={editForm.departureTime || ""} onValueChange={v => setEditForm(f => ({...f, departureTime: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{TIME_OPTIONS_E.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">着日</label>
+                <Input className="h-8 text-xs" value={editForm.arrivalDate || ""} onChange={e => setEditForm(f => ({...f, arrivalDate: e.target.value}))} placeholder="YYYY/MM/DD" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">着時間</label>
+                <Select value={editForm.arrivalTime || ""} onValueChange={v => setEditForm(f => ({...f, arrivalTime: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{TIME_OPTIONS_E.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="text-xs font-bold text-muted-foreground border-b border-border pb-1 pt-1">荷物・車両</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">荷種</label>
+                <Input className="h-8 text-xs" value={editForm.cargoType || ""} onChange={e => setEditForm(f => ({...f, cargoType: e.target.value}))} placeholder="食品・家電 等" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">重量</label>
+                <Input className="h-8 text-xs" value={editForm.weight || ""} onChange={e => setEditForm(f => ({...f, weight: e.target.value}))} placeholder="例: 100kg" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">車種</label>
+                <Select value={editForm.vehicleType || ""} onValueChange={v => setEditForm(f => ({...f, vehicleType: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{VEHICLE_TYPES_E.map(v => <SelectItem key={v} value={v}>{v}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">車体</label>
+                <Select value={editForm.bodyType || ""} onValueChange={v => setEditForm(f => ({...f, bodyType: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{BODY_TYPES_E.map(b => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="text-xs font-bold text-muted-foreground border-b border-border pb-1 pt-1">運賃・条件</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">運賃（税別）</label>
+                <Input className="h-8 text-xs" value={editForm.price || ""} onChange={e => setEditForm(f => ({...f, price: e.target.value}))} placeholder="例: 15000" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">高速代</label>
+                <Select value={editForm.highwayFee || ""} onValueChange={v => setEditForm(f => ({...f, highwayFee: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{HIGHWAY_FEE_E.map(h => <SelectItem key={h} value={h}>{h}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">形態</label>
+                <Select value={editForm.transportType || ""} onValueChange={v => setEditForm(f => ({...f, transportType: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{TRANSPORT_TYPE_E.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">積合</label>
+                <Select value={editForm.consolidation || ""} onValueChange={v => setEditForm(f => ({...f, consolidation: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{CONSOLIDATION_E.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">作業</label>
+                <Select value={editForm.driverWork || ""} onValueChange={v => setEditForm(f => ({...f, driverWork: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{DRIVER_WORK_E.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">温度管理</label>
+                <Select value={editForm.temperatureControl || ""} onValueChange={v => setEditForm(f => ({...f, temperatureControl: v}))}>
+                  <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="選択" /></SelectTrigger>
+                  <SelectContent>{TEMP_CONTROLS_E.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="text-xs font-bold text-muted-foreground border-b border-border pb-1 pt-1">その他</div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">担当者</label>
+                <Input className="h-8 text-xs" value={editForm.contactPerson || ""} onChange={e => setEditForm(f => ({...f, contactPerson: e.target.value}))} />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-muted-foreground">入金予定日</label>
+                <Input className="h-8 text-xs" value={editForm.paymentDate || ""} onChange={e => setEditForm(f => ({...f, paymentDate: e.target.value}))} placeholder="月末締め翌月末払い 等" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-muted-foreground">備考</label>
+              <Textarea className="text-xs min-h-[60px] resize-none" value={editForm.description || ""} onChange={e => setEditForm(f => ({...f, description: e.target.value}))} placeholder="備考・特記事項" />
+            </div>
+          </div>
+
+          <Button
+            className="w-full"
+            disabled={updateCargoMutation.isPending}
+            onClick={() => listing && updateCargoMutation.mutate({ id: listing.id, data: editForm })}
+            data-testid="button-save-edit"
+          >
+            {updateCargoMutation.isPending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />保存中...</> : <><Save className="w-4 h-4 mr-2" />変更を保存</>}
+          </Button>
         </div>
       ) : (
         <div className="p-4 space-y-4">
@@ -469,6 +687,7 @@ export default function MyCargo() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [selectedCargoId, setSelectedCargoId] = useState<string | null>(null);
+  const [panelDefaultTab, setPanelDefaultTab] = useState<"cargo" | "company" | "edit">("cargo");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState<"newest" | "departDate" | "arriveDate" | "price">("newest");
   const [page, setPage] = useState(1);
@@ -810,7 +1029,7 @@ export default function MyCargo() {
                         <tr
                           key={listing.id}
                           className={`hover-elevate cursor-pointer transition-colors ${index % 2 === 1 ? "bg-muted/20" : ""} ${selectedCargoId === listing.id ? "bg-primary/10" : ""}`}
-                          onClick={() => setSelectedCargoId(listing.id)}
+                          onClick={() => { setSelectedCargoId(listing.id); setPanelDefaultTab("cargo"); }}
                           data-testid={`row-my-cargo-${listing.id}`}
                         >
                           <td className="px-2 py-3 text-center align-top" onClick={(e) => e.stopPropagation()}>
@@ -842,10 +1061,7 @@ export default function MyCargo() {
                           </td>
                           <td className="px-2 py-3 text-center align-top">
                             {listing.transportType ? (
-                              <Badge variant="outline" className={`text-[10px] px-1 ${
-                                listing.transportType === "スポット" ? "border-blue-300 text-blue-600" :
-                                listing.transportType === "定期" ? "border-primary/30 text-primary" : ""
-                              }`}>{listing.transportType}</Badge>
+                              <Badge variant="outline" className="text-[10px] px-1 text-foreground">{listing.transportType}</Badge>
                             ) : (
                               <span className="text-xs text-muted-foreground font-bold">-</span>
                             )}
@@ -853,7 +1069,6 @@ export default function MyCargo() {
                           <td className="px-2 py-3 align-top">
                             <div className="flex items-center gap-2">
                               <div className="flex items-start gap-1 min-w-0 w-[140px] shrink-0">
-                                <Navigation className="w-3 h-3 fill-primary text-primary shrink-0 mt-0.5" />
                                 <div className="min-w-0">
                                   <div className="flex items-center gap-1 flex-wrap">
                                     <span className="font-bold text-[12px] text-foreground">{listing.departureArea}</span>
@@ -868,7 +1083,6 @@ export default function MyCargo() {
                               </div>
                               <ArrowRight className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                               <div className="flex items-start gap-1 min-w-0">
-                                <MapPin className="w-3 h-3 text-blue-600 shrink-0 mt-0.5" />
                                 <div className="min-w-0">
                                   <div className="flex items-center gap-1 flex-wrap">
                                     <span className="font-bold text-[12px] text-foreground">{listing.arrivalArea}</span>
@@ -922,16 +1136,15 @@ export default function MyCargo() {
                           </td>
                           <td className="px-2 py-3 align-top" onClick={(e) => e.stopPropagation()}>
                             <div className="flex items-center justify-center gap-1">
-                              <Link href={`/cargo/edit/${listing.id}`}>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  className="text-[10px] h-6 px-2"
-                                  data-testid={`button-edit-${listing.id}`}
-                                >
-                                  <Pencil className="w-3 h-3 mr-0.5" />編集
-                                </Button>
-                              </Link>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="text-[10px] h-6 px-2"
+                                data-testid={`button-edit-${listing.id}`}
+                                onClick={(e) => { e.stopPropagation(); setSelectedCargoId(listing.id); setPanelDefaultTab("edit"); }}
+                              >
+                                <Pencil className="w-3 h-3 mr-0.5" />編集
+                              </Button>
                               <Button
                                 size="sm"
                                 variant="ghost"
@@ -981,7 +1194,7 @@ export default function MyCargo() {
           </div>
         </div>
         {selectedCargoId && selectedCargo && (
-          <CargoDetailPanel listing={selectedCargo} onClose={() => setSelectedCargoId(null)} />
+          <CargoDetailPanel listing={selectedCargo} onClose={() => setSelectedCargoId(null)} defaultTab={panelDefaultTab} />
         )}
       </div>
     </DashboardLayout>
