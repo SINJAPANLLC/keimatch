@@ -995,79 +995,90 @@ function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing:
           )}
         </div>
       ) : panelTab === "company" ? (
-        <div className="p-3 space-y-3">
-          <h3 className="text-base font-bold text-foreground">{companyInfo?.companyName || listing.companyName}</h3>
-
-          <Card className="p-3">
-            <div className="text-xs font-bold text-muted-foreground mb-3">KEI MATCHでの実績</div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1.5 mb-1">
-                  <Package className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground font-bold">委託</span>
-                </div>
-                <div className="text-xs text-muted-foreground font-bold">成約 <span className="text-lg text-foreground">{companyInfo?.cargoCount1m ?? 0}</span></div>
-                <div className="text-xs text-muted-foreground font-bold">登録 <span className="text-lg text-foreground">{companyInfo?.cargoCount3m ?? 0}</span></div>
+        (() => {
+          const displayInfo = isContracted ? companyInfo : carrierInfo;
+          const displayLabel = isContracted ? "荷主" : "運送会社（受注）";
+          const displayPhone = isContracted ? listing.contactPhone : carrierInfo?.phone;
+          const fallbackName = isContracted ? listing.companyName : listing.acceptedByCompanyName;
+          return (
+            <div className="p-3 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded font-bold">{displayLabel}</span>
+                <h3 className="text-base font-bold text-foreground">{displayInfo?.companyName || fallbackName || "-"}</h3>
               </div>
-              <div className="text-center">
-                <div className="flex items-center justify-center gap-1.5 mb-1">
-                  <Truck className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground font-bold">受託</span>
+
+              <Card className="p-3">
+                <div className="text-xs font-bold text-muted-foreground mb-3">KEI MATCHでの実績</div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1.5 mb-1">
+                      <Package className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground font-bold">委託</span>
+                    </div>
+                    <div className="text-xs text-muted-foreground font-bold">成約 <span className="text-lg text-foreground">{displayInfo?.cargoCount1m ?? 0}</span></div>
+                    <div className="text-xs text-muted-foreground font-bold">登録 <span className="text-lg text-foreground">{displayInfo?.cargoCount3m ?? 0}</span></div>
+                  </div>
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1.5 mb-1">
+                      <Truck className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground font-bold">受託</span>
+                    </div>
+                    <div className="text-xs text-muted-foreground font-bold">成約 <span className="text-lg text-foreground">{displayInfo?.truckCount1m ?? 0}</span></div>
+                    <div className="text-xs text-muted-foreground font-bold">登録 <span className="text-lg text-foreground">{displayInfo?.truckCount3m ?? 0}</span></div>
+                  </div>
                 </div>
-                <div className="text-xs text-muted-foreground font-bold">成約 <span className="text-lg text-foreground">{companyInfo?.truckCount1m ?? 0}</span></div>
-                <div className="text-xs text-muted-foreground font-bold">登録 <span className="text-lg text-foreground">{companyInfo?.truckCount3m ?? 0}</span></div>
+              </Card>
+
+              <h4 className="text-sm font-bold text-foreground">基本情報</h4>
+              <div className="border border-border rounded-md overflow-hidden">
+                <DetailRow label="法人名・事業者名">
+                  <div>
+                    {displayInfo?.companyNameKana && (
+                      <div className="text-[10px] text-muted-foreground mb-0.5">{displayInfo.companyNameKana}</div>
+                    )}
+                    <div className="text-primary font-bold">{displayInfo?.companyName || fallbackName}</div>
+                  </div>
+                </DetailRow>
+                <DetailRow label="住所" value={displayInfo?.postalCode ? `〒${displayInfo.postalCode}\n${displayInfo.address || "-"}` : displayInfo?.address} />
+                <DetailRow label="電話番号" value={displayPhone} />
+                <DetailRow label="FAX番号" value={displayInfo?.fax} />
+                <DetailRow label="請求事業者登録番号" value={displayInfo?.invoiceRegistrationNumber} />
+                <DetailRow label="業務内容・会社PR" value={displayInfo?.businessDescription} />
+                <DetailRow label="保有車両台数" value={displayInfo?.truckCount ? `${displayInfo.truckCount} 台` : "-"} />
+                <DetailRow label="ウェブサイトURL" value={displayInfo?.websiteUrl} />
+              </div>
+
+              <h4 className="text-sm font-bold text-foreground">詳細情報</h4>
+              <div className="border border-border rounded-md overflow-hidden">
+                <DetailRow label="代表者" value={displayInfo?.representative} />
+                <DetailRow label="設立" value={displayInfo?.establishedDate} />
+                <DetailRow label="資本金" value={displayInfo?.capital ? `${displayInfo.capital} 万円` : null} />
+                <DetailRow label="従業員数" value={displayInfo?.employeeCount} />
+                <DetailRow label="事業所所在地" value={displayInfo?.officeLocations} />
+                <DetailRow label="年間売上" value={displayInfo?.annualRevenue ? `${displayInfo.annualRevenue} 万円` : null} />
+                <DetailRow label="取引先銀行" value={displayInfo?.bankInfo} />
+                <DetailRow label="主要取引先" value={displayInfo?.majorClients} />
+                <DetailRow label="締め日" value={[displayInfo?.closingMonth, displayInfo?.closingDay].filter(Boolean).join(" ") || null} />
+                <DetailRow label="支払月・支払日" value={[displayInfo?.paymentMonth, displayInfo?.paymentDay].filter(Boolean).join(" ") || null} />
+                <DetailRow label="営業地域" value={displayInfo?.businessArea} />
+              </div>
+
+              <h4 className="text-sm font-bold text-foreground">信用情報</h4>
+              <div className="border border-border rounded-md overflow-hidden">
+                <DetailRow label="加入組織" value={displayInfo?.memberOrganization} />
+                <DetailRow label="国交省認可番号" value={displayInfo?.transportLicenseNumber} />
+                <DetailRow label="デジタコ搭載数" value={displayInfo?.digitalTachographCount} />
+                <DetailRow label="GPS搭載数" value={displayInfo?.gpsCount} />
+                <DetailRow label="安全性優良事業所" value={displayInfo?.safetyExcellenceCert || "無"} />
+                <DetailRow label="グリーン経営認証" value={displayInfo?.greenManagementCert || "無"} />
+                <DetailRow label="ISO9000" value={displayInfo?.iso9000 || "無"} />
+                <DetailRow label="ISO14000" value={displayInfo?.iso14000 || "無"} />
+                <DetailRow label="ISO39001" value={displayInfo?.iso39001 || "無"} />
+                <DetailRow label="荷物保険" value={displayInfo?.cargoInsurance} />
               </div>
             </div>
-          </Card>
-
-          <h4 className="text-sm font-bold text-foreground">基本情報</h4>
-          <div className="border border-border rounded-md overflow-hidden">
-            <DetailRow label="法人名・事業者名">
-              <div>
-                {companyInfo?.companyNameKana && (
-                  <div className="text-[10px] text-muted-foreground mb-0.5">{companyInfo.companyNameKana}</div>
-                )}
-                <div className="text-primary font-bold">{companyInfo?.companyName || listing.companyName}</div>
-              </div>
-            </DetailRow>
-            <DetailRow label="住所" value={companyInfo?.postalCode ? `〒${companyInfo.postalCode}\n${companyInfo.address || "-"}` : companyInfo?.address} />
-            <DetailRow label="電話番号" value={listing.contactPhone} />
-            <DetailRow label="FAX番号" value={companyInfo?.fax} />
-            <DetailRow label="請求事業者登録番号" value={companyInfo?.invoiceRegistrationNumber} />
-            <DetailRow label="業務内容・会社PR" value={companyInfo?.businessDescription} />
-            <DetailRow label="保有車両台数" value={companyInfo?.truckCount ? `${companyInfo.truckCount} 台` : "-"} />
-            <DetailRow label="ウェブサイトURL" value={companyInfo?.websiteUrl} />
-          </div>
-
-          <h4 className="text-sm font-bold text-foreground">詳細情報</h4>
-          <div className="border border-border rounded-md overflow-hidden">
-            <DetailRow label="代表者" value={companyInfo?.representative} />
-            <DetailRow label="設立" value={companyInfo?.establishedDate} />
-            <DetailRow label="資本金" value={companyInfo?.capital ? `${companyInfo.capital} 万円` : null} />
-            <DetailRow label="従業員数" value={companyInfo?.employeeCount} />
-            <DetailRow label="事業所所在地" value={companyInfo?.officeLocations} />
-            <DetailRow label="年間売上" value={companyInfo?.annualRevenue ? `${companyInfo.annualRevenue} 万円` : null} />
-            <DetailRow label="取引先銀行" value={companyInfo?.bankInfo} />
-            <DetailRow label="主要取引先" value={companyInfo?.majorClients} />
-            <DetailRow label="締め日" value={[companyInfo?.closingMonth, companyInfo?.closingDay].filter(Boolean).join(" ") || null} />
-            <DetailRow label="支払月・支払日" value={[companyInfo?.paymentMonth, companyInfo?.paymentDay].filter(Boolean).join(" ") || null} />
-            <DetailRow label="営業地域" value={companyInfo?.businessArea} />
-          </div>
-
-          <h4 className="text-sm font-bold text-foreground">信用情報</h4>
-          <div className="border border-border rounded-md overflow-hidden">
-            <DetailRow label="加入組織" value={companyInfo?.memberOrganization} />
-            <DetailRow label="国交省認可番号" value={companyInfo?.transportLicenseNumber} />
-            <DetailRow label="デジタコ搭載数" value={companyInfo?.digitalTachographCount} />
-            <DetailRow label="GPS搭載数" value={companyInfo?.gpsCount} />
-            <DetailRow label="安全性優良事業所" value={companyInfo?.safetyExcellenceCert || "無"} />
-            <DetailRow label="グリーン経営認証" value={companyInfo?.greenManagementCert || "無"} />
-            <DetailRow label="ISO9000" value={companyInfo?.iso9000 || "無"} />
-            <DetailRow label="ISO14000" value={companyInfo?.iso14000 || "無"} />
-            <DetailRow label="ISO39001" value={companyInfo?.iso39001 || "無"} />
-            <DetailRow label="荷物保険" value={companyInfo?.cargoInsurance} />
-          </div>
-        </div>
+          );
+        })()
       ) : (
         <DispatchRequestTab listing={listing} companyInfo={companyInfo} isContracted={isContracted} />
       )}
