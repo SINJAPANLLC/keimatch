@@ -960,7 +960,17 @@ export async function registerRoutes(
     try {
       const listings = await storage.getCargoListingsByUserId(req.session.userId as string);
       await expireOldCargoListings(listings);
-      res.json(listings);
+      const acceptedUserIds = [...new Set(listings.filter(l => l.status === "completed" && l.acceptedByUserId).map(l => l.acceptedByUserId as string))];
+      const carrierMap: Record<string, string> = {};
+      await Promise.all(acceptedUserIds.map(async (uid) => {
+        const u = await storage.getUser(uid);
+        if (u) carrierMap[uid] = u.companyName || u.username || uid;
+      }));
+      const enriched = listings.map(l => ({
+        ...l,
+        acceptedByCompanyName: l.acceptedByUserId ? (carrierMap[l.acceptedByUserId] || null) : null,
+      }));
+      res.json(enriched);
     } catch (error) {
       res.status(500).json({ message: "荷物一覧の取得に失敗しました" });
     }

@@ -16,6 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+type EnrichedCargoListing = CargoListing & { acceptedByCompanyName?: string | null };
+
 function formatDateCompact(dateStr: string | null | undefined) {
   if (!dateStr) return "";
   const cleaned = dateStr.replace(/\//g, "-");
@@ -755,7 +757,7 @@ function DispatchRequestTab({ listing, companyInfo, isContracted = false }: { li
   );
 }
 
-function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing: CargoListing | null; onClose: () => void; isContracted?: boolean }) {
+function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing: EnrichedCargoListing | null; onClose: () => void; isContracted?: boolean }) {
   const [panelTab, setPanelTab] = useState<"deal" | "company" | "request">("deal");
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -778,6 +780,11 @@ function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing:
   const { data: companyInfo } = useQuery<CompanyInfo>({
     queryKey: ["/api/companies", listing?.userId],
     enabled: !!listing?.userId,
+  });
+
+  const { data: carrierInfo } = useQuery<CompanyInfo>({
+    queryKey: ["/api/companies", listing?.acceptedByUserId],
+    enabled: !!listing?.acceptedByUserId,
   });
 
   useEffect(() => {
@@ -870,10 +877,10 @@ function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing:
           <div className="border border-border rounded-md overflow-hidden">
             <DetailRow label="運送会社">
               <div>
-                <div className="font-bold">{listing.companyName}</div>
-                {listing.contactPerson && <div className="text-xs text-muted-foreground mt-0.5">担当者：{listing.contactPerson}</div>}
-                <div className="text-xs text-muted-foreground">TEL：{listing.contactPhone}</div>
-                {companyInfo?.fax && <div className="text-xs text-muted-foreground">FAX：{companyInfo.fax}</div>}
+                <div className="font-bold">{carrierInfo?.companyName || "-"}</div>
+                {carrierInfo?.contactName && <div className="text-xs text-muted-foreground mt-0.5">担当者：{carrierInfo.contactName}</div>}
+                {carrierInfo?.phone && <div className="text-xs text-muted-foreground">TEL：{carrierInfo.phone}</div>}
+                {carrierInfo?.fax && <div className="text-xs text-muted-foreground">FAX：{carrierInfo.fax}</div>}
               </div>
             </DetailRow>
             <DetailRow label="荷主会社">
@@ -1069,8 +1076,8 @@ function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing:
 }
 
 function BillingTable({ paymentItems, invoiceItems, selectedId, onSelect }: {
-  paymentItems: CargoListing[];
-  invoiceItems: CargoListing[];
+  paymentItems: EnrichedCargoListing[];
+  invoiceItems: EnrichedCargoListing[];
   selectedId: string | null;
   onSelect: (id: string) => void;
 }) {
@@ -1206,7 +1213,7 @@ function DispatchStatusBadge({ cargoId }: { cargoId: string }) {
 }
 
 function CompletedCargoTable({ items, selectedId, onSelect }: {
-  items: CargoListing[];
+  items: EnrichedCargoListing[];
   selectedId: string | null;
   onSelect: (id: string) => void;
 }) {
@@ -1254,7 +1261,7 @@ function CompletedCargoTable({ items, selectedId, onSelect }: {
                   <Badge variant="outline" className="text-[10px] border-orange-300 text-orange-600">成約</Badge>
                 </td>
                 <td className="px-3 py-2.5 whitespace-nowrap">
-                  <div className="font-bold">{item.companyName}</div>
+                  <div className="font-bold">{item.acceptedByCompanyName || "-"}</div>
                 </td>
                 <td className="px-3 py-2.5 whitespace-nowrap">
                   <div className="font-bold">{formatDateCompact(item.desiredDate)} {item.departureTime || ""}</div>
@@ -1288,11 +1295,11 @@ export default function CompletedCargo() {
   const [selectedCargoId, setSelectedCargoId] = useState<string | null>(null);
   const [mainTab, setMainTab] = useState<"own" | "contracted" | "billing">("own");
 
-  const { data: allCargo, isLoading } = useQuery<CargoListing[]>({
+  const { data: allCargo, isLoading } = useQuery<EnrichedCargoListing[]>({
     queryKey: ["/api/my-cargo"],
   });
 
-  const { data: contractedCargo, isLoading: isLoadingContracted } = useQuery<CargoListing[]>({
+  const { data: contractedCargo, isLoading: isLoadingContracted } = useQuery<EnrichedCargoListing[]>({
     queryKey: ["/api/contracted-cargo"],
   });
 
