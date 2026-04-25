@@ -117,7 +117,7 @@ export default function Services() {
                       <h3 className="font-bold text-sm text-foreground">TRA MATCH</h3>
                       <ExternalLink className="w-3 h-3 text-muted-foreground" />
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">一般貨物・トラック求荷求車マッチングサービス</p>
+                    <p className="text-xs text-muted-foreground mt-1">一般貨物・大型トラック向け求荷求車マッチングサービス</p>
                     <div className="text-xs text-orange-500 font-medium mt-1.5">tramatch-sinjapan.com</div>
                   </div>
                 </CardContent>
