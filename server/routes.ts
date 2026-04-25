@@ -1057,7 +1057,17 @@ export async function registerRoutes(
               }
 
               if (u.notifyLine && u.lineUserId && isLineConfigured()) {
-                const lineMsg = `【KEI MATCH】新着案件🚚\n\n${listing.departureArea} → ${listing.arrivalArea}\n${listing.cargoType || ""}　${listing.weight || ""}\n\n${appBaseUrl}/cargo`;
+                const priceStr = listing.price ? `💴 運賃: ${listing.price}円` : "";
+                const lineMsg = [
+                  "【KEI MATCH】新着案件📦",
+                  "",
+                  `🚚 ${listing.departureArea} → ${listing.arrivalArea}`,
+                  `📦 ${listing.cargoType || ""}　${listing.weight || ""}`,
+                  priceStr,
+                  `📅 ${listing.loadingDate || ""}`,
+                  "",
+                  `▶ ${appBaseUrl}/cargo`,
+                ].filter(Boolean).join("\n");
                 sendLineMessage(u.lineUserId, lineMsg).catch(() => {});
               }
             }
@@ -1494,7 +1504,17 @@ export async function registerRoutes(
               }
 
               if (u.notifyLine && u.lineUserId && isLineConfigured()) {
-                const lineMsg = `【KEI MATCH】新着空き車両🚐\n\n${listing.currentArea} → ${listing.destinationArea}\n${listing.vehicleType || ""}　${listing.maxWeight || ""}\n\n${appBaseUrl}/trucks`;
+                const priceStr = listing.price ? `💴 希望運賃: ${listing.price}円` : "";
+                const lineMsg = [
+                  "【KEI MATCH】新着空き車両🚐",
+                  "",
+                  `📍 ${listing.currentArea} → ${listing.destinationArea}`,
+                  `🚐 ${listing.vehicleType || ""}　最大${listing.maxWeight || ""}`,
+                  priceStr,
+                  `📅 ${listing.availableDate || ""}`,
+                  "",
+                  `▶ ${appBaseUrl}/trucks`,
+                ].filter(Boolean).join("\n");
                 sendLineMessage(u.lineUserId, lineMsg).catch(() => {});
               }
             }
@@ -4940,47 +4960,36 @@ JSON形式で以下を返してください（日本語で）:
 
     const parsed = req.body;
 
+    const lineToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    const lineReply = async (replyToken: string, text: string) => {
+      if (!lineToken) return;
+      await fetch("https://api.line.me/v2/bot/message/reply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${lineToken}` },
+        body: JSON.stringify({ replyToken, messages: [{ type: "text", text }] }),
+      });
+    };
+
     const events = parsed.events || [];
     for (const event of events) {
       const lineUserId = event.source?.userId;
       if (!lineUserId) continue;
 
-      // 友だち追加 or ブロック解除
+      // 友だち追加 → 必ずメールアドレスを送付するよう案内
       if (event.type === "follow") {
-        // 既存ユーザーのlineUserIdを更新（設定ページから連携済みの場合）
-        // まずDB内に同じlineUserIdのユーザーがいるか確認（重複防止）
         const allUsers = await db.select({ id: users.id, lineUserId: users.lineUserId }).from(users);
         const existing = allUsers.find((u: any) => u.lineUserId === lineUserId);
-        if (!existing) {
-          // 未連携：ウェルカムメッセージのみ送信
-          const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-          if (token) {
-            await fetch("https://api.line.me/v2/bot/message/reply", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                replyToken: event.replyToken,
-                messages: [{
-                  type: "text",
-                  text: "【KEI MATCH】友だち追加ありがとうございます！\n\nLINE通知を受け取るには、KEI MATCHにログイン後「設定」→「通知設定」からあなたのLINE User IDを登録してください。\n\nあなたのLINE User ID:\n" + lineUserId
-                }]
-              })
-            });
-          }
-        } else {
-          // 連携済みユーザー：再有効化
+        if (existing) {
+          // 再フォロー：通知再開
           await storage.updateUserProfile(existing.id, { notifyLine: true });
-          const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-          if (token) {
-            await fetch("https://api.line.me/v2/bot/message/reply", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                replyToken: event.replyToken,
-                messages: [{ type: "text", text: "【KEI MATCH】LINE通知を再開しました。案件マッチング時などにお知らせします。" }]
-              })
-            });
-          }
+          await lineReply(event.replyToken,
+            "【KEI MATCH】おかえりなさい！\nLINE通知を再開しました🎉\n\n新着案件・空き車両が登録されたらすぐにお知らせします。"
+          );
+        } else {
+          // 新規フォロー：メールアドレスを要求
+          await lineReply(event.replyToken,
+            "【KEI MATCH】友だち追加ありがとうございます！🚐\n\nアカウントを連携してLINE通知を受け取りましょう。\n\nKEI MATCHに登録済みの\n📧 メールアドレスをこのトークに送信してください。"
+          );
         }
       }
 
@@ -4996,47 +5005,45 @@ JSON形式で以下を返してください（日本語で）:
       // テキストメッセージ受信
       if (event.type === "message" && event.message?.type === "text") {
         const text = (event.message.text || "").trim();
-        const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
-
-        // 「ID」送信 → LINE User IDを返答
-        if (text === "ID" || text === "id" || text === "ＩＤ" || text === "マイID") {
-          if (token) {
-            await fetch("https://api.line.me/v2/bot/message/reply", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                replyToken: event.replyToken,
-                messages: [{ type: "text", text: `あなたのLINE User ID:\n${lineUserId}\n\nKEI MATCHの設定画面に入力してください。` }]
-              })
-            });
-          }
-        }
-
-        // メールアドレス送信 → DB照合してアカウント連携
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if (emailRegex.test(text)) {
+          // メールアドレス → DB照合してアカウント連携
           const matchedUser = await storage.getUserByEmail(text.toLowerCase());
-          let replyText = "";
           if (matchedUser) {
-            // すでに別のLINEアカウントが連携済みの場合は上書き
-            await storage.updateUserProfile(matchedUser.id, {
-              lineUserId,
-              notifyLine: true,
-            });
-            replyText = `✅ 連携完了！\n${matchedUser.companyName || matchedUser.username} さんのアカウントとLINEを連携しました。\n\n今後、新着案件や新着空き車両の通知をLINEでお送りします。`;
+            await storage.updateUserProfile(matchedUser.id, { lineUserId, notifyLine: true });
+            await lineReply(event.replyToken,
+              `✅ 連携完了！\n${matchedUser.companyName || matchedUser.username} さんのアカウントとLINEを連携しました。\n\n新着案件・新着空き車両が登録されたらLINEでお知らせします🚐`
+            );
           } else {
-            replyText = `❌ 該当するアカウントが見つかりませんでした。\n\nKEI MATCHに登録済みのメールアドレスを送信してください。\n（例: example@example.com）`;
+            await lineReply(event.replyToken,
+              `❌ 該当するアカウントが見つかりませんでした。\n\nKEI MATCHに登録済みのメールアドレスを送信してください。\n\n▶ https://keimatch-sinjapan.com/register`
+            );
           }
-          if (token) {
-            await fetch("https://api.line.me/v2/bot/message/reply", {
-              method: "POST",
-              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                replyToken: event.replyToken,
-                messages: [{ type: "text", text: replyText }]
-              })
-            });
-          }
+        } else if (/案件|荷物|cargo/i.test(text)) {
+          await lineReply(event.replyToken,
+            "新着案件はこちらからご確認いただけます📦\n\n▶ https://keimatch-sinjapan.com/cargo\n\n案件が登録されると自動でLINE通知をお送りします。"
+          );
+        } else if (/空車|空き車両|truck/i.test(text)) {
+          await lineReply(event.replyToken,
+            "空き車両情報はこちらからご確認いただけます🚐\n\n▶ https://keimatch-sinjapan.com/trucks\n\n空き車両が登録されると自動でLINE通知をお送りします。"
+          );
+        } else if (/登録|会員|新規/i.test(text)) {
+          await lineReply(event.replyToken,
+            "KEI MATCHへの会員登録はこちらから📝\n\n▶ https://keimatch-sinjapan.com/register\n\n登録後にこのトークへメールアドレスを送信すると、LINE通知が有効になります。"
+          );
+        } else if (/連携|メール|アドレス/i.test(text)) {
+          await lineReply(event.replyToken,
+            "アカウント連携はKEI MATCHに登録済みの\n📧 メールアドレスをこのトークに送信してください。\n\n例: example@example.com"
+          );
+        } else if (/ありがとう|よろしく|はじめまして|こんにちは/i.test(text)) {
+          await lineReply(event.replyToken,
+            "こちらこそよろしくお願いします！😊\n\nKEI MATCHは軽貨物ドライバーと案件をマッチングするサービスです。\n\nまずはメールアドレスを送信してアカウントを連携してください📧"
+          );
+        } else {
+          await lineReply(event.replyToken,
+            "【KEI MATCH】サポートBOTです🚐\n\n以下の操作ができます：\n\n📧 メールアドレスを送信\n→ アカウント連携\n\n📦「案件」と送信\n→ 案件一覧を表示\n\n🚐「空車」と送信\n→ 空き車両一覧を表示\n\nお問い合わせ：info@sinjapan.jp"
+          );
         }
       }
     }
