@@ -3,7 +3,7 @@ import type { Express, Request, Response, NextFunction } from "express";
 import type { Server } from "http";
 import { storage } from "./storage";
 import { db, dbPool } from "./db";
-import { insertCargoListingSchema, insertTruckListingSchema, insertUserSchema, insertAnnouncementSchema, insertPartnerSchema, insertTransportRecordSchema, insertNotificationTemplateSchema, insertContactInquirySchema, insertAgentSchema, notificationTemplates, landingPages } from "@shared/schema";
+import { insertCargoListingSchema, insertTruckListingSchema, insertUserSchema, insertAnnouncementSchema, insertPartnerSchema, insertTransportRecordSchema, insertNotificationTemplateSchema, insertContactInquirySchema, insertAgentSchema, notificationTemplates, landingPages, users } from "@shared/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { z } from "zod";
 import { fromError } from "zod-validation-error";
@@ -4911,6 +4911,98 @@ JSON形式で以下を返してください（日本語で）:
     } catch (error) {
       res.status(500).json({ message: "LP削除に失敗しました" });
     }
+  });
+
+  // LINE Webhook endpoint
+  app.post("/api/line/webhook", async (req, res) => {
+    const channelSecret = process.env.LINE_CHANNEL_SECRET;
+    if (!channelSecret) return res.status(500).json({ message: "LINE未設定" });
+
+    // Signature verification using rawBody buffer captured by express.json verify
+    const signature = req.headers["x-line-signature"] as string;
+    const rawBuf = req.rawBody as Buffer | undefined;
+    if (rawBuf && signature) {
+      const hmac = crypto.createHmac("sha256", channelSecret).update(rawBuf).digest("base64");
+      if (signature !== hmac) {
+        return res.status(401).json({ message: "Invalid signature" });
+      }
+    }
+
+    const parsed = req.body;
+
+    const events = parsed.events || [];
+    for (const event of events) {
+      const lineUserId = event.source?.userId;
+      if (!lineUserId) continue;
+
+      // 友だち追加 or ブロック解除
+      if (event.type === "follow") {
+        // 既存ユーザーのlineUserIdを更新（設定ページから連携済みの場合）
+        // まずDB内に同じlineUserIdのユーザーがいるか確認（重複防止）
+        const allUsers = await db.select({ id: users.id, lineUserId: users.lineUserId }).from(users);
+        const existing = allUsers.find((u: any) => u.lineUserId === lineUserId);
+        if (!existing) {
+          // 未連携：ウェルカムメッセージのみ送信
+          const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+          if (token) {
+            await fetch("https://api.line.me/v2/bot/message/reply", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                replyToken: event.replyToken,
+                messages: [{
+                  type: "text",
+                  text: "【KEI MATCH】友だち追加ありがとうございます！\n\nLINE通知を受け取るには、KEI MATCHにログイン後「設定」→「通知設定」からあなたのLINE User IDを登録してください。\n\nあなたのLINE User ID:\n" + lineUserId
+                }]
+              })
+            });
+          }
+        } else {
+          // 連携済みユーザー：再有効化
+          await storage.updateUserProfile(existing.id, { notifyLine: true });
+          const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+          if (token) {
+            await fetch("https://api.line.me/v2/bot/message/reply", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                replyToken: event.replyToken,
+                messages: [{ type: "text", text: "【KEI MATCH】LINE通知を再開しました。案件マッチング時などにお知らせします。" }]
+              })
+            });
+          }
+        }
+      }
+
+      // ブロック：通知フラグをOFF
+      if (event.type === "unfollow") {
+        const allUsers = await db.select({ id: users.id, lineUserId: users.lineUserId }).from(users);
+        const existing = allUsers.find((u: any) => u.lineUserId === lineUserId);
+        if (existing) {
+          await storage.updateUserProfile(existing.id, { notifyLine: false });
+        }
+      }
+
+      // テキストメッセージ受信：IDを返答
+      if (event.type === "message" && event.message?.type === "text") {
+        const text = (event.message.text || "").trim();
+        if (text === "ID" || text === "id" || text === "ＩＤ" || text === "マイID") {
+          const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+          if (token) {
+            await fetch("https://api.line.me/v2/bot/message/reply", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                replyToken: event.replyToken,
+                messages: [{ type: "text", text: `あなたのLINE User ID:\n${lineUserId}\n\nKEI MATCHの設定画面に入力してください。` }]
+              })
+            });
+          }
+        }
+      }
+    }
+
+    res.status(200).json({ message: "ok" });
   });
 
   // Public: serve published LP by slug
