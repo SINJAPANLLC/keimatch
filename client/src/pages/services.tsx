@@ -12,6 +12,7 @@ import {
   Handshake,
   Megaphone,
   Mail,
+  ExternalLink,
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard-layout";
 
@@ -99,6 +100,64 @@ export default function Services() {
           {serviceItems.map((service, index) => (
             <ServiceCard key={service.title} service={service} index={index} />
           ))}
+        </div>
+
+        <div className="mb-6">
+          <h2 className="text-base font-bold text-foreground mb-1">関連サービス</h2>
+          <p className="text-xs text-muted-foreground mb-3">SIN JAPANグループの関連サービスをご活用ください</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <a href="https://tramatch-sinjapan.com/" target="_blank" rel="noopener noreferrer" data-testid="link-tramatch">
+              <Card className="cursor-pointer hover:bg-primary/10 transition-colors h-full">
+                <CardContent className="p-4 flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-md bg-orange-500/10 flex items-center justify-center shrink-0">
+                    <Truck className="w-5 h-5 text-orange-500" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <h3 className="font-bold text-sm text-foreground">TRA MATCH</h3>
+                      <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">一般貨物・トラック求荷求車マッチングサービス</p>
+                    <div className="text-xs text-orange-500 font-medium mt-1.5">tramatch-sinjapan.com</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
+            <a href="https://keisaiyou-sinjapan.com/" target="_blank" rel="noopener noreferrer" data-testid="link-keisaiyou">
+              <Card className="cursor-pointer hover:bg-primary/10 transition-colors h-full">
+                <CardContent className="p-4 flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-md bg-green-500/10 flex items-center justify-center shrink-0">
+                    <Users className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <h3 className="font-bold text-sm text-foreground">KEI SAIYOU</h3>
+                      <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">軽貨物・配送ドライバー採用・求人サービス</p>
+                    <div className="text-xs text-green-600 font-medium mt-1.5">keisaiyou-sinjapan.com</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
+            <a href="https://sinjapanai.site/" target="_blank" rel="noopener noreferrer" data-testid="link-sinjapan-ai">
+              <Card className="cursor-pointer hover:bg-primary/10 transition-colors h-full">
+                <CardContent className="p-4 flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-md bg-blue-500/10 flex items-center justify-center shrink-0">
+                    <Code className="w-5 h-5 text-blue-500" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <h3 className="font-bold text-sm text-foreground">SIN JAPAN AI</h3>
+                      <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">物流・配送業務向けAIソリューション</p>
+                    <div className="text-xs text-blue-500 font-medium mt-1.5">sinjapanai.site</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
+          </div>
         </div>
 
         <Card className="border-dashed border-2" data-testid="card-sponsor">
