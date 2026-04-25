@@ -80,8 +80,7 @@ function NotificationDropdown() {
           <Bell className="w-4 h-4" />
           {unreadCount > 0 && (
             <span
-              className="absolute top-1 right-1 min-w-[8px] h-2 rounded-full"
-              style={{ backgroundColor: "#40E0D0" }}
+              className="absolute top-1 right-1 min-w-[8px] h-2 rounded-full bg-blue-500"
               data-testid="badge-notification-dot"
             />
           )}
