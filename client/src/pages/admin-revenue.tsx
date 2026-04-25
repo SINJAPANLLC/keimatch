@@ -1,12 +1,17 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Users, UserCheck, UserPlus, Package, CheckCircle, Truck, Crown,
   BarChart3, TrendingUp, ArrowUpDown, Banknote, CircleDollarSign,
-  MapPin
+  MapPin, Pencil, Trash2, Check, X
 } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient, apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 import DashboardLayout from "@/components/dashboard-layout";
 
 type CompletedCargoDetail = {
@@ -19,6 +24,8 @@ type CompletedCargoDetail = {
   price: string | null;
   priceValue: number;
   companyName: string;
+  acceptedByUserId: string | null;
+  acceptedByCompanyName: string | null;
   desiredDate: string;
   createdAt: string;
 };
@@ -91,8 +98,41 @@ function StatCard({
 }
 
 export default function AdminRevenue() {
+  const { toast } = useToast();
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editPrice, setEditPrice] = useState("");
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+
   const { data: stats, isLoading } = useQuery<RevenueStats>({
     queryKey: ["/api/admin/revenue-stats"],
+  });
+
+  const editMutation = useMutation({
+    mutationFn: async ({ id, price }: { id: string; price: string }) => {
+      await apiRequest("PATCH", `/api/cargo/${id}`, { price });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/revenue-stats"] });
+      setEditingId(null);
+      toast({ title: "運賃を更新しました" });
+    },
+    onError: () => {
+      toast({ title: "エラー", description: "更新に失敗しました", variant: "destructive" });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await apiRequest("DELETE", `/api/admin/cargo/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/revenue-stats"] });
+      setDeleteConfirmId(null);
+      toast({ title: "案件を削除しました" });
+    },
+    onError: () => {
+      toast({ title: "エラー", description: "削除に失敗しました", variant: "destructive" });
+    },
   });
 
   const now = new Date();
@@ -401,9 +441,11 @@ export default function AdminRevenue() {
                       <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">荷物名</th>
                       <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">区間</th>
                       <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">荷種</th>
-                      <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">企業名</th>
+                      <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">荷主</th>
+                      <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">運送会社</th>
                       <th className="text-right px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">運賃</th>
                       <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">成約日</th>
+                      <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">操作</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
@@ -422,9 +464,41 @@ export default function AdminRevenue() {
                           </div>
                         </td>
                         <td className="px-3 py-2.5 text-foreground text-[12px]">{cargo.cargoType}</td>
-                        <td className="px-3 py-2.5 text-foreground font-bold text-[12px] truncate max-w-[100px]">{cargo.companyName}</td>
+                        <td className="px-3 py-2.5 text-foreground text-[12px] truncate max-w-[90px]">{cargo.companyName}</td>
+                        <td className="px-3 py-2.5 text-foreground font-bold text-[12px] truncate max-w-[100px]">
+                          {cargo.acceptedByCompanyName || <span className="text-muted-foreground font-normal">-</span>}
+                        </td>
                         <td className="px-3 py-2.5 text-right whitespace-nowrap">
-                          {cargo.priceValue > 0 ? (
+                          {editingId === cargo.id ? (
+                            <div className="flex items-center gap-1 justify-end">
+                              <Input
+                                value={editPrice}
+                                onChange={(e) => setEditPrice(e.target.value)}
+                                className="h-6 text-xs w-20 px-1"
+                                placeholder="金額"
+                                data-testid={`input-edit-price-${cargo.id}`}
+                              />
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-6 w-6"
+                                onClick={() => editMutation.mutate({ id: cargo.id, price: editPrice })}
+                                disabled={editMutation.isPending}
+                                data-testid={`button-save-price-${cargo.id}`}
+                              >
+                                <Check className="w-3 h-3 text-green-600" />
+                              </Button>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-6 w-6"
+                                onClick={() => setEditingId(null)}
+                                data-testid={`button-cancel-edit-${cargo.id}`}
+                              >
+                                <X className="w-3 h-3 text-muted-foreground" />
+                              </Button>
+                            </div>
+                          ) : cargo.priceValue > 0 ? (
                             <span className="font-bold text-foreground text-[12px]">{formatYen(cargo.priceValue)}</span>
                           ) : (
                             <span className="text-[12px] text-muted-foreground">未設定</span>
@@ -433,18 +507,65 @@ export default function AdminRevenue() {
                         <td className="px-3 py-2.5 text-muted-foreground text-[12px] whitespace-nowrap">
                           {new Date(cargo.createdAt).toLocaleDateString("ja-JP")}
                         </td>
+                        <td className="px-3 py-2.5 whitespace-nowrap">
+                          {deleteConfirmId === cargo.id ? (
+                            <div className="flex items-center gap-1">
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-6 w-6"
+                                onClick={() => deleteMutation.mutate(cargo.id)}
+                                disabled={deleteMutation.isPending}
+                                data-testid={`button-confirm-delete-${cargo.id}`}
+                              >
+                                <Check className="w-3 h-3 text-destructive" />
+                              </Button>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-6 w-6"
+                                onClick={() => setDeleteConfirmId(null)}
+                                data-testid={`button-cancel-delete-${cargo.id}`}
+                              >
+                                <X className="w-3 h-3 text-muted-foreground" />
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1">
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-6 w-6"
+                                onClick={() => { setEditingId(cargo.id); setEditPrice(cargo.price || ""); setDeleteConfirmId(null); }}
+                                data-testid={`button-edit-cargo-${cargo.id}`}
+                              >
+                                <Pencil className="w-3 h-3 text-muted-foreground" />
+                              </Button>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                className="h-6 w-6"
+                                onClick={() => { setDeleteConfirmId(cargo.id); setEditingId(null); }}
+                                data-testid={`button-delete-cargo-${cargo.id}`}
+                              >
+                                <Trash2 className="w-3 h-3 text-destructive/70" />
+                              </Button>
+                            </div>
+                          )}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                   <tfoot>
                     <tr className="border-t-2 border-border bg-muted/30">
-                      <td colSpan={5} className="px-3 py-2.5 text-sm font-bold text-foreground text-right">合計</td>
+                      <td colSpan={6} className="px-3 py-2.5 text-sm font-bold text-foreground text-right">合計</td>
                       <td className="px-3 py-2.5 text-right">
                         <span className="font-bold text-foreground text-sm">{formatYen(stats?.totalTradeVolume ?? 0)}</span>
                       </td>
                       <td className="px-3 py-2.5 text-right">
                         <span className="text-xs text-muted-foreground">{completedSorted.length}件</span>
                       </td>
+                      <td />
                     </tr>
                   </tfoot>
                 </table>

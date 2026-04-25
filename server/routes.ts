@@ -3622,6 +3622,13 @@ JSON形式で以下を返してください（日本語で）:
         return parseInt(cleaned, 10) || 0;
       };
 
+      const carrierUserIds = [...new Set(completedCargo.filter(c => c.acceptedByUserId).map(c => c.acceptedByUserId as string))];
+      const carrierNameMap: Record<string, string> = {};
+      await Promise.all(carrierUserIds.map(async (uid) => {
+        const u = await storage.getUser(uid);
+        if (u) carrierNameMap[uid] = u.companyName || u.username || uid;
+      }));
+
       const completedCargoDetails = completedCargo.map(c => ({
         id: c.id,
         cargoNumber: c.cargoNumber,
@@ -3632,6 +3639,8 @@ JSON形式で以下を返してください（日本語で）:
         price: c.price,
         priceValue: parsePrice(c.price),
         companyName: c.companyName,
+        acceptedByUserId: c.acceptedByUserId,
+        acceptedByCompanyName: c.acceptedByUserId ? (carrierNameMap[c.acceptedByUserId] || null) : null,
         desiredDate: c.desiredDate,
         createdAt: c.createdAt,
       }));
