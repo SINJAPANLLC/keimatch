@@ -1122,7 +1122,7 @@ export async function registerRoutes(
                   `🚚 ${listing.departureArea} → ${listing.arrivalArea}`,
                   `📦 ${listing.cargoType || ""}　${listing.weight || ""}`,
                   priceStr,
-                  `📅 ${listing.loadingDate || ""}`,
+                  `📅 ${listing.desiredDate || ""}`,
                   "",
                   `▶ ${appBaseUrl}/cargo`,
                 ].filter(Boolean).join("\n");
@@ -1174,7 +1174,7 @@ export async function registerRoutes(
             const host = req.get("host") || "";
             const protocol = host.includes("localhost") ? "http" : "https";
             const appBaseUrl = `${protocol}://${host}`;
-            const owner = await storage.getUser(listing.userId);
+            const owner = listing.userId ? await storage.getUser(listing.userId) : null;
             const acceptor = await storage.getUser(req.session.userId as string);
             const priceStr = listing.price ? `${listing.price}円（税別）` : "要相談";
             const desiredDateStr = listing.desiredDate || "";
@@ -1821,10 +1821,9 @@ export async function registerRoutes(
         email,
         phone,
         userType: "both",
-        role: isAdmin ? "admin" : "user",
-        approved: true,
         plan: "free",
-      });
+      } as any);
+      await db.update(users).set({ role: isAdmin ? "admin" : "user", approved: true }).where(eq(users.id, newUser.id));
       const admin = await storage.getUser(req.session.userId as string);
       await storage.createAuditLog({
         userId: req.session.userId as string,
