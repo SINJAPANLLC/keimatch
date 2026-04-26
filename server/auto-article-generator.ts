@@ -43,6 +43,31 @@ const SEO_TOPICS = [
   { topic: "軽貨物配送のコンプライアンスと法令遵守", keywords: "コンプライアンス, 法令遵守, 貨物軽自動車運送事業, 届出", category: "carrier-sales" },
   { topic: "ECサイト運営者のための軽貨物配送パートナー選び", keywords: "EC, 軽貨物, フルフィルメント, 配送パートナー", category: "truck-order" },
   { topic: "軽貨物ドライバーのための確定申告と節税対策", keywords: "確定申告, 節税, 個人事業主, 軽貨物", category: "carrier-sales" },
+  { topic: "軽貨物配送と青色申告の活用術", keywords: "青色申告, 軽貨物, 経費, 節税", category: "carrier-sales" },
+  { topic: "軽バンと軽トラックの違いと用途別選び方", keywords: "軽バン, 軽トラック, 車種選び, 軽貨物", category: "truck-order" },
+  { topic: "軽貨物配送で使える経費と節税ポイント一覧", keywords: "経費, 節税, 軽貨物, 個人事業主", category: "carrier-sales" },
+  { topic: "軽貨物ドライバーの月収・年収はいくら？", keywords: "軽貨物, 年収, 月収, 収入", category: "kyukakyusha" },
+  { topic: "軽貨物配送における損害賠償リスクと対策", keywords: "損害賠償, 保険, リスク, 軽貨物", category: "truck-order" },
+  { topic: "Amazon配送委託と軽貨物フリーランスの比較", keywords: "Amazon, デリバリープロバイダ, 軽貨物, フリーランス", category: "carrier-sales" },
+  { topic: "軽貨物配送の繁忙期と閑散期を乗り越えるコツ", keywords: "繁忙期, 閑散期, 軽貨物, 売上管理", category: "carrier-sales" },
+  { topic: "軽貨物ドライバーが知っておくべき道路交通法の基礎", keywords: "道路交通法, 軽貨物, 交通違反, ドライバー", category: "carrier-sales" },
+  { topic: "荷主企業が抱える配送コスト削減の課題と解決策", keywords: "荷主, 配送コスト, 物流改善, 軽貨物", category: "truck-order" },
+  { topic: "軽貨物配送でのクレーム対応と品質管理", keywords: "クレーム, 品質管理, 軽貨物, 顧客対応", category: "truck-order" },
+  { topic: "軽貨物ドライバーのためのスマートフォン活用術", keywords: "スマートフォン, アプリ, ナビ, 軽貨物", category: "kyukakyusha" },
+  { topic: "軽貨物配送業界の将来性と成長市場", keywords: "将来性, 市場規模, EC物流, 軽貨物", category: "kyukakyusha" },
+  { topic: "冷凍・冷蔵軽貨物配送の特徴と需要", keywords: "冷凍, 冷蔵, 温度管理, 軽貨物配送", category: "truck-order" },
+  { topic: "医療・医薬品の軽貨物配送における注意点", keywords: "医療, 医薬品, 軽貨物, 特殊配送", category: "truck-order" },
+  { topic: "軽貨物事業者の社会保険と保障制度", keywords: "社会保険, 国民健康保険, 軽貨物, 個人事業主", category: "carrier-sales" },
+  { topic: "求貨求車プラットフォームで荷物を増やす方法", keywords: "求貨求車, プラットフォーム, 案件, 軽貨物", category: "kyukakyusha" },
+  { topic: "軽貨物配送のルート最適化で収益を上げる方法", keywords: "ルート最適化, 効率化, 燃費, 軽貨物", category: "carrier-sales" },
+  { topic: "2025年最新・軽貨物配送の単価相場", keywords: "単価, 運賃相場, 軽貨物, 料金", category: "kyukakyusha" },
+  { topic: "軽貨物配送の受発注デジタル化と業務効率化", keywords: "デジタル化, 受発注, 業務効率, 軽貨物", category: "kyukakyusha" },
+  { topic: "夜間・早朝配送の需要と軽貨物ドライバーへの影響", keywords: "夜間配送, 早朝, 時間外, 軽貨物", category: "carrier-sales" },
+  { topic: "建設現場への小口配送と軽貨物の活用", keywords: "建設, 小口配送, 資材, 軽貨物", category: "truck-order" },
+  { topic: "軽貨物事業者のための請求書・領収書の作り方", keywords: "請求書, 領収書, 軽貨物, 個人事業主", category: "carrier-sales" },
+  { topic: "引越し繁忙期の軽貨物スポット案件活用法", keywords: "引越し, スポット, 軽貨物, 繁忙期", category: "kyukakyusha" },
+  { topic: "軽貨物ドライバーに必要な資格と免許まとめ", keywords: "資格, 免許, 軽貨物, ドライバー", category: "carrier-sales" },
+  { topic: "軽貨物配送における積載効率の上げ方", keywords: "積載効率, 積み方, 軽貨物, 配送最適化", category: "truck-order" },
 ];
 
 function generateSlug(title: string): string {
@@ -56,7 +81,7 @@ function generateSlug(title: string): string {
   return `${dateStr}-${rand}-${base || "article"}`;
 }
 
-const DAILY_ARTICLE_COUNT = 10;
+const DAILY_ARTICLE_COUNT = 5;
 
 async function generateSingleArticle(selectedTopic: { topic: string; keywords: string; category: string }, articleIndex: number) {
   try {
@@ -68,14 +93,16 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
           content: `あなたはSEOに強い軽貨物配送業界専門のコラムライターです。「KEI MATCH」という軽貨物案件マッチングプラットフォームのコラム記事を作成してください。
 
 記事の要件：
-1. SEOに最適化されたタイトル（# 見出し）- キーワードを含む
-2. 読者を引き込む導入文（200文字程度）
-3. 本文（## と ### の見出しで構造化、合計2000〜3000文字）
-  - 具体的なデータや事例を含める
-  - 読者にとって実用的な情報を提供
-  - 自然にキーワードを含める（キーワード密度2-3%）
-  - KEI MATCHのサービスを自然に紹介
-4. まとめ・結論
+1. SEOに最適化されたタイトル（# 見出し）- 検索されやすいキーワードを自然に含める
+2. 読者を引き込む導入文（200〜300文字）
+3. 本文（## と ### の見出しで構造化、合計3000〜4000文字）
+   - 具体的なデータや数字を含める（例：「月収30〜50万円」「配送単価800〜1,200円」など）
+   - 実践的なノウハウや手順を含める
+   - 読者の悩みに答える内容にする
+   - 自然にキーワードを含める（キーワード密度2〜3%）
+   - KEI MATCHのサービスを自然に1〜2箇所で紹介
+   - 見出しは5〜7個程度
+4. まとめ・結論（200文字程度）
 
 重要な出力ルール：
 - マークダウン形式で出力してください
@@ -84,44 +111,57 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
 - 正しい例: ## 軽貨物配送とは
 - 間違った例: ## H2: 軽貨物配送とは
 
-最後にJSON形式でメタ情報を出力してください：
+本文の最後に必ず以下の形式でメタ情報を出力してください：
 ---META---
-{"metaDescription": "160文字以内のSEO用ディスクリプション", "faq": [{"question": "質問1", "answer": "回答1"}, {"question": "質問2", "answer": "回答2"}, {"question": "質問3", "answer": "回答3"}]}`
+{"metaDescription": "120〜160文字のSEO用ディスクリプション（検索ユーザーがクリックしたくなる説明文）", "faq": [{"question": "よくある質問1", "answer": "詳細な回答1（100文字以上）"}, {"question": "よくある質問2", "answer": "詳細な回答2（100文字以上）"}, {"question": "よくある質問3", "answer": "詳細な回答3（100文字以上）"}]}`
         },
         {
           role: "user",
-          content: `テーマ: ${selectedTopic.topic}\nキーワード: ${selectedTopic.keywords}\n備考: KEI MATCHのサービスを自然に紹介してください`
+          content: `テーマ: ${selectedTopic.topic}\nキーワード: ${selectedTopic.keywords}\n備考: 実践的で読者の役に立つ情報を充実させてください。KEI MATCHのサービスも自然に紹介してください。`
         }
       ],
-      max_tokens: 4000,
+      max_tokens: 5000,
     });
 
     const rawContent = completion.choices[0]?.message?.content || "";
     let content = rawContent;
     let metaDescription = "";
     let faq: string | null = null;
-    const metaMatch = rawContent.match(/---META---\s*(\{[\s\S]*?\})/);
-    if (metaMatch) {
-      content = rawContent.replace(/---META---[\s\S]*$/, "").trim();
+
+    const metaIndex = rawContent.lastIndexOf("---META---");
+    if (metaIndex !== -1) {
+      content = rawContent.substring(0, metaIndex).trim();
+      const metaStr = rawContent.substring(metaIndex + "---META---".length).trim();
       try {
-        const meta = JSON.parse(metaMatch[1]);
-        metaDescription = meta.metaDescription || "";
-        if (meta.faq && Array.isArray(meta.faq)) {
-          faq = JSON.stringify(meta.faq);
+        const jsonStart = metaStr.indexOf("{");
+        const jsonEnd = metaStr.lastIndexOf("}");
+        if (jsonStart !== -1 && jsonEnd !== -1) {
+          const meta = JSON.parse(metaStr.substring(jsonStart, jsonEnd + 1));
+          metaDescription = meta.metaDescription || "";
+          if (meta.faq && Array.isArray(meta.faq) && meta.faq.length > 0) {
+            faq = JSON.stringify(meta.faq);
+          }
         }
-      } catch {}
+      } catch (parseErr) {
+        console.error(`[Auto Article] Meta parse error:`, parseErr);
+      }
     }
+
     const titleMatch = content.match(/^#\s+(.+)$/m);
-    const title = titleMatch ? titleMatch[1] : selectedTopic.topic;
+    const title = titleMatch ? titleMatch[1].trim() : selectedTopic.topic;
     const slug = generateSlug(title);
     const wordCount = content.replace(/[#*\-\n\s]/g, "").length;
+
+    if (!metaDescription) {
+      metaDescription = `${selectedTopic.topic}について詳しく解説。${selectedTopic.keywords.split(",")[0].trim()}の基礎知識から実践的なノウハウまで、軽貨物事業者に役立つ情報をまとめました。`;
+    }
 
     await storage.createSeoArticle({
       topic: selectedTopic.topic,
       keywords: selectedTopic.keywords,
       title,
       slug,
-      metaDescription: metaDescription || null,
+      metaDescription: metaDescription.substring(0, 160),
       content,
       status: "published",
       autoGenerated: true,
@@ -130,7 +170,7 @@ async function generateSingleArticle(selectedTopic: { topic: string; keywords: s
       faq,
     });
 
-    console.log(`[Auto Article] [${articleIndex + 1}] Successfully generated and published: ${title}`);
+    console.log(`[Auto Article] [${articleIndex + 1}] Generated: "${title}" (${wordCount}字, meta:${metaDescription.length}字, faq:${faq ? "あり" : "なし"})`);
   } catch (error) {
     console.error(`[Auto Article] [${articleIndex + 1}] Failed to generate article:`, error);
   }
@@ -151,11 +191,12 @@ export async function runDailyArticleGeneration() {
     const usedTopics = new Set(existingArticles.map(a => a.topic));
 
     const availableTopics = SEO_TOPICS.filter(t => !usedTopics.has(t.topic));
-    
+
     for (let i = 0; i < remaining; i++) {
       let selectedTopic: { topic: string; keywords: string; category: string };
       if (availableTopics.length > 0) {
-        selectedTopic = availableTopics.splice(Math.floor(Math.random() * availableTopics.length), 1)[0];
+        const idx = Math.floor(Math.random() * availableTopics.length);
+        selectedTopic = availableTopics.splice(idx, 1)[0];
       } else {
         const idx = Math.floor(Math.random() * SEO_TOPICS.length);
         selectedTopic = SEO_TOPICS[idx];
@@ -165,7 +206,7 @@ export async function runDailyArticleGeneration() {
       await generateSingleArticle(selectedTopic, todayCount + i);
 
       if (i < remaining - 1) {
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 4000));
       }
     }
 
