@@ -192,3 +192,101 @@ export function replaceTemplateVariables(
   }
   return result;
 }
+
+export function buildCargoNewEmailHtml(vars: {
+  departureArea: string;
+  arrivalArea: string;
+  cargoType: string;
+  weight: string;
+  price: string;
+  desiredDate: string;
+  vehicleType: string;
+  companyName: string;
+  appBaseUrl: string;
+}): string {
+  const subject = "【KEI MATCH】新しい案件が登録されました";
+  const rows = [
+    { label: "出発地 → 到着地", value: `${vars.departureArea} → ${vars.arrivalArea}` },
+    { label: "荷物種類", value: vars.cargoType || "未設定" },
+    { label: "重量", value: vars.weight || "未設定" },
+    { label: "希望車種", value: vars.vehicleType || "未設定" },
+    { label: "希望日", value: vars.desiredDate || "未設定" },
+    { label: "運賃", value: vars.price ? `${vars.price}` : "要相談" },
+    { label: "登録会社", value: vars.companyName || "匿名" },
+  ];
+  const tableRows = rows.map((r, i) => `
+    <tr style="background-color:${i % 2 === 0 ? "#f8faff" : "#ffffff"};">
+      <td style="padding:10px 14px;font-size:12px;color:#71717a;white-space:nowrap;width:120px;border-bottom:1px solid #e4e4e7;">${r.label}</td>
+      <td style="padding:10px 14px;font-size:13px;color:#18181b;font-weight:600;border-bottom:1px solid #e4e4e7;">${r.value}</td>
+    </tr>`).join("");
+
+  return wrapInEmailTemplate(subject, `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+<tr><td style="padding-bottom:20px;">
+  <div style="display:inline-block;background-color:#e8f0ff;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:700;color:#1a2f6e;letter-spacing:0.5px;">📦 新着案件</div>
+  <h2 style="margin:10px 0 4px;font-size:18px;color:#18181b;font-weight:700;">新しい軽貨物案件が登録されました</h2>
+  <p style="margin:0;font-size:13px;color:#71717a;">以下の案件がKEI MATCHに登録されました。</p>
+</td></tr>
+<tr><td style="padding-bottom:8px;">
+  <div style="background:linear-gradient(135deg,#1a2f6e 0%,#2d4a9e 100%);border-radius:8px;padding:16px 20px;text-align:center;">
+    <span style="color:rgba(255,255,255,0.8);font-size:12px;">配送区間</span><br>
+    <span style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:1px;">${vars.departureArea}&nbsp;→&nbsp;${vars.arrivalArea}</span>
+  </div>
+</td></tr>
+<tr><td style="padding-bottom:20px;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-radius:8px;overflow:hidden;border:1px solid #e4e4e7;">
+    ${tableRows}
+  </table>
+</td></tr>
+<tr><td style="text-align:center;padding-bottom:8px;">
+  <a href="${vars.appBaseUrl}/cargo" style="display:inline-block;background-color:#1a2f6e;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:14px 36px;border-radius:6px;letter-spacing:0.5px;">案件の詳細を確認する →</a>
+</td></tr>
+</table>`);
+}
+
+export function buildTruckNewEmailHtml(vars: {
+  currentArea: string;
+  destinationArea: string;
+  vehicleType: string;
+  maxWeight: string;
+  price: string;
+  availableDate: string;
+  companyName: string;
+  appBaseUrl: string;
+}): string {
+  const subject = "【KEI MATCH】新しい空き車両が登録されました";
+  const rows = [
+    { label: "現在地 → 行先", value: `${vars.currentArea} → ${vars.destinationArea || "相談可"}` },
+    { label: "車両タイプ", value: vars.vehicleType || "未設定" },
+    { label: "積載量", value: vars.maxWeight || "未設定" },
+    { label: "空き日", value: vars.availableDate || "未設定" },
+    { label: "希望運賃", value: vars.price ? `${vars.price}` : "要相談" },
+    { label: "登録会社", value: vars.companyName || "匿名" },
+  ];
+  const tableRows = rows.map((r, i) => `
+    <tr style="background-color:${i % 2 === 0 ? "#f8faff" : "#ffffff"};">
+      <td style="padding:10px 14px;font-size:12px;color:#71717a;white-space:nowrap;width:120px;border-bottom:1px solid #e4e4e7;">${r.label}</td>
+      <td style="padding:10px 14px;font-size:13px;color:#18181b;font-weight:600;border-bottom:1px solid #e4e4e7;">${r.value}</td>
+    </tr>`).join("");
+
+  return wrapInEmailTemplate(subject, `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+<tr><td style="padding-bottom:20px;">
+  <div style="display:inline-block;background-color:#e8fff3;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:700;color:#166534;letter-spacing:0.5px;">🚐 新着空き車両</div>
+  <h2 style="margin:10px 0 4px;font-size:18px;color:#18181b;font-weight:700;">新しい空き車両が登録されました</h2>
+  <p style="margin:0;font-size:13px;color:#71717a;">以下の空き車両がKEI MATCHに登録されました。</p>
+</td></tr>
+<tr><td style="padding-bottom:8px;">
+  <div style="background:linear-gradient(135deg,#166534 0%,#16a34a 100%);border-radius:8px;padding:16px 20px;text-align:center;">
+    <span style="color:rgba(255,255,255,0.8);font-size:12px;">エリア</span><br>
+    <span style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:1px;">${vars.currentArea}&nbsp;→&nbsp;${vars.destinationArea || "相談可"}</span>
+  </div>
+</td></tr>
+<tr><td style="padding-bottom:20px;">
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-radius:8px;overflow:hidden;border:1px solid #e4e4e7;">
+    ${tableRows}
+  </table>
+</td></tr>
+<tr><td style="text-align:center;padding-bottom:8px;">
+  <a href="${vars.appBaseUrl}/trucks" style="display:inline-block;background-color:#166534;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:14px 36px;border-radius:6px;letter-spacing:0.5px;">空き車両の詳細を確認する →</a>
+</td></tr>
+</table>`);
+}

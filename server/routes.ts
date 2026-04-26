@@ -12,7 +12,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import crypto from "crypto";
-import { sendEmail, sendLineMessage, isEmailConfigured, isLineConfigured, replaceTemplateVariables } from "./notification-service";
+import { sendEmail, sendLineMessage, isEmailConfigured, isLineConfigured, replaceTemplateVariables, buildCargoNewEmailHtml, buildTruckNewEmailHtml } from "./notification-service";
 import { pingGoogleSitemap } from "./auto-article-generator";
 import OpenAI from "openai";
 
@@ -1106,7 +1106,7 @@ export async function registerRoutes(
                     "cargo_new",
                     cargoVars,
                     "【KEI MATCH】新しい案件が登録されました",
-                    `新しい案件が登録されました。\n\n出発地: ${listing.departureArea}\n到着地: ${listing.arrivalArea}\n荷物種類: ${listing.cargoType}\n重量: ${listing.weight}\n\nKEI MATCHにログインして詳細をご確認ください。`
+                    buildCargoNewEmailHtml(cargoVars as any)
                   );
                   if (resolved) await sendEmail(u.email, resolved.subject, resolved.body);
                 } catch (emailErr) {
@@ -1584,7 +1584,7 @@ export async function registerRoutes(
                     "truck_new",
                     truckVars,
                     "【KEI MATCH】新しい空き車両が登録されました",
-                    `新しい空き車両情報が登録されました。\n\n現在地: ${listing.currentArea}\n行先: ${listing.destinationArea}\n車両タイプ: ${listing.vehicleType}\n積載量: ${listing.maxWeight}\n\nKEI MATCHにログインして詳細をご確認ください。`
+                    buildTruckNewEmailHtml(truckVars as any)
                   );
                   if (resolved) await sendEmail(u.email, resolved.subject, resolved.body);
                 } catch (emailErr) {
