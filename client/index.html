@@ -19,9 +19,10 @@
     <meta name="twitter:title" content="軽貨物マッチ｜軽貨物・ラストマイル配送のAI案件マッチングサービス" />
     <meta name="twitter:description" content="軽貨物マッチは軽貨物ドライバーと配送案件をAIでマッチングする国内最大級のプラットフォームです。軽バン・軽トラックでの配送案件を効率的に探せます。" />
     <meta name="twitter:image" content="/og-image.png" />
+    <link rel="preload" href="/logo.png" as="image" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="splash-screen" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#fff;transition:opacity 0.5s ease-out">
@@ -46,7 +47,7 @@
     </style>
     <script>
       window.__dismissSplash=function(){var s=document.getElementById('splash-screen');if(s){s.style.opacity='0';setTimeout(function(){s.remove()},500)}};
-      setTimeout(function(){window.__dismissSplash()},5000);
+      setTimeout(function(){window.__dismissSplash()},2000);
     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

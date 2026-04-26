@@ -293,6 +293,8 @@ function YouTubePreviewSection() {
                       src={video.thumbnailUrl || `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`}
                       alt={video.title}
                       className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors">
                       <div className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center shadow-lg">
@@ -383,7 +385,7 @@ export default function Home() {
             <div className="slide-track track-1">
               {[...Array(3)].map((_, loop) =>
                 LOGO_WALL_IMAGES_ROW1.map((src, i) => (
-                  <div className="logo-slide" key={`row1-${loop}-${i}`}><img src={src} alt="" loading="eager" /></div>
+                  <div className="logo-slide" key={`row1-${loop}-${i}`}><img src={src} alt="" loading="lazy" decoding="async" /></div>
                 ))
               )}
             </div>
@@ -392,7 +394,7 @@ export default function Home() {
             <div className="slide-track track-2">
               {[...Array(3)].map((_, loop) =>
                 LOGO_WALL_IMAGES_ROW2.map((src, i) => (
-                  <div className="logo-slide" key={`row2-${loop}-${i}`}><img src={src} alt="" loading="eager" /></div>
+                  <div className="logo-slide" key={`row2-${loop}-${i}`}><img src={src} alt="" loading="lazy" decoding="async" /></div>
                 ))
               )}
             </div>
@@ -692,7 +694,7 @@ export default function Home() {
             <div className="sin-slide-track">
               {[...Array(3)].map((_, loop) =>
                 LOGO_WALL_IMAGES_BOTTOM.map((src, i) => (
-                  <div className="sin-slide" key={`sin-${loop}-${i}`}><img src={src} alt="" loading="eager" /></div>
+                  <div className="sin-slide" key={`sin-${loop}-${i}`}><img src={src} alt="" loading="lazy" decoding="async" /></div>
                 ))
               )}
             </div>
