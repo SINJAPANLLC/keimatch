@@ -15,6 +15,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import DashboardLayout from "@/components/dashboard-layout";
+import karukamologoImg from "@assets/karukamo-logo.png";
 
 type ServiceItem = {
   title: string;
@@ -153,6 +154,30 @@ export default function Services() {
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">物流・配送業務向けAIソリューション</p>
                     <div className="text-xs text-blue-500 font-medium mt-1.5">sinjapanai.site</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </a>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <h2 className="text-base font-bold text-foreground mb-1">スポンサー</h2>
+          <p className="text-xs text-muted-foreground mb-3">KEI MATCHを応援してくださるパートナー企業様</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+            <a href="https://karukamo.info" target="_blank" rel="noopener noreferrer" data-testid="link-sponsor-karukamo">
+              <Card className="cursor-pointer hover:bg-primary/10 transition-colors h-full">
+                <CardContent className="p-4 flex items-center gap-4">
+                  <div className="w-24 h-12 flex items-center justify-center shrink-0">
+                    <img src={karukamologoImg} alt="かるかも" className="max-w-full max-h-full object-contain" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <h3 className="font-bold text-sm text-foreground">かるかも</h3>
+                      <ExternalLink className="w-3 h-3 text-muted-foreground" />
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">軽貨物ドライバーのお役立ち情報サイト</p>
+                    <div className="text-xs text-primary font-medium mt-1.5">karukamo.info</div>
                   </div>
                 </CardContent>
               </Card>
