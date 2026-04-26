@@ -1,5 +1,15 @@
 import { Link } from "wouter";
 import logoImage from "@assets/logo.png";
+import { SiX, SiInstagram, SiYoutube, SiTiktok, SiFacebook, SiLine, SiAppstore } from "react-icons/si";
+
+const SNS_LINKS = [
+  { href: "https://x.com/keimatch_sj", icon: SiX, label: "X (Twitter)" },
+  { href: "https://www.instagram.com/keimatch_sinjapan/", icon: SiInstagram, label: "Instagram" },
+  { href: "https://www.youtube.com/@keimatch-sinjapan", icon: SiYoutube, label: "YouTube" },
+  { href: "https://www.tiktok.com/@keimatch_sinjapan", icon: SiTiktok, label: "TikTok" },
+  { href: "https://www.facebook.com/keimatch.sinjapan", icon: SiFacebook, label: "Facebook" },
+  { href: "https://line.me/R/ti/p/@684fhwyj", icon: SiLine, label: "LINE公式" },
+];
 
 export default function Footer() {
   return (
@@ -47,8 +57,39 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-8 pt-6 border-t border-primary-foreground/30 text-center text-base text-primary-foreground">
-          &copy; 2026 SIN JAPAN LLC All rights reserved.
+
+        <div className="mt-8 pt-6 border-t border-primary-foreground/30">
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap justify-center">
+              {SNS_LINKS.map(({ href, icon: Icon, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  data-testid={`link-sns-${label.replace(/[^a-zA-Z]/g, "").toLowerCase()}`}
+                  className="w-9 h-9 rounded-full bg-primary-foreground/15 hover:bg-primary-foreground/30 flex items-center justify-center transition-colors"
+                >
+                  <Icon className="w-4 h-4 text-primary-foreground" />
+                </a>
+              ))}
+              <a
+                href="https://apps.apple.com/jp/app/%E3%82%B1%E3%82%A4%E3%83%9E%E3%83%83%E3%83%81/id6760977063"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="App Store"
+                data-testid="link-appstore"
+                className="flex items-center gap-1.5 px-3 h-9 rounded-full bg-primary-foreground/15 hover:bg-primary-foreground/30 transition-colors"
+              >
+                <SiAppstore className="w-4 h-4 text-primary-foreground" />
+                <span className="text-xs font-medium text-primary-foreground whitespace-nowrap">App Store</span>
+              </a>
+            </div>
+            <p className="text-base text-primary-foreground text-center">
+              &copy; 2026 SIN JAPAN LLC All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
