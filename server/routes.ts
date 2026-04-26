@@ -1091,7 +1091,7 @@ export async function registerRoutes(
             appBaseUrl,
           };
           for (const u of allUsers) {
-            if (u.id !== sessionUserId && u.approved) {
+            if (u.approved) {
               await storage.createNotification({
                 userId: u.id,
                 type: "cargo_new",
@@ -1569,7 +1569,7 @@ export async function registerRoutes(
             appBaseUrl,
           };
           for (const u of allUsers) {
-            if (u.id !== sessionUserId && u.approved) {
+            if (u.approved) {
               await storage.createNotification({
                 userId: u.id,
                 type: "truck_new",
