@@ -1,0 +1,33 @@
+ot@srv1087935:/var/www/keimatch# pm2 env 3 | grep LINE
+root@srv1087935:/var/www/keimatch# cat /var/www/keimatch/ecosystem.config.js
+cat: /var/www/keimatch/ecosystem.config.js: No such file or directory
+root@srv1087935:/var/www/keimatch# export LINE_CHANNEL_ACCESS_TOKEN="dAcLUKCK2RhSUOVxJCtWZN6tkX+P+UgJrQ8MO8lhmps3p3C1apvcKX8s4VTxLbxl30HsjttBXUO6E1lwkjUN0y28F+x/3ZoB2uiA0CP3LrZY51pLdSLDuMG5wf6PnjioL/Sez/548hM9x2KU+y9bfgdB04t89/1O/w1cDnyilFU="
+export LINE_CHANNEL_SECRET="571a0f0fbddc8d7dc6c08b6281439ef7"
+pm2 restart keimatch --update-env
+pm2 save
+pm2 env 3 | grep LINE
+[PM2] Applying action restartProcessId on app [keimatch](ids: [ 3 ])
+[PM2] [keimatch](3) ✓
+┌────┬────────────────────┬──────────┬──────┬───────────┬──────────┬──────────┐
+│ id │ name               │ mode     │ ↺    │ status    │ cpu      │ memory   │
+├────┼────────────────────┼──────────┼──────┼───────────┼──────────┼──────────┤
+│ 4  │ aiagent            │ fork     │ 6    │ online    │ 0%       │ 237.0mb  │
+│ 3  │ keimatch           │ fork     │ 4    │ online    │ 0%       │ 14.3mb   │
+│ 12 │ keisaiyou          │ fork     │ 6    │ online    │ 0%       │ 425.6mb  │
+│ 2  │ menz-esthe-town    │ fork     │ 0    │ online    │ 0%       │ 143.1mb  │
+│ 11 │ onlyu              │ fork     │ 2    │ online    │ 0%       │ 122.0mb  │
+│ 7  │ sinjapan-crm-api   │ fork     │ 0    │ online    │ 0%       │ 133.9mb  │
+│ 0  │ sinjapan-manager   │ fork     │ 0    │ online    │ 0%       │ 62.1mb   │
+│ 1  │ sinjapan-onlinesc… │ fork     │ 0    │ online    │ 0%       │ 100.3mb  │
+│ 16 │ sinjapan-sales-api │ fork     │ 8    │ online    │ 0%       │ 280.1mb  │
+│ 5  │ sinjapanai         │ fork     │ 0    │ online    │ 0%       │ 108.4mb  │
+│ 6  │ sinjapanailive-api │ fork     │ 0    │ online    │ 0%       │ 107.4mb  │
+│ 9  │ sinjapanaisite-api │ fork     │ 1    │ online    │ 0%       │ 184.2mb  │
+│ 10 │ tiktokshindan      │ fork     │ 1    │ online    │ 0%       │ 166.1mb  │
+│ 8  │ tramatch           │ fork     │ 5    │ online    │ 0%       │ 448.6mb  │
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+[PM2] Saving current process list...
+[PM2] Successfully saved in /root/.pm2/dump.pm2
+LINE_CHANNEL_ACCESS_TOKEN: dAcLUKCK2RhSUOVxJCtWZN6tkX+P+UgJrQ8MO8lhmps3p3C1apvcKX8s4VTxLbxl30HsjttBXUO6E1lwkjUN0y28F+x/3ZoB2uiA0CP3LrZY51pLdSLDuMG5wf6PnjioL/Sez/548hM9x2KU+y9bfgdB04t89/1O/w1cDnyilFU=
+LINE_CHANNEL_SECRET: 571a0f0fbddc8d7dc6c08b6281439ef7
+root@srv1087935:/var/www/keimatch# 
