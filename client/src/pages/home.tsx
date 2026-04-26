@@ -335,7 +335,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary-foreground leading-tight text-shadow-lg" data-testid="text-hero-title">
-              軽貨物案件マッチングサービス
+              軽貨物マッチングサービス
             </h1>
             <div className="mt-6 flex justify-center">
               <img src={logoImage} alt="KEI MATCH" className="h-14 sm:h-20 w-auto brightness-0 invert" />
