@@ -11,7 +11,7 @@ export default function Footer() {
               <img src={logoImage} alt="KEI MATCH" className="h-10 w-auto brightness-0 invert" />
             </div>
             <p className="text-base text-primary-foreground leading-relaxed mb-4">
-              軽貨物ドライバーをつなぐ、AI案件マッチングサービス
+              軽貨物事業者をつなぐ、軽貨物マッチングサービス
             </p>
             <div className="text-sm text-primary-foreground space-y-1">
               <p className="font-semibold">合同会社SIN JAPAN</p>
