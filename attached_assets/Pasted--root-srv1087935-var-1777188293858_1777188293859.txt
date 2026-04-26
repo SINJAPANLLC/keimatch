@@ -1,0 +1,108 @@
+└────┴────────────────────┴──────────┴──────┴───────────┴──────────┴──────────┘
+root@srv1087935:/var/www/keimatch# pm2 logs keimatch --lines 50
+[TAILING] Tailing last 50 lines for [keimatch] process (change the value with --lines option)
+/root/.pm2/logs/keimatch-error.log last 50 lines:
+3|keimatch |     code: 'UND_ERR_CONNECT_TIMEOUT',
+3|keimatch |     [Symbol(undici.error.UND_ERR)]: true,
+3|keimatch |     [Symbol(undici.error.UND_ERR_CONNECT_TIMEOUT)]: true
+3|keimatch |   }
+3|keimatch | }
+3|keimatch | [Lead Crawler] DuckDuckGo search failed: TypeError: fetch failed
+3|keimatch |     at node:internal/deps/undici/undici:14902:13
+3|keimatch |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3|keimatch |     at async VAe (/var/www/keimatch/dist/index.cjs:471:17558)
+3|keimatch |     at async RH (/var/www/keimatch/dist/index.cjs:471:20633)
+3|keimatch |     at async Timeout._onTimeout (/var/www/keimatch/dist/index.cjs:556:833) {
+3|keimatch |   [cause]: ConnectTimeoutError: Connect Timeout Error (attempted addresses: 139.255.196.196:443, 182.23.79.195:443, timeout: 10000ms)
+3|keimatch |       at onConnectTimeout (node:internal/deps/undici/undici:2718:28)
+3|keimatch |       at Immediate._onImmediate (node:internal/deps/undici/undici:2699:11)
+3|keimatch |       at process.processImmediate (node:internal/timers:483:21) {
+3|keimatch |     code: 'UND_ERR_CONNECT_TIMEOUT',
+3|keimatch |     [Symbol(undici.error.UND_ERR)]: true,
+3|keimatch |     [Symbol(undici.error.UND_ERR_CONNECT_TIMEOUT)]: true
+3|keimatch |   }
+3|keimatch | }
+3|keimatch | [Lead Crawler] DuckDuckGo search failed: TypeError: fetch failed
+3|keimatch |     at node:internal/deps/undici/undici:14902:13
+3|keimatch |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3|keimatch |     at async VAe (/var/www/keimatch/dist/index.cjs:471:17558)
+3|keimatch |     at async RH (/var/www/keimatch/dist/index.cjs:471:20633)
+3|keimatch |     at async Timeout._onTimeout (/var/www/keimatch/dist/index.cjs:556:833) {
+3|keimatch |   [cause]: ConnectTimeoutError: Connect Timeout Error (attempted addresses: 139.255.196.196:443, 182.23.79.195:443, timeout: 10000ms)
+3|keimatch |       at onConnectTimeout (node:internal/deps/undici/undici:2718:28)
+3|keimatch |       at Immediate._onImmediate (node:internal/deps/undici/undici:2699:11)
+3|keimatch |       at process.processImmediate (node:internal/timers:483:21) {
+3|keimatch |     code: 'UND_ERR_CONNECT_TIMEOUT',
+3|keimatch |     [Symbol(undici.error.UND_ERR)]: true,
+3|keimatch |     [Symbol(undici.error.UND_ERR_CONNECT_TIMEOUT)]: true
+3|keimatch |   }
+3|keimatch | }
+3|keimatch | [Lead Crawler] DuckDuckGo search failed: TypeError: fetch failed
+3|keimatch |     at node:internal/deps/undici/undici:14902:13
+3|keimatch |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+3|keimatch |     at async VAe (/var/www/keimatch/dist/index.cjs:471:17558)
+3|keimatch |     at async RH (/var/www/keimatch/dist/index.cjs:471:20633)
+3|keimatch |     at async Timeout._onTimeout (/var/www/keimatch/dist/index.cjs:556:833) {
+3|keimatch |   [cause]: ConnectTimeoutError: Connect Timeout Error (attempted addresses: 182.23.79.195:443, 139.255.196.196:443, timeout: 10000ms)
+3|keimatch |       at onConnectTimeout (node:internal/deps/undici/undici:2718:28)
+3|keimatch |       at Immediate._onImmediate (node:internal/deps/undici/undici:2699:11)
+3|keimatch |       at process.processImmediate (node:internal/timers:483:21) {
+3|keimatch |     code: 'UND_ERR_CONNECT_TIMEOUT',
+3|keimatch |     [Symbol(undici.error.UND_ERR)]: true,
+3|keimatch |     [Symbol(undici.error.UND_ERR_CONNECT_TIMEOUT)]: true
+3|keimatch |   }
+3|keimatch | }
+
+/root/.pm2/logs/keimatch-out.log last 50 lines:
+3|keimatch | [Lead Crawler] Checking directory: https://www.lnews.jp/
+3|keimatch | [Lead Crawler] Found 6 links from directory: https://www.lnews.jp/
+3|keimatch | [Lead Crawler] Crawling: https://www.l-partner.co.jp/contact.html
+3|keimatch | [Lead Crawler] Skipped (not transport): https://www.l-partner.co.jp/contact.html
+3|keimatch | [Lead Crawler] Crawling: https://www.mediabiz.jp/recruit.html
+3|keimatch | [Lead Crawler] Skipped (not transport): https://www.mediabiz.jp/recruit.html
+3|keimatch | [Lead Crawler] Crawling: https://www.tokyo-system.co.jp/tlf/kawagoe/
+3|keimatch | [Lead Crawler] Crawling: http://lnews.e-sohko.com/
+3|keimatch | [Lead Crawler] Crawling: https://www.the0123.com/houjin/
+3|keimatch | [Lead Crawler] Skipped (not transport): https://www.the0123.com/houjin/
+3|keimatch | [Lead Crawler] Crawling: https://www.sou-ko.com
+3|keimatch | [Lead Crawler] Skipped (not transport): https://www.sou-ko.com
+3|keimatch | [Lead Crawler] Checking directory: https://transport-company.jp/information/saitama/saitama/
+3|keimatch | [Lead Crawler] Found 11 links from directory: https://transport-company.jp/information/saitama/saitama/
+3|keimatch | [Lead Crawler] Crawling: http://b.hatena.ne.jp/entry/https://transport-company.jp/information/saitama/
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp/xmlrpc.php
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp/information/saitama/
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp//webfonts.xserver.jp
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp//ajax.googleapis.com
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp//www.googletagmanager.com
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp//fonts.googleapis.com
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp//maxcdn.bootstrapcdn.com
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp//s.w.org
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp/feed/
+3|keimatch | [Lead Crawler] Crawling: https://transport-company.jp/comments/feed/
+3|keimatch | Database already has users, skipping seed.
+3|keimatch | 7:23:08 AM [express] serving on port 3001
+3|keimatch | [YouTube Auto] Next auto-publish scheduled in 997 minutes (2026-04-27T09:00:00.000Z)
+3|keimatch | [Lead Crawler] Scheduled: crawl=5,8,12,16,21時, send=9,11,14,17時, retry=10時, followup=13時 JST (now: 16時)
+3|keimatch | [Auto Article] Generating 2 articles today (8 already done)...
+3|keimatch | [Auto Article] [9/10] Generating: 軽貨物配送の安全管理と事故防止対策
+3|keimatch | 7:23:25 AM [express] GET /api/user 401 in 2ms
+3|keimatch | 7:23:30 AM [express] GET /api/announcements 304 in 251ms
+3|keimatch | 7:23:30 AM [express] GET /api/trucks 304 in 253ms
+3|keimatch | 7:23:30 AM [express] GET /api/youtube-videos 304 in 559ms
+3|keimatch | 7:23:30 AM [express] GET /api/cargo 304 in 802ms
+3|keimatch | 7:23:34 AM [express] GET /api/columns 200 in 5097ms
+3|keimatch | [Auto Article] [9] Successfully generated and published: 軽貨物配送の安全管理と事故防止対策
+3|keimatch | [Auto Article] [10/10] Generating: 軽貨物ドライバーの1日のスケジュールと収入例
+3|keimatch | Database already has users, skipping seed.
+3|keimatch | 7:24:02 AM [express] serving on port 3001
+3|keimatch | [YouTube Auto] Next auto-publish scheduled in 996 minutes (2026-04-27T09:00:00.000Z)
+3|keimatch | [Lead Crawler] Scheduled: crawl=0,2,4,6,8,10,12,14,16,18,20,22時, send=9,11,14,17時, retry=10時, followup=13時 JST (now: 16時)
+3|keimatch | [Auto Article] Today's 5 articles already generated, skipping.
+3|keimatch | 7:24:16 AM [express] GET /api/user 401 in 3ms
+3|keimatch | 7:24:20 AM [express] GET /api/announcements 304 in 251ms
+3|keimatch | 7:24:21 AM [express] GET /api/trucks 304 in 247ms
+3|keimatch | 7:24:21 AM [express] GET /api/youtube-videos 304 in 557ms
+3|keimatch | 7:24:21 AM [express] GET /api/cargo 304 in 811ms
+3|keimatch | 7:24:22 AM [express] GET /api/columns 200 in 1997ms
+
+
