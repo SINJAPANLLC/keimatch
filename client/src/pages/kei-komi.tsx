@@ -10,13 +10,38 @@ import { Badge } from "@/components/ui/badge";
 import { Star, MessageSquarePlus, ChevronDown, ChevronUp, MapPin, Briefcase } from "lucide-react";
 import type { KeiKomiPost } from "@shared/schema";
 
-const CATEGORIES = [
+const CATEGORY_GROUPS = [
+  {
+    groupLabel: "デリバリーアプリ",
+    categories: [
+      { id: "amazon-flex", label: "Amazon Flex", color: "bg-orange-500" },
+      { id: "uber-eats", label: "Uber Eats", color: "bg-green-600" },
+      { id: "demaecan", label: "出前館", color: "bg-red-500" },
+      { id: "menu", label: "menu", color: "bg-pink-500" },
+      { id: "wolt", label: "Wolt", color: "bg-cyan-600" },
+      { id: "pickgo", label: "PickGo", color: "bg-indigo-500" },
+    ],
+  },
+  {
+    groupLabel: "委託・軽貨物会社",
+    categories: [
+      { id: "yamato", label: "ヤマト運輸", color: "bg-yellow-600" },
+      { id: "sagawa", label: "佐川急便", color: "bg-green-700" },
+      { id: "japanpost", label: "日本郵便", color: "bg-red-700" },
+      { id: "general-carrier", label: "軽貨物会社（一般）", color: "bg-blue-600" },
+    ],
+  },
+  {
+    groupLabel: "その他",
+    categories: [
+      { id: "general", label: "その他・一般", color: "bg-purple-600" },
+    ],
+  },
+];
+
+const ALL_CATEGORIES = [
   { id: "all", label: "すべて", color: "bg-slate-600" },
-  { id: "amazon-flex", label: "Amazon Flex", color: "bg-orange-500" },
-  { id: "yamato", label: "ヤマト運輸", color: "bg-yellow-600" },
-  { id: "sagawa", label: "佐川急便", color: "bg-green-600" },
-  { id: "general-carrier", label: "軽貨物会社", color: "bg-blue-600" },
-  { id: "general", label: "その他・一般", color: "bg-purple-600" },
+  ...CATEGORY_GROUPS.flatMap(g => g.categories),
 ];
 
 const WORK_TYPES = ["宅配", "チャーター", "スポット", "定期", "その他"];
@@ -55,7 +80,7 @@ function StarInput({ value, onChange }: { value: number; onChange: (v: number) =
 
 function PostCard({ post }: { post: KeiKomiPost }) {
   const [expanded, setExpanded] = useState(false);
-  const cat = CATEGORIES.find(c => c.id === post.category);
+  const cat = ALL_CATEGORIES.find(c => c.id === post.category);
   const isLong = post.body.length > 160;
 
   return (
@@ -126,8 +151,6 @@ function PostForm({ onClose }: { onClose: () => void }) {
     onError: () => toast({ title: "投稿に失敗しました", variant: "destructive" }),
   });
 
-  const selectedCat = CATEGORIES.find(c => c.id === category);
-
   return (
     <Card className="border border-primary/30 shadow-md">
       <CardContent className="pt-5 pb-6 px-5 md:px-6">
@@ -136,18 +159,25 @@ function PostForm({ onClose }: { onClose: () => void }) {
         </h3>
         <div className="space-y-4">
           <div>
-            <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">カテゴリー <span className="text-destructive">*</span></label>
-            <div className="flex flex-wrap gap-2">
-              {CATEGORIES.filter(c => c.id !== "all").map(c => (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => { setCategory(c.id); setCompanyName(c.id === "general" || c.id === "general-carrier" ? "" : c.label); }}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${category === c.id ? `${c.color} text-white border-transparent` : "border-border text-muted-foreground hover:bg-muted"}`}
-                  data-testid={`category-btn-${c.id}`}
-                >
-                  {c.label}
-                </button>
+            <label className="text-xs font-semibold text-muted-foreground mb-2 block">カテゴリー <span className="text-destructive">*</span></label>
+            <div className="space-y-2">
+              {CATEGORY_GROUPS.map(group => (
+                <div key={group.groupLabel}>
+                  <p className="text-[10px] font-semibold text-muted-foreground/60 uppercase tracking-wider mb-1.5">{group.groupLabel}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {group.categories.map(c => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => { setCategory(c.id); setCompanyName(c.id === "general" || c.id === "general-carrier" ? "" : c.label); }}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${category === c.id ? `${c.color} text-white border-transparent` : "border-border text-muted-foreground hover:bg-muted"}`}
+                        data-testid={`category-btn-${c.id}`}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
@@ -245,31 +275,49 @@ export default function KeiKomiPage() {
       </section>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div className="flex items-center gap-2 flex-wrap">
-            {CATEGORIES.map(cat => (
+        <div className="flex flex-col gap-4 mb-6">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 flex-wrap">
               <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-colors ${
-                  activeCategory === cat.id
-                    ? `${cat.color} text-white border-transparent`
-                    : "border-border text-muted-foreground hover:bg-muted"
-                }`}
-                data-testid={`filter-${cat.id}`}
+                onClick={() => setActiveCategory("all")}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-colors ${activeCategory === "all" ? "bg-slate-600 text-white border-transparent" : "border-border text-muted-foreground hover:bg-muted"}`}
+                data-testid="filter-all"
               >
-                {cat.label}
+                すべて
               </button>
+            </div>
+            <Button
+              onClick={() => setShowForm(!showForm)}
+              className="shrink-0"
+              data-testid="button-toggle-form"
+            >
+              <MessageSquarePlus className="w-4 h-4 mr-1.5" />
+              口コミを書く
+            </Button>
+          </div>
+          <div className="space-y-2">
+            {CATEGORY_GROUPS.map(group => (
+              <div key={group.groupLabel} className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-wider w-24 shrink-0">{group.groupLabel}</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {group.categories.map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setActiveCategory(cat.id)}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold border transition-colors ${
+                        activeCategory === cat.id
+                          ? `${cat.color} text-white border-transparent`
+                          : "border-border text-muted-foreground hover:bg-muted"
+                      }`}
+                      data-testid={`filter-${cat.id}`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
-          <Button
-            onClick={() => setShowForm(!showForm)}
-            className="shrink-0"
-            data-testid="button-toggle-form"
-          >
-            <MessageSquarePlus className="w-4 h-4 mr-1.5" />
-            口コミを書く
-          </Button>
         </div>
 
         {showForm && (
