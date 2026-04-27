@@ -158,6 +158,15 @@ function PostCard({ post }: { post: KeiKomiPost }) {
             {expanded ? <><ChevronUp className="w-3 h-3" />閉じる</> : <><ChevronDown className="w-3 h-3" />続きを読む</>}
           </button>
         )}
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-3">
+            {post.tags.map(tag => (
+              <span key={tag} className="inline-flex items-center text-[11px] font-medium bg-muted text-muted-foreground rounded px-1.5 py-0.5 leading-none">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
         <div className="flex items-center gap-3 mt-3 flex-wrap">
           <span className="text-xs text-muted-foreground font-medium">{post.authorName}</span>
           {post.prefecture && (

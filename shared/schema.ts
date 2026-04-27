@@ -581,6 +581,7 @@ export const keiKomiPosts = pgTable("kei_komi_posts", {
   authorName: text("author_name").notNull().default("匿名"),
   workType: text("work_type"),
   prefecture: text("prefecture"),
+  tags: text("tags").array().default([]),
   isApproved: boolean("is_approved").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
