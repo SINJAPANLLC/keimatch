@@ -41,6 +41,7 @@ export default function Footer() {
                 <li><Link href="/contact" className="hover:underline" data-testid="link-contact">お問い合わせ</Link></li>
                 <li><Link href="/column" className="hover:underline" data-testid="link-columns">コラム記事</Link></li>
                 <li><Link href="/kei-komi" className="hover:underline" data-testid="link-kei-komi">ケイコミ（口コミ）</Link></li>
+                <li><Link href="/blacklist" className="hover:underline" data-testid="link-blacklist">強制退会リスト</Link></li>
               </ul>
             </div>
             <div>

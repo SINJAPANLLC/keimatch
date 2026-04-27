@@ -2068,6 +2068,43 @@ export async function registerRoutes(
     }
   });
 
+  app.get("/api/blacklist", async (req, res) => {
+    try {
+      const type = req.query.type as string | undefined;
+      const entries = await storage.getBlacklistEntries(type);
+      res.json(entries);
+    } catch (error) {
+      res.status(500).json({ message: "取得に失敗しました" });
+    }
+  });
+
+  app.post("/api/admin/blacklist", requireAdmin, async (req, res) => {
+    try {
+      const { type, name, reason, detail, prefecture, bannedAt } = req.body;
+      if (!name || !reason || !type) {
+        return res.status(400).json({ message: "名前・理由・種別は必須です" });
+      }
+      const entry = await storage.createBlacklistEntry({
+        type, name, reason,
+        detail: detail || null,
+        prefecture: prefecture || null,
+        bannedAt: bannedAt ? new Date(bannedAt) : new Date(),
+      });
+      res.json(entry);
+    } catch (error) {
+      res.status(500).json({ message: "登録に失敗しました" });
+    }
+  });
+
+  app.delete("/api/admin/blacklist/:id", requireAdmin, async (req, res) => {
+    try {
+      await storage.deleteBlacklistEntry(req.params.id);
+      res.json({ message: "削除しました" });
+    } catch (error) {
+      res.status(500).json({ message: "削除に失敗しました" });
+    }
+  });
+
   app.post("/api/contact", async (req, res) => {
     try {
       const parsed = insertContactInquirySchema.safeParse(req.body);

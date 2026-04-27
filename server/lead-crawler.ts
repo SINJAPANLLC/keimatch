@@ -1345,7 +1345,7 @@ function extractExternalUrls(html: string, baseUrl: string): string[] {
 
 const EXCLUDED_DOMAINS = [
   "duckduckgo", "google", "youtube", "wikipedia", "yahoo", "bing",
-  "indeed", "recruit", "mynavi", "doda", "keikamotsu", "tramatch", "amazon", "facebook", "twitter",
+  "indeed", "recruit", "mynavi", "doda", "keimatch", "tramatch", "amazon", "facebook", "twitter",
   "instagram", "linkedin", "tiktok", "reddit", "naver", "rakuten", "goo.ne.jp",
   "baseconnect.in", "clearworks.co.jp", "wantedly", "en-gage", "hellowork",
   "mlit.go.jp", "freee.co.jp", "crowdworks", "lancers", "coconala",

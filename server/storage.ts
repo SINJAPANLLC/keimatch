@@ -28,6 +28,7 @@ import {
   invoices, agents, aiTrainingExamples, aiCorrectionLogs, youtubeVideos, youtubeAutoPublishJobs,
   emailCampaigns, emailLeads,
   type KeiKomiPost, type InsertKeiKomiPost, keiKomiPosts,
+  type BlacklistEntry, type InsertBlacklistEntry, blacklistEntries,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, sql, ilike, or, gte } from "drizzle-orm";
@@ -228,6 +229,10 @@ export interface IStorage {
   getAllKeiKomiPosts(): Promise<KeiKomiPost[]>;
   approveKeiKomiPost(id: string): Promise<KeiKomiPost | undefined>;
   deleteKeiKomiPost(id: string): Promise<boolean>;
+
+  createBlacklistEntry(entry: InsertBlacklistEntry): Promise<BlacklistEntry>;
+  getBlacklistEntries(type?: string): Promise<BlacklistEntry[]>;
+  deleteBlacklistEntry(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1334,6 +1339,25 @@ export class DatabaseStorage implements IStorage {
 
   async deleteKeiKomiPost(id: string): Promise<boolean> {
     const result = await db.delete(keiKomiPosts).where(eq(keiKomiPosts.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async createBlacklistEntry(entry: InsertBlacklistEntry): Promise<BlacklistEntry> {
+    const [created] = await db.insert(blacklistEntries).values(entry).returning();
+    return created;
+  }
+
+  async getBlacklistEntries(type?: string): Promise<BlacklistEntry[]> {
+    if (type && type !== "all") {
+      return db.select().from(blacklistEntries)
+        .where(eq(blacklistEntries.type, type))
+        .orderBy(desc(blacklistEntries.bannedAt));
+    }
+    return db.select().from(blacklistEntries).orderBy(desc(blacklistEntries.bannedAt));
+  }
+
+  async deleteBlacklistEntry(id: string): Promise<boolean> {
+    const result = await db.delete(blacklistEntries).where(eq(blacklistEntries.id, id));
     return (result.rowCount ?? 0) > 0;
   }
 }

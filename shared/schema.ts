@@ -589,3 +589,18 @@ export const keiKomiPosts = pgTable("kei_komi_posts", {
 export const insertKeiKomiPostSchema = createInsertSchema(keiKomiPosts).omit({ id: true, isApproved: true, createdAt: true });
 export type InsertKeiKomiPost = z.infer<typeof insertKeiKomiPostSchema>;
 export type KeiKomiPost = typeof keiKomiPosts.$inferSelect;
+
+export const blacklistEntries = pgTable("blacklist_entries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  type: text("type").notNull().default("company"),
+  name: text("name").notNull(),
+  reason: text("reason").notNull(),
+  detail: text("detail"),
+  prefecture: text("prefecture"),
+  bannedAt: timestamp("banned_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertBlacklistEntrySchema = createInsertSchema(blacklistEntries).omit({ id: true, createdAt: true });
+export type InsertBlacklistEntry = z.infer<typeof insertBlacklistEntrySchema>;
+export type BlacklistEntry = typeof blacklistEntries.$inferSelect;
