@@ -405,9 +405,9 @@ export default function KeiKomiPage() {
 
         <div className="mt-12 p-5 bg-muted/40 rounded-xl border border-border text-center">
           <p className="font-bold text-foreground mb-1">案件を探しているドライバーの方へ</p>
-          <p className="text-sm text-muted-foreground mb-4">KEI MATCHでは軽貨物の案件を無料で検索・マッチングできます。</p>
+          <p className="text-sm text-muted-foreground mb-4">KEI MATCHでは軽貨物の案件を検索・マッチングできます。</p>
           <Button asChild>
-            <a href="/register" data-testid="link-register-cta">無料で案件を探す</a>
+            <a href="/register" data-testid="link-register-cta">案件を探す</a>
           </Button>
         </div>
       </div>
