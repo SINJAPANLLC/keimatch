@@ -598,6 +598,7 @@ export const blacklistEntries = pgTable("blacklist_entries", {
   detail: text("detail"),
   prefecture: text("prefecture"),
   bannedAt: timestamp("banned_at").defaultNow().notNull(),
+  source: text("source").notNull().default("keimatch"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

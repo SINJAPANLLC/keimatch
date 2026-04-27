@@ -2084,11 +2084,13 @@ export async function registerRoutes(
       if (!name || !reason || !type) {
         return res.status(400).json({ message: "名前・理由・種別は必須です" });
       }
+      const { source } = req.body;
       const entry = await storage.createBlacklistEntry({
         type, name, reason,
         detail: detail || null,
         prefecture: prefecture || null,
         bannedAt: bannedAt ? new Date(bannedAt) : new Date(),
+        source: source || "keimatch",
       });
       res.json(entry);
     } catch (error) {

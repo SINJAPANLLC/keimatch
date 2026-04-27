@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertTriangle, Building2, User, MapPin, Calendar, Flag, X, Upload, FileImage, Paperclip, CheckCircle } from "lucide-react";
+import { AlertTriangle, Building2, User, MapPin, Calendar, Flag, X, Upload, FileImage, Paperclip, CheckCircle, ShieldCheck, MessageCircleWarning } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { BlacklistEntry } from "@shared/schema";
 
@@ -32,8 +32,15 @@ function readFileAsBase64(file: File): Promise<string> {
   });
 }
 
+const SOURCE_LABELS: Record<string, { label: string; cls: string; icon: React.ElementType }> = {
+  keimatch: { label: "KEI MATCH確認済み", cls: "bg-green-50 text-green-700 border-green-300 dark:bg-green-950/30 dark:text-green-400 dark:border-green-800", icon: ShieldCheck },
+  report:   { label: "通報情報", cls: "bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-800", icon: MessageCircleWarning },
+};
+
 function EntryCard({ entry, onReport }: { entry: BlacklistEntry; onReport: (entry: BlacklistEntry) => void }) {
   const typeInfo = TYPE_LABELS[entry.type] ?? TYPE_LABELS.company;
+  const sourceInfo = SOURCE_LABELS[(entry as any).source ?? "keimatch"] ?? SOURCE_LABELS.keimatch;
+  const SrcIcon = sourceInfo.icon;
   const Icon = typeInfo.icon;
 
   return (
@@ -49,6 +56,9 @@ function EntryCard({ entry, onReport }: { entry: BlacklistEntry; onReport: (entr
               <Badge variant="outline" className="text-xs text-blue-700 dark:text-blue-400 border-blue-300 dark:border-blue-700 px-2 py-0.5">
                 {entry.reason}
               </Badge>
+              <span className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium ${sourceInfo.cls}`}>
+                <SrcIcon className="w-3 h-3" />{sourceInfo.label}
+              </span>
             </div>
             <h3 className="font-bold text-foreground text-base">{entry.name}</h3>
             {entry.detail && (
@@ -238,6 +248,7 @@ function ReportModal({ onClose, prefillTarget }: { onClose: () => void; prefillT
 export default function BlacklistPage() {
   const [activeType, setActiveType] = useState("all");
   const [activeReason, setActiveReason] = useState("すべて");
+  const [activeSource, setActiveSource] = useState("all");
   const [showReportModal, setShowReportModal] = useState(false);
   const [reportTarget, setReportTarget] = useState<BlacklistEntry | null>(null);
 
@@ -247,7 +258,9 @@ export default function BlacklistPage() {
     queryFn: async () => { const res = await fetch(url); return res.json(); },
   });
 
-  const filtered = activeReason === "すべて" ? entries : entries.filter(e => e.reason === activeReason);
+  const filtered = entries
+    .filter(e => activeReason === "すべて" || e.reason === activeReason)
+    .filter(e => activeSource === "all" || (e as any).source === activeSource);
 
   const openReport = (entry?: BlacklistEntry) => {
     setReportTarget(entry ?? null);
@@ -281,11 +294,20 @@ export default function BlacklistPage() {
       </section>
 
       <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6 flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-          <div className="text-sm text-blue-800 dark:text-blue-200">
-            <p className="font-semibold mb-0.5">ご注意</p>
-            <p>掲載情報はKEI MATCHの管理者が確認・審査した上で公開しています。掲載内容への異議・訂正は<a href="/contact" className="underline">お問い合わせ</a>からご連絡ください。</p>
+        <div className="grid sm:grid-cols-2 gap-3 mb-6">
+          <div className="bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 rounded-lg p-4 flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+            <div className="text-sm text-green-800 dark:text-green-200">
+              <p className="font-semibold mb-0.5">KEI MATCH確認済み</p>
+              <p className="text-xs leading-relaxed">KEI MATCH上でのトラブルを管理者が確認・審査した情報です。</p>
+            </div>
+          </div>
+          <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4 flex items-start gap-3">
+            <MessageCircleWarning className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <div className="text-sm text-amber-800 dark:text-amber-200">
+              <p className="font-semibold mb-0.5">通報情報</p>
+              <p className="text-xs leading-relaxed">他プラットフォーム含むユーザー通報を審査後に掲載した情報です。KEI MATCHが事実を保証するものではありません。</p>
+            </div>
           </div>
         </div>
 
@@ -315,6 +337,22 @@ export default function BlacklistPage() {
                 data-testid={`filter-reason-${r}`}
               >
                 {r}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            {[
+              { id: "all", label: "出所：すべて" },
+              { id: "keimatch", label: "KEI MATCH確認済み" },
+              { id: "report", label: "通報情報" },
+            ].map(s => (
+              <button
+                key={s.id}
+                onClick={() => setActiveSource(s.id)}
+                className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${activeSource === s.id ? "bg-slate-700 text-white border-transparent" : "border-border text-muted-foreground hover:bg-muted"}`}
+                data-testid={`filter-source-${s.id}`}
+              >
+                {s.label}
               </button>
             ))}
           </div>

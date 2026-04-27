@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Trash2, Plus, Building2, User, MapPin, Calendar, Flag, Eye, X, FileImage, Paperclip, CheckCircle, Clock } from "lucide-react";
+import { AlertTriangle, Trash2, Plus, Building2, User, MapPin, Calendar, Flag, Eye, X, FileImage, Paperclip, CheckCircle, Clock, ShieldCheck, MessageCircleWarning } from "lucide-react";
 import DashboardLayout from "@/components/dashboard-layout";
 import type { BlacklistEntry, BlacklistReport } from "@shared/schema";
 
@@ -116,7 +116,7 @@ export default function AdminBlacklistPage() {
   const [activeTab, setActiveTab] = useState<"entries" | "reports">("entries");
   const [showForm, setShowForm] = useState(false);
   const [reportStatusFilter, setReportStatusFilter] = useState("all");
-  const [form, setForm] = useState({ type: "company", name: "", reason: "未払い", detail: "", prefecture: "", bannedAt: new Date().toISOString().slice(0, 10) });
+  const [form, setForm] = useState({ type: "company", name: "", reason: "未払い", detail: "", prefecture: "", bannedAt: new Date().toISOString().slice(0, 10), source: "keimatch" });
 
   const { data: entries = [], isLoading: entriesLoading } = useQuery<BlacklistEntry[]>({
     queryKey: ["/api/blacklist"],
@@ -227,6 +227,21 @@ export default function AdminBlacklistPage() {
                         </select>
                       </div>
                     </div>
+                    <div>
+                      <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">情報の出所 <span className="text-blue-600">*</span></label>
+                      <div className="flex gap-2">
+                        <button type="button" onClick={() => setForm(f => ({ ...f, source: "keimatch" }))}
+                          className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium border transition-colors ${form.source === "keimatch" ? "bg-green-600 text-white border-transparent" : "border-border text-muted-foreground hover:bg-muted"}`}
+                          data-testid="source-btn-keimatch">
+                          <ShieldCheck className="w-3.5 h-3.5" />KEI MATCH確認済み
+                        </button>
+                        <button type="button" onClick={() => setForm(f => ({ ...f, source: "report" }))}
+                          className={`flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-medium border transition-colors ${form.source === "report" ? "bg-amber-500 text-white border-transparent" : "border-border text-muted-foreground hover:bg-muted"}`}
+                          data-testid="source-btn-report">
+                          <MessageCircleWarning className="w-3.5 h-3.5" />通報情報
+                        </button>
+                      </div>
+                    </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="text-xs font-semibold text-muted-foreground mb-1 block">都道府県</label>
@@ -279,6 +294,15 @@ export default function AdminBlacklistPage() {
                             <div className="flex items-center gap-2 flex-wrap mb-1">
                               <Badge className={`${typeInfo.color} text-white text-xs border-0`}>{typeInfo.label}</Badge>
                               <Badge variant="outline" className="text-xs text-blue-700 dark:text-blue-400 border-blue-200">{entry.reason}</Badge>
+                              {(entry as any).source === "report" ? (
+                                <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium bg-amber-50 text-amber-700 border-amber-300">
+                                  <MessageCircleWarning className="w-3 h-3" />通報情報
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border font-medium bg-green-50 text-green-700 border-green-300">
+                                  <ShieldCheck className="w-3 h-3" />KEI MATCH確認済み
+                                </span>
+                              )}
                             </div>
                             <p className="font-bold text-foreground">{entry.name}</p>
                             {entry.detail && <p className="text-sm text-muted-foreground mt-0.5">{entry.detail}</p>}
