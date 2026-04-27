@@ -351,11 +351,6 @@ export default function Home() {
                   案件を探す
                 </Button>
               </Link>
-              <Link href="/login">
-                <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm w-full sm:w-auto sm:min-w-[220px] text-base" data-testid="button-hero-trucks">
-                  空き車両を見てみる
-                </Button>
-              </Link>
             </div>
           </div>
         </div>
