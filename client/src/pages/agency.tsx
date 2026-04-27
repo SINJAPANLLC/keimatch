@@ -5,8 +5,6 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -99,7 +97,6 @@ export default function AgencyPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <Header />
       <main className="flex-1">
         <section className="bg-primary py-16 px-4">
           <div className="max-w-3xl mx-auto text-center">
@@ -271,7 +268,6 @@ export default function AgencyPage() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }
