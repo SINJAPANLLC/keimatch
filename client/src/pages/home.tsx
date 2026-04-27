@@ -340,15 +340,20 @@ export default function Home() {
               <img src={logoImage} alt="KEI MATCH" className="h-14 sm:h-20 w-auto brightness-0 invert" />
             </div>
             <p className="mt-6 text-xl sm:text-2xl text-primary-foreground font-bold leading-relaxed text-shadow" data-testid="text-hero-subtitle">
-              案件を探しているドライバーの方へ
+              AIで軽貨物の案件や空き車両を簡単登録　簡単検索
             </p>
             <p className="mt-3 text-sm sm:text-lg text-primary-foreground leading-relaxed mx-auto text-shadow">
-              KEI MATCHでは軽貨物の案件を検索・マッチングできます。
+              軽貨物の案件・空き車両情報をリアルタイムでAI登録・AI検索できます。
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link href="/login">
                 <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm w-full sm:w-auto sm:min-w-[220px] text-base" data-testid="button-hero-cargo">
-                  案件を探す
+                  案件を見てみる
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button size="lg" variant="outline" className="text-primary-foreground border-primary-foreground/40 bg-primary-foreground/10 backdrop-blur-sm w-full sm:w-auto sm:min-w-[220px] text-base" data-testid="button-hero-trucks">
+                  空き車両を見てみる
                 </Button>
               </Link>
             </div>
