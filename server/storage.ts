@@ -29,6 +29,7 @@ import {
   emailCampaigns, emailLeads,
   type KeiKomiPost, type InsertKeiKomiPost, keiKomiPosts,
   type BlacklistEntry, type InsertBlacklistEntry, blacklistEntries,
+  type BlacklistReport, type InsertBlacklistReport, blacklistReports,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, sql, ilike, or, gte } from "drizzle-orm";
@@ -233,6 +234,11 @@ export interface IStorage {
   createBlacklistEntry(entry: InsertBlacklistEntry): Promise<BlacklistEntry>;
   getBlacklistEntries(type?: string): Promise<BlacklistEntry[]>;
   deleteBlacklistEntry(id: string): Promise<boolean>;
+
+  createBlacklistReport(report: InsertBlacklistReport): Promise<BlacklistReport>;
+  getBlacklistReports(status?: string): Promise<BlacklistReport[]>;
+  updateBlacklistReportStatus(id: string, status: string): Promise<BlacklistReport | undefined>;
+  deleteBlacklistReport(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1358,6 +1364,33 @@ export class DatabaseStorage implements IStorage {
 
   async deleteBlacklistEntry(id: string): Promise<boolean> {
     const result = await db.delete(blacklistEntries).where(eq(blacklistEntries.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
+
+  async createBlacklistReport(report: InsertBlacklistReport): Promise<BlacklistReport> {
+    const [created] = await db.insert(blacklistReports).values(report).returning();
+    return created;
+  }
+
+  async getBlacklistReports(status?: string): Promise<BlacklistReport[]> {
+    if (status && status !== "all") {
+      return db.select().from(blacklistReports)
+        .where(eq(blacklistReports.status, status))
+        .orderBy(desc(blacklistReports.createdAt));
+    }
+    return db.select().from(blacklistReports).orderBy(desc(blacklistReports.createdAt));
+  }
+
+  async updateBlacklistReportStatus(id: string, status: string): Promise<BlacklistReport | undefined> {
+    const [updated] = await db.update(blacklistReports)
+      .set({ status })
+      .where(eq(blacklistReports.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteBlacklistReport(id: string): Promise<boolean> {
+    const result = await db.delete(blacklistReports).where(eq(blacklistReports.id, id));
     return (result.rowCount ?? 0) > 0;
   }
 }

@@ -604,3 +604,20 @@ export const blacklistEntries = pgTable("blacklist_entries", {
 export const insertBlacklistEntrySchema = createInsertSchema(blacklistEntries).omit({ id: true, createdAt: true });
 export type InsertBlacklistEntry = z.infer<typeof insertBlacklistEntrySchema>;
 export type BlacklistEntry = typeof blacklistEntries.$inferSelect;
+
+export const blacklistReports = pgTable("blacklist_reports", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  targetName: text("target_name").notNull(),
+  targetType: text("target_type").notNull().default("unknown"),
+  reporterName: text("reporter_name"),
+  reporterContact: text("reporter_contact"),
+  reportReason: text("report_reason").notNull(),
+  reportContent: text("report_content").notNull(),
+  evidenceFiles: text("evidence_files").array().default(sql`'{}'`),
+  status: text("status").notNull().default("pending"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertBlacklistReportSchema = createInsertSchema(blacklistReports).omit({ id: true, status: true, createdAt: true });
+export type InsertBlacklistReport = z.infer<typeof insertBlacklistReportSchema>;
+export type BlacklistReport = typeof blacklistReports.$inferSelect;

@@ -2105,6 +2105,55 @@ export async function registerRoutes(
     }
   });
 
+  app.post("/api/blacklist/report", async (req, res) => {
+    try {
+      const { targetName, targetType, reporterName, reporterContact, reportReason, reportContent, evidenceFiles } = req.body;
+      if (!targetName || !reportReason || !reportContent) {
+        return res.status(400).json({ message: "対象名・通報理由・内容は必須です" });
+      }
+      const report = await storage.createBlacklistReport({
+        targetName, targetType: targetType || "unknown",
+        reporterName: reporterName || null,
+        reporterContact: reporterContact || null,
+        reportReason, reportContent,
+        evidenceFiles: evidenceFiles || [],
+      });
+      res.json({ message: "通報を受け付けました", report });
+    } catch (error) {
+      res.status(500).json({ message: "送信に失敗しました" });
+    }
+  });
+
+  app.get("/api/admin/blacklist/reports", requireAdmin, async (req, res) => {
+    try {
+      const status = req.query.status as string | undefined;
+      const reports = await storage.getBlacklistReports(status);
+      res.json(reports);
+    } catch (error) {
+      res.status(500).json({ message: "取得に失敗しました" });
+    }
+  });
+
+  app.patch("/api/admin/blacklist/reports/:id/status", requireAdmin, async (req, res) => {
+    try {
+      const { status } = req.body;
+      if (!status) return res.status(400).json({ message: "status は必須です" });
+      const updated = await storage.updateBlacklistReportStatus(req.params.id, status);
+      res.json(updated);
+    } catch (error) {
+      res.status(500).json({ message: "更新に失敗しました" });
+    }
+  });
+
+  app.delete("/api/admin/blacklist/reports/:id", requireAdmin, async (req, res) => {
+    try {
+      await storage.deleteBlacklistReport(req.params.id);
+      res.json({ message: "削除しました" });
+    } catch (error) {
+      res.status(500).json({ message: "削除に失敗しました" });
+    }
+  });
+
   app.post("/api/contact", async (req, res) => {
     try {
       const parsed = insertContactInquirySchema.safeParse(req.body);
