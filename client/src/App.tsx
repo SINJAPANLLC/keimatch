@@ -50,6 +50,7 @@ const pageImports = {
   adminMediaGen: () => import("@/pages/admin-media-gen"),
   adminLpGen: () => import("@/pages/admin-lp-gen"),
   adminDesign: () => import("@/pages/admin-design"),
+  adminKeiKomi: () => import("@/pages/admin-kei-komi"),
   guide: () => import("@/pages/guide"),
   faq: () => import("@/pages/faq"),
   contact: () => import("@/pages/contact"),
@@ -108,6 +109,7 @@ const AdminSns = lazy(pageImports.adminSns);
 const AdminMediaGen = lazy(pageImports.adminMediaGen);
 const AdminLpGen = lazy(pageImports.adminLpGen);
 const AdminDesign = lazy(pageImports.adminDesign);
+const AdminKeiKomi = lazy(pageImports.adminKeiKomi);
 const Guide = lazy(pageImports.guide);
 const Faq = lazy(pageImports.faq);
 const Contact = lazy(pageImports.contact);
@@ -168,7 +170,7 @@ const DASHBOARD_PATHS = [
   "/my-cargo", "/completed-cargo", "/cancelled-cargo", "/companies", "/partners",
   "/transport-ledger", "/payment", "/services", "/settings",
   "/admin", "/admin/applications", "/admin/users", "/admin/revenue", "/admin/invoices",
-  "/admin/notifications", "/admin/announcements", "/admin/listings", "/admin/seo", "/admin/settings", "/admin/contact-inquiries", "/admin/audit-logs", "/admin/agents", "/admin/ai-training", "/admin/youtube", "/admin/email-marketing", "/admin/sns", "/admin/media-gen", "/admin/lp-gen", "/admin/design",
+  "/admin/notifications", "/admin/announcements", "/admin/listings", "/admin/seo", "/admin/settings", "/admin/contact-inquiries", "/admin/audit-logs", "/admin/agents", "/admin/ai-training", "/admin/youtube", "/admin/email-marketing", "/admin/sns", "/admin/media-gen", "/admin/lp-gen", "/admin/design", "/admin/kei-komi",
 ];
 
 function Router() {
@@ -218,6 +220,7 @@ function Router() {
         <Route path="/admin/media-gen">{() => <AdminRoute component={AdminMediaGen} />}</Route>
         <Route path="/admin/lp-gen">{() => <AdminRoute component={AdminLpGen} />}</Route>
         <Route path="/admin/design">{() => <AdminRoute component={AdminDesign} />}</Route>
+        <Route path="/admin/kei-komi">{() => <AdminRoute component={AdminKeiKomi} />}</Route>
         <Route path="/admin">{() => <AdminRoute component={AdminDashboard} />}</Route>
         <Route path="/guide" component={Guide} />
         <Route path="/faq" component={Faq} />

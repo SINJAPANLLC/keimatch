@@ -54,7 +54,7 @@ const adminMenuGroups: AdminMenuGroup[] = [
       { href: "/admin/announcements", label: "お知らせ", icon: Megaphone },
       { href: "/admin/notifications", label: "通知管理", icon: Bell },
       { href: "/admin/contact-inquiries", label: "お問い合わせ", icon: MessageSquare },
-      { href: "/admin?tab=keiKomi", label: "ケイコミ管理", icon: Star },
+      { href: "/admin/kei-komi", label: "ケイコミ管理", icon: Star },
     ],
   },
   {
