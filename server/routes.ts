@@ -3346,7 +3346,7 @@ statusの意味:
   // Admin: Send notification to users (multi-channel)
   app.post("/api/admin/notifications/send", requireAdmin, async (req, res) => {
     try {
-      const { title, message, target, channels, userIds } = req.body;
+      const { title, message, htmlBody, target, channels, userIds, ignoreEmailPreference, ignoreLinePreference } = req.body;
       if (!title || !message) {
         return res.status(400).json({ message: "タイトルと本文は必須です" });
       }
@@ -3375,14 +3375,17 @@ statusの意味:
           results.system++;
         }
 
-        if (selectedChannels.includes("email") && user.notifyEmail && user.email) {
-          const emailResult = await sendEmail(user.email, `【KEI MATCH】${title}`, message);
+        const canSendEmail = ignoreEmailPreference ? !!user.email : (user.notifyEmail && !!user.email);
+        if (selectedChannels.includes("email") && canSendEmail) {
+          const emailContent = htmlBody || message;
+          const emailResult = await sendEmail(user.email!, `【KEI MATCH】${title}`, emailContent);
           if (emailResult.success) results.email++;
           else results.emailErrors++;
         }
 
-        if (selectedChannels.includes("line") && user.notifyLine && user.lineUserId) {
-          const lineResult = await sendLineMessage(user.lineUserId, `${title}\n\n${message}`);
+        const canSendLine = ignoreLinePreference ? !!user.lineUserId : (user.notifyLine && !!user.lineUserId);
+        if (selectedChannels.includes("line") && canSendLine) {
+          const lineResult = await sendLineMessage(user.lineUserId!, `${title}\n\n${message}`);
           if (lineResult.success) results.line++;
           else results.lineErrors++;
         }

@@ -140,6 +140,10 @@ export default function AdminNotifications() {
   const [sendTarget, setSendTarget] = useState("all");
   const [sendTitle, setSendTitle] = useState("");
   const [sendMessage, setSendMessage] = useState("");
+  const [sendHtmlBody, setSendHtmlBody] = useState("");
+  const [sendBodyMode, setSendBodyMode] = useState<"text" | "html">("text");
+  const [sendIgnoreEmailPref, setSendIgnoreEmailPref] = useState(false);
+  const [sendIgnoreLinePref, setSendIgnoreLinePref] = useState(false);
   const [sendChannels, setSendChannels] = useState<string[]>(["system"]);
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [userSearchQuery, setUserSearchQuery] = useState("");
@@ -268,8 +272,16 @@ export default function AdminNotifications() {
   const sendMutation = useMutation({
     mutationFn: async () => {
       const payload: any = {
-        title: sendTitle, message: sendMessage, target: sendTarget, channels: sendChannels,
+        title: sendTitle,
+        message: sendMessage,
+        target: sendTarget,
+        channels: sendChannels,
+        ignoreEmailPreference: sendIgnoreEmailPref,
+        ignoreLinePreference: sendIgnoreLinePref,
       };
+      if (sendBodyMode === "html" && sendHtmlBody.trim()) {
+        payload.htmlBody = sendHtmlBody;
+      }
       if (sendTarget === "selected") {
         payload.userIds = selectedUserIds;
       }
@@ -1011,9 +1023,62 @@ export default function AdminNotifications() {
                     <Input className="mt-1" value={sendTitle} onChange={e => setSendTitle(e.target.value)} placeholder="通知タイトル" data-testid="input-send-title" />
                   </div>
                   <div>
-                    <Label className="text-xs">本文</Label>
-                    <Textarea className="mt-1 min-h-[120px]" value={sendMessage} onChange={e => setSendMessage(e.target.value)} placeholder="通知メッセージ" data-testid="input-send-message" />
+                    <div className="flex items-center justify-between mb-1">
+                      <Label className="text-xs">本文</Label>
+                      {sendChannels.includes("email") && (
+                        <div className="flex items-center gap-1 border border-border rounded-md overflow-hidden">
+                          <button type="button" className={`px-2.5 py-1 text-[11px] font-medium transition-colors ${sendBodyMode === "text" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`} onClick={() => setSendBodyMode("text")} data-testid="button-send-mode-text">テキスト</button>
+                          <button type="button" className={`px-2.5 py-1 text-[11px] font-medium transition-colors ${sendBodyMode === "html" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`} onClick={() => setSendBodyMode("html")} data-testid="button-send-mode-html">HTMLメール</button>
+                        </div>
+                      )}
+                    </div>
+                    <Textarea className="mt-1 min-h-[100px]" value={sendMessage} onChange={e => setSendMessage(e.target.value)} placeholder="通知メッセージ（テキスト版・LINE・システム通知に使用）" data-testid="input-send-message" />
+                    {sendChannels.includes("email") && sendBodyMode === "html" && (
+                      <div className="mt-2">
+                        <Label className="text-xs text-muted-foreground">HTMLメール本文（メール送信時のみ使用）</Label>
+                        <Textarea className="mt-1 min-h-[160px] font-mono text-xs" value={sendHtmlBody} onChange={e => setSendHtmlBody(e.target.value)} placeholder="HTMLコードを入力..." data-testid="input-send-html-body" />
+                      </div>
+                    )}
                   </div>
+
+                  <div className="space-y-2 pt-1 border-t border-border">
+                    <p className="text-[11px] font-semibold text-muted-foreground">送信オプション</p>
+                    {sendChannels.includes("email") && (
+                      <label className="flex items-center gap-2 cursor-pointer" data-testid="checkbox-ignore-email-pref">
+                        <input type="checkbox" checked={sendIgnoreEmailPref} onChange={e => setSendIgnoreEmailPref(e.target.checked)} className="rounded border-border" />
+                        <span className="text-xs text-foreground">メール通知をオフにしているユーザーにも送る</span>
+                      </label>
+                    )}
+                    {sendChannels.includes("line") && (
+                      <label className="flex items-center gap-2 cursor-pointer" data-testid="checkbox-ignore-line-pref">
+                        <input type="checkbox" checked={sendIgnoreLinePref} onChange={e => setSendIgnoreLinePref(e.target.checked)} className="rounded border-border" />
+                        <span className="text-xs text-foreground">LINE通知をオフにしているユーザーにも送る</span>
+                      </label>
+                    )}
+                  </div>
+
+                  <div className="space-y-2 pt-1 border-t border-border">
+                    <p className="text-[11px] font-semibold text-muted-foreground">定型文クイック入力</p>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="w-full justify-start text-xs"
+                      data-testid="button-prefill-line"
+                      onClick={() => {
+                        setSendTitle("KEI MATCH公式LINEのご案内");
+                        setSendMessage("いつもKEI MATCHをご利用いただきありがとうございます。\n\nKEI MATCH公式LINEアカウントを開設しました！\n友だち追加で最新の案件情報や空き車両情報をいち早くお届けします。\n\n▼ 友だち追加はこちら\nhttps://line.me/R/ti/p/@684fhwyj\n\nLINE ID: @684fhwyj\n\n今後ともKEI MATCHをよろしくお願いいたします。\n合同会社SIN JAPAN");
+                        setSendBodyMode("html");
+                        setSendHtmlBody(`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;padding:0;background-color:#f4f4f5;font-family:Hiragino Sans,Hiragino Kaku Gothic ProN,Noto Sans JP,Yu Gothic,Meiryo,sans-serif;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#f4f4f5;"><tr><td align="center" style="padding:24px 16px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);"><tr><td style="background-color:#1a2f6e;padding:20px 24px;text-align:center;"><div style="color:#ffffff;font-size:20px;font-weight:700;letter-spacing:1px;">KEI MATCH</div><div style="color:rgba(255,255,255,0.85);font-size:11px;padding-top:2px;">KEIKAMOTSU MATCH</div></td></tr><tr><td style="padding:28px 24px 16px;"><div style="display:inline-block;background-color:#e8f0ff;border-radius:4px;padding:4px 10px;font-size:11px;font-weight:700;color:#1a2f6e;letter-spacing:0.5px;">&#x1F4F1; LINE公式アカウント</div><h2 style="margin:10px 0 8px;font-size:18px;color:#18181b;font-weight:700;">KEI MATCH公式LINEを友だち追加してください</h2><p style="margin:0 0 16px;font-size:13px;color:#71717a;line-height:1.7;">いつもKEI MATCHをご利用いただきありがとうございます。<br>公式LINEアカウントを開設しました。友だち追加で最新の案件情報や空き車両情報をいち早くお届けします。</p><div style="background:linear-gradient(135deg,#06b025 0%,#00c300 100%);border-radius:8px;padding:20px;text-align:center;margin-bottom:16px;"><div style="color:rgba(255,255,255,0.9);font-size:12px;margin-bottom:8px;">LINE ID</div><div style="color:#ffffff;font-size:22px;font-weight:700;letter-spacing:2px;">@684fhwyj</div></div><div style="text-align:center;margin-bottom:20px;"><a href="https://line.me/R/ti/p/@684fhwyj" style="display:inline-block;background-color:#06b025;color:#ffffff;text-decoration:none;font-size:15px;font-weight:700;padding:16px 40px;border-radius:8px;letter-spacing:0.5px;">&#x2714; 友だち追加する</a></div><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-radius:8px;overflow:hidden;border:1px solid #e4e4e7;"><tr style="background-color:#f8faff;"><td style="padding:10px 14px;font-size:12px;color:#71717a;width:120px;border-bottom:1px solid #e4e4e7;">最新案件情報</td><td style="padding:10px 14px;font-size:13px;color:#18181b;font-weight:600;border-bottom:1px solid #e4e4e7;">新着案件をいち早くお知らせ</td></tr><tr style="background-color:#ffffff;"><td style="padding:10px 14px;font-size:12px;color:#71717a;width:120px;border-bottom:1px solid #e4e4e7;">空き車両情報</td><td style="padding:10px 14px;font-size:13px;color:#18181b;font-weight:600;border-bottom:1px solid #e4e4e7;">空き車両のリアルタイム通知</td></tr><tr style="background-color:#f8faff;"><td style="padding:10px 14px;font-size:12px;color:#71717a;width:120px;">お得情報</td><td style="padding:10px 14px;font-size:13px;color:#18181b;font-weight:600;">キャンペーンや新機能のご案内</td></tr></table></td></tr><tr><td style="padding:0 24px 24px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-top:1px solid #e4e4e7;"><tr><td style="padding-top:20px;color:#71717a;font-size:11px;line-height:1.6;text-align:center;">本メールはKEI MATCHから送信しています。<br>合同会社SIN JAPAN｜<a href="https://keimatch-sinjapan.com" style="color:#1a2f6e;text-decoration:none;">keimatch-sinjapan.com</a></td></tr></table></td></tr></table></td></tr></table></body></html>`);
+                        setSendChannels(prev => prev.includes("email") ? prev : [...prev, "email"]);
+                        setSendIgnoreEmailPref(true);
+                      }}
+                    >
+                      <span style={{ color: "#06b025" }}>■</span>
+                      <span className="ml-1.5">LINE公式アカウント案内メール</span>
+                    </Button>
+                  </div>
+
                   <Button
                     className="w-full"
                     onClick={() => sendMutation.mutate()}
