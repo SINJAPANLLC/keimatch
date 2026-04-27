@@ -7,7 +7,7 @@ import type { CargoListing, TruckListing, KeiKomiPost } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type SafeUser = {
   id: string;
@@ -27,7 +27,8 @@ type SafeUser = {
 
 export default function Admin() {
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<"cargo" | "trucks" | "users" | "keiKomi">("cargo");
+  const initialTab = (new URLSearchParams(window.location.search).get("tab") as "cargo" | "trucks" | "users" | "keiKomi") || "cargo";
+  const [activeTab, setActiveTab] = useState<"cargo" | "trucks" | "users" | "keiKomi">(initialTab);
 
   const { data: cargo, isLoading: cargoLoading } = useQuery<CargoListing[]>({
     queryKey: ["/api/cargo"],
