@@ -68,6 +68,7 @@ const pageImports = {
   myTrucks: () => import("@/pages/my-trucks"),
   notFound: () => import("@/pages/not-found"),
   agency: () => import("@/pages/agency"),
+  keiKomi: () => import("@/pages/kei-komi"),
 };
 
 const Login = lazy(pageImports.login);
@@ -125,6 +126,7 @@ const TruckForm = lazy(pageImports.truckForm);
 const MyTrucks = lazy(pageImports.myTrucks);
 const NotFound = lazy(pageImports.notFound);
 const Agency = lazy(pageImports.agency);
+const KeiKomi = lazy(pageImports.keiKomi);
 
 function usePreloadAllPages() {
   useEffect(() => {
@@ -224,6 +226,7 @@ function Router() {
         <Route path="/terms" component={Terms} />
         <Route path="/privacy" component={Privacy} />
         <Route path="/agency" component={Agency} />
+        <Route path="/kei-komi" component={KeiKomi} />
         <Route path="/column/kyukakyusha" component={ColumnCategory} />
         <Route path="/column/truck-order" component={ColumnCategory} />
         <Route path="/column/carrier-sales" component={ColumnCategory} />

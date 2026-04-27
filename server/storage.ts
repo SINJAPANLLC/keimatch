@@ -26,7 +26,8 @@ import {
   partners, transportRecords, seoArticles, payments, adminSettings, notificationTemplates,
   passwordResetTokens, auditLogs, type AuditLog, contactInquiries, planChangeRequests, userAddRequests,
   invoices, agents, aiTrainingExamples, aiCorrectionLogs, youtubeVideos, youtubeAutoPublishJobs,
-  emailCampaigns, emailLeads
+  emailCampaigns, emailLeads,
+  type KeiKomiPost, type InsertKeiKomiPost, keiKomiPosts,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, sql, ilike, or, gte } from "drizzle-orm";
@@ -221,6 +222,12 @@ export interface IStorage {
   getFailedEmailLeadsForRetry(limit: number): Promise<EmailLead[]>;
   getSentLeadsForFollowUp(limit: number, daysAfterSent: number): Promise<EmailLead[]>;
   getEmailLeadByDomain(domain: string): Promise<EmailLead | undefined>;
+
+  createKeiKomiPost(post: InsertKeiKomiPost): Promise<KeiKomiPost>;
+  getKeiKomiPosts(category?: string): Promise<KeiKomiPost[]>;
+  getAllKeiKomiPosts(): Promise<KeiKomiPost[]>;
+  approveKeiKomiPost(id: string): Promise<KeiKomiPost | undefined>;
+  deleteKeiKomiPost(id: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1295,6 +1302,39 @@ export class DatabaseStorage implements IStorage {
       .where(sql`${emailLeads.email} LIKE ${'%@' + domain} OR ${emailLeads.website} LIKE ${'%://' + domain + '%'} OR ${emailLeads.website} LIKE ${'%://www.' + domain + '%'}`)
       .limit(1);
     return lead;
+  }
+
+  async createKeiKomiPost(post: InsertKeiKomiPost): Promise<KeiKomiPost> {
+    const [created] = await db.insert(keiKomiPosts).values(post).returning();
+    return created;
+  }
+
+  async getKeiKomiPosts(category?: string): Promise<KeiKomiPost[]> {
+    if (category && category !== "all") {
+      return db.select().from(keiKomiPosts)
+        .where(and(eq(keiKomiPosts.isApproved, true), eq(keiKomiPosts.category, category)))
+        .orderBy(desc(keiKomiPosts.createdAt));
+    }
+    return db.select().from(keiKomiPosts)
+      .where(eq(keiKomiPosts.isApproved, true))
+      .orderBy(desc(keiKomiPosts.createdAt));
+  }
+
+  async getAllKeiKomiPosts(): Promise<KeiKomiPost[]> {
+    return db.select().from(keiKomiPosts).orderBy(desc(keiKomiPosts.createdAt));
+  }
+
+  async approveKeiKomiPost(id: string): Promise<KeiKomiPost | undefined> {
+    const [updated] = await db.update(keiKomiPosts)
+      .set({ isApproved: true })
+      .where(eq(keiKomiPosts.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteKeiKomiPost(id: string): Promise<boolean> {
+    const result = await db.delete(keiKomiPosts).where(eq(keiKomiPosts.id, id));
+    return (result.rowCount ?? 0) > 0;
   }
 }
 

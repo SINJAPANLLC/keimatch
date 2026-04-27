@@ -2010,6 +2010,64 @@ export async function registerRoutes(
     }
   });
 
+  // ケイコミ（口コミ掲示板）
+  app.get("/api/kei-komi", async (req, res) => {
+    try {
+      const category = req.query.category as string | undefined;
+      const posts = await storage.getKeiKomiPosts(category);
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "取得に失敗しました" });
+    }
+  });
+
+  app.post("/api/kei-komi", async (req, res) => {
+    try {
+      const { category, companyName, title, body, rating, authorName, workType, prefecture } = req.body;
+      if (!category || !companyName || !title || !body || !rating) {
+        return res.status(400).json({ message: "必須項目を入力してください" });
+      }
+      const post = await storage.createKeiKomiPost({
+        category, companyName, title, body,
+        rating: Number(rating),
+        authorName: authorName || "匿名",
+        workType: workType || null,
+        prefecture: prefecture || null,
+      });
+      res.json({ message: "投稿を受け付けました。審査後に公開されます。", id: post.id });
+    } catch (error) {
+      res.status(500).json({ message: "投稿に失敗しました" });
+    }
+  });
+
+  app.get("/api/admin/kei-komi", requireAdmin, async (_req, res) => {
+    try {
+      const posts = await storage.getAllKeiKomiPosts();
+      res.json(posts);
+    } catch (error) {
+      res.status(500).json({ message: "取得に失敗しました" });
+    }
+  });
+
+  app.patch("/api/admin/kei-komi/:id/approve", requireAdmin, async (req, res) => {
+    try {
+      const post = await storage.approveKeiKomiPost(req.params.id);
+      if (!post) return res.status(404).json({ message: "投稿が見つかりません" });
+      res.json(post);
+    } catch (error) {
+      res.status(500).json({ message: "承認に失敗しました" });
+    }
+  });
+
+  app.delete("/api/admin/kei-komi/:id", requireAdmin, async (req, res) => {
+    try {
+      await storage.deleteKeiKomiPost(req.params.id);
+      res.json({ message: "削除しました" });
+    } catch (error) {
+      res.status(500).json({ message: "削除に失敗しました" });
+    }
+  });
+
   app.post("/api/contact", async (req, res) => {
     try {
       const parsed = insertContactInquirySchema.safeParse(req.body);

@@ -570,3 +570,21 @@ export const landingPages = pgTable("landing_pages", {
 export const insertLandingPageSchema = createInsertSchema(landingPages).omit({ id: true, createdAt: true, updatedAt: true });
 export type InsertLandingPage = z.infer<typeof insertLandingPageSchema>;
 export type LandingPage = typeof landingPages.$inferSelect;
+
+export const keiKomiPosts = pgTable("kei_komi_posts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  category: text("category").notNull(),
+  companyName: text("company_name").notNull(),
+  title: text("title").notNull(),
+  body: text("body").notNull(),
+  rating: integer("rating").notNull().default(3),
+  authorName: text("author_name").notNull().default("匿名"),
+  workType: text("work_type"),
+  prefecture: text("prefecture"),
+  isApproved: boolean("is_approved").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertKeiKomiPostSchema = createInsertSchema(keiKomiPosts).omit({ id: true, isApproved: true, createdAt: true });
+export type InsertKeiKomiPost = z.infer<typeof insertKeiKomiPostSchema>;
+export type KeiKomiPost = typeof keiKomiPosts.$inferSelect;

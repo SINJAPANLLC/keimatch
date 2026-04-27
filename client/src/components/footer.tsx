@@ -40,6 +40,7 @@ export default function Footer() {
                 <li><Link href="/faq" className="hover:underline" data-testid="link-faq">よくある質問</Link></li>
                 <li><Link href="/contact" className="hover:underline" data-testid="link-contact">お問い合わせ</Link></li>
                 <li><Link href="/column" className="hover:underline" data-testid="link-columns">コラム記事</Link></li>
+                <li><Link href="/kei-komi" className="hover:underline" data-testid="link-kei-komi">ケイコミ（口コミ）</Link></li>
               </ul>
             </div>
             <div>
