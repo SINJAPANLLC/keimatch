@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
+import { useSearch, useLocation } from "wouter";
 
 type SafeUser = {
   id: string;
@@ -27,8 +28,14 @@ type SafeUser = {
 
 export default function Admin() {
   const { toast } = useToast();
-  const initialTab = (new URLSearchParams(window.location.search).get("tab") as "cargo" | "trucks" | "users" | "keiKomi") || "cargo";
-  const [activeTab, setActiveTab] = useState<"cargo" | "trucks" | "users" | "keiKomi">(initialTab);
+  const search = useSearch();
+  const [, setLocation] = useLocation();
+  const tabFromUrl = (new URLSearchParams(search).get("tab") as "cargo" | "trucks" | "users" | "keiKomi") || "cargo";
+  const [activeTab, setActiveTab] = useState<"cargo" | "trucks" | "users" | "keiKomi">(tabFromUrl);
+
+  useEffect(() => {
+    setActiveTab(tabFromUrl);
+  }, [tabFromUrl]);
 
   const { data: cargo, isLoading: cargoLoading } = useQuery<CargoListing[]>({
     queryKey: ["/api/cargo"],
@@ -129,7 +136,7 @@ export default function Admin() {
           <Card
             key={tab.key}
             className={`cursor-pointer hover-elevate ${activeTab === tab.key ? "ring-2 ring-primary" : ""}`}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => { setActiveTab(tab.key); setLocation(tab.key === "cargo" ? "/admin" : `/admin?tab=${tab.key}`); }}
             data-testid={`button-admin-tab-${tab.key}`}
           >
             <CardContent className="p-4 flex items-center gap-4">
