@@ -7,7 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Star, MessageSquarePlus, ChevronDown, ChevronUp, MapPin, Briefcase } from "lucide-react";
+import { Star, MessageSquarePlus, ChevronDown, ChevronUp, MapPin, Briefcase, Share2, Copy, Check } from "lucide-react";
+import { SiX, SiLine } from "react-icons/si";
 import type { KeiKomiPost } from "@shared/schema";
 
 const CATEGORY_GROUPS = [
@@ -80,11 +81,60 @@ function StarInput({ value, onChange }: { value: number; onChange: (v: number) =
 
 function PostCard({ post }: { post: KeiKomiPost }) {
   const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
   const cat = ALL_CATEGORIES.find(c => c.id === post.category);
   const isLong = post.body.length > 160;
 
+  const shareUrl = `${window.location.origin}/kei-komi`;
+  const shareText = `【ケイコミ】${post.companyName} ★${post.rating}.0\n${post.title}\n`;
+
+  const shareX = () => {
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, "_blank", "noopener,noreferrer");
+  };
+  const shareLine = () => {
+    window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareText)}`, "_blank", "noopener,noreferrer");
+  };
+  const copyLink = async () => {
+    await navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <Card className="border border-border shadow-sm hover:shadow-md transition-shadow" data-testid={`card-post-${post.id}`}>
+      <div className="flex items-center justify-between px-5 pt-3 pb-2 border-b border-border/50">
+        <span className="text-[10px] text-muted-foreground/60 flex items-center gap-1"><Share2 className="w-3 h-3" />シェアする</span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={shareX}
+            className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded hover:bg-muted"
+            data-testid={`share-x-${post.id}`}
+            title="Xでシェア"
+          >
+            <SiX className="w-3 h-3" />
+          </button>
+          <button
+            type="button"
+            onClick={shareLine}
+            className="flex items-center gap-1 text-[11px] font-medium text-green-600 hover:text-green-700 transition-colors px-2 py-1 rounded hover:bg-muted"
+            data-testid={`share-line-${post.id}`}
+            title="LINEでシェア"
+          >
+            <SiLine className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={copyLink}
+            className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded hover:bg-muted"
+            data-testid={`copy-link-${post.id}`}
+            title="リンクをコピー"
+          >
+            {copied ? <Check className="w-3 h-3 text-green-500" /> : <Copy className="w-3 h-3" />}
+            <span className="text-[10px]">{copied ? "コピー済" : "コピー"}</span>
+          </button>
+        </div>
+      </div>
       <CardContent className="pt-4 pb-5 px-5">
         <div className="flex items-start justify-between gap-3 mb-2">
           <div className="flex-1 min-w-0">
