@@ -82,9 +82,10 @@ export default function AdminSeo() {
     queryKey: ["/api/admin/seo-articles"],
   });
 
-  const { data: gscKeywords, isLoading: kwLoading, refetch: refetchKeywords } = useQuery<GscKeyword[]>({
+  const { data: gscKeywords, isLoading: kwLoading, error: kwError, refetch: refetchKeywords } = useQuery<GscKeyword[]>({
     queryKey: ["/api/admin/gsc/keywords"],
     enabled: false,
+    retry: false,
   });
 
   const generateMutation = useMutation({
@@ -374,6 +375,21 @@ export default function AdminSeo() {
               )}
             </CardContent>
           </Card>
+
+          {/* GSC Keywords Error */}
+          {kwError && (
+            <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/30 dark:border-red-900 p-4 space-y-2">
+              <p className="text-sm font-bold text-red-700 dark:text-red-400 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" />
+                キーワード取得エラー
+              </p>
+              <p className="text-xs text-red-600 dark:text-red-300">{(kwError as any)?.message || "エラーが発生しました"}</p>
+              <p className="text-xs text-red-600 dark:text-red-300 font-medium">
+                ⚠️ トークンのスコープが不足している可能性があります。OAuth Playgroundで再認証し、
+                <strong>「Webmaster Tools v2」→「webmasters.readonly」</strong>スコープを選択してトークンを取得し直してください。
+              </p>
+            </div>
+          )}
 
           {/* GSC Keywords Table */}
           {gscKeywords && gscKeywords.length > 0 && (

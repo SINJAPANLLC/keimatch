@@ -4625,6 +4625,7 @@ JSON形式で以下を返してください（日本語で）:
       await storage.setAdminSetting("gsc_last_sync", new Date().toISOString());
       res.json(keywords);
     } catch (error: any) {
+      console.error("[GSC Keywords] Error:", error.message, error.code);
       res.status(500).json({ message: error.message || "キーワード取得に失敗しました" });
     }
   });
