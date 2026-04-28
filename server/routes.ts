@@ -4530,7 +4530,12 @@ JSON形式で以下を返してください（日本語で）:
       const connected = await isGscConnected();
       const lastSync = await storage.getAdminSetting("gsc_last_sync");
       const siteUrl = process.env.SITE_URL || "https://keimatch-sinjapan.com";
-      res.json({ connected, lastSync: lastSync || null, siteUrl });
+      const replitDomain = process.env.REPLIT_DEV_DOMAIN;
+      const callbackBaseUrl = replitDomain
+        ? `https://${replitDomain}`
+        : siteUrl;
+      const callbackUrl = `${callbackBaseUrl}/api/admin/gsc/callback`;
+      res.json({ connected, lastSync: lastSync || null, siteUrl, callbackUrl });
     } catch (error) {
       res.status(500).json({ connected: false, error: "GSCステータスの取得に失敗しました" });
     }
@@ -4539,9 +4544,13 @@ JSON形式で以下を返してください（日本語で）:
   app.get("/api/admin/gsc/connect", requireAdmin, async (req, res) => {
     try {
       const { getGscAuthUrl } = await import("./gsc-client");
-      const baseUrl = `${req.protocol}://${req.get("host")}`;
+      const replitDomain = process.env.REPLIT_DEV_DOMAIN;
+      const baseUrl = replitDomain
+        ? `https://${replitDomain}`
+        : (process.env.SITE_URL || "https://keimatch-sinjapan.com");
       await storage.setAdminSetting("gsc_callback_base_url", baseUrl);
       const url = getGscAuthUrl(baseUrl);
+      console.log("[GSC OAuth] connect redirect_uri:", `${baseUrl}/api/admin/gsc/callback`);
       res.redirect(url);
     } catch (error: any) {
       res.status(500).json({ message: error.message || "OAuth URLの生成に失敗しました" });
@@ -4550,18 +4559,25 @@ JSON形式で以下を返してください（日本語で）:
 
   app.get("/api/admin/gsc/callback", async (req, res) => {
     const code = req.query.code as string;
+    const error = req.query.error as string;
+    if (error) {
+      console.error("[GSC OAuth] Google returned error:", error, req.query.error_description);
+      return res.redirect(`/admin/seo?gsc=error&reason=${encodeURIComponent(error)}`);
+    }
     if (!code) return res.status(400).send("認証コードが見つかりません");
     try {
       const { exchangeCodeForToken } = await import("./gsc-client");
       const storedBaseUrl = await storage.getAdminSetting("gsc_callback_base_url");
-      const baseUrl = storedBaseUrl || `${req.protocol}://${req.get("host")}`;
+      const replitDomain = process.env.REPLIT_DEV_DOMAIN;
+      const baseUrl = storedBaseUrl || (replitDomain ? `https://${replitDomain}` : "https://keimatch-sinjapan.com");
+      console.log("[GSC OAuth] callback using baseUrl:", baseUrl);
       const refreshToken = await exchangeCodeForToken(code, baseUrl);
       await storage.setAdminSetting("gsc_refresh_token", refreshToken);
       await storage.setAdminSetting("gsc_connected_at", new Date().toISOString());
       res.redirect("/admin/seo?gsc=connected");
     } catch (error: any) {
-      console.error("[GSC OAuth] callback error:", error);
-      res.redirect("/admin/seo?gsc=error");
+      console.error("[GSC OAuth] callback error:", error.message || error);
+      res.redirect(`/admin/seo?gsc=error&reason=${encodeURIComponent(error.message || "unknown")}`);
     }
   });
 

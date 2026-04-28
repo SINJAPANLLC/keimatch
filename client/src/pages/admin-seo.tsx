@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Sparkles, FileText, PenTool, Trash2, ChevronDown, ChevronUp,
   Loader2, Globe, Eye, EyeOff, Bot, ExternalLink, Clock, AlertTriangle,
-  Link2, Link2Off, TrendingUp, RefreshCw, Play, Search, BarChart2, Pencil
+  Link2, Link2Off, TrendingUp, RefreshCw, Play, Search, BarChart2, Pencil, Copy, Check
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -35,7 +35,7 @@ const CATEGORY_OPTIONS = [
   { value: "carrier-sales", label: "ドライバーの案件獲得・営業" },
 ];
 
-interface GscStatus { connected: boolean; lastSync: string | null; siteUrl: string; }
+interface GscStatus { connected: boolean; lastSync: string | null; siteUrl: string; callbackUrl: string; }
 interface GscKeyword { keyword: string; impressions: number; clicks: number; position: number; ctr: number; }
 
 export default function AdminSeo() {
@@ -49,17 +49,28 @@ export default function AdminSeo() {
   const [filterCategory, setFilterCategory] = useState("all");
   const [pipelineRunning, setPipelineRunning] = useState(false);
   const [rewriteRunning, setRewriteRunning] = useState(false);
+  const [copiedUrl, setCopiedUrl] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("gsc") === "connected") {
       toast({ title: "Search Console の接続が完了しました" });
       window.history.replaceState({}, "", "/admin/seo");
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/gsc/status"] });
     } else if (params.get("gsc") === "error") {
-      toast({ title: "Search Console の接続に失敗しました", variant: "destructive" });
+      const reason = params.get("reason") || "不明なエラー";
+      toast({ title: `Search Console 接続に失敗しました: ${reason}`, variant: "destructive" });
       window.history.replaceState({}, "", "/admin/seo");
     }
   }, []);
+
+  const handleCopyCallbackUrl = (url: string) => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedUrl(true);
+      toast({ title: "コールバックURLをコピーしました" });
+      setTimeout(() => setCopiedUrl(false), 2000);
+    });
+  };
 
   const { data: gscStatus, isLoading: gscLoading, refetch: refetchGsc } = useQuery<GscStatus>({
     queryKey: ["/api/admin/gsc/status"],
@@ -224,6 +235,23 @@ export default function AdminSeo() {
                         ? `${gscStatus.siteUrl} | 最終同期: ${gscStatus.lastSync ? new Date(gscStatus.lastSync).toLocaleString("ja-JP") : "未実行"}`
                         : "接続するとGSCキーワードで記事が自動生成されます"}
                     </p>
+                    {!gscStatus?.connected && gscStatus?.callbackUrl && (
+                      <div className="mt-2 space-y-1">
+                        <p className="text-[10px] text-muted-foreground font-medium">Google Cloud Consoleに追加するリダイレクトURI:</p>
+                        <div className="flex items-center gap-1.5">
+                          <code className="text-[10px] bg-muted px-2 py-1 rounded font-mono break-all flex-1">{gscStatus.callbackUrl}</code>
+                          <Button
+                            size="icon"
+                            variant="outline"
+                            className="h-6 w-6 shrink-0"
+                            onClick={() => handleCopyCallbackUrl(gscStatus.callbackUrl)}
+                            data-testid="button-copy-callback-url"
+                          >
+                            {copiedUrl ? <Check className="w-3 h-3 text-green-600" /> : <Copy className="w-3 h-3" />}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
