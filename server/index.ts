@@ -94,8 +94,16 @@ app.use((req, res, next) => {
   if (process.env.NODE_ENV === "production") {
     setTimeout(async () => {
       try {
-        const { scheduleAutoArticleGeneration } = await import("./auto-article-generator");
-        scheduleAutoArticleGeneration();
+        const { runGscPoweredGeneration, scheduleWeeklyRewrite } = await import("./seo-pipeline");
+        runGscPoweredGeneration(5).catch((e) => console.error("[SEO Pipeline] init error:", e));
+        setInterval(() => {
+          const now = new Date();
+          if (now.getHours() === 6 && now.getMinutes() === 0) {
+            runGscPoweredGeneration(5).catch((e) => console.error("[SEO Pipeline] daily error:", e));
+          }
+        }, 60 * 1000);
+        scheduleWeeklyRewrite();
+
         const { scheduleAutoPublish } = await import("./youtube-auto-publisher");
         scheduleAutoPublish();
         const { scheduleLeadCrawler } = await import("./lead-crawler");

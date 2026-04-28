@@ -4523,6 +4523,94 @@ JSON形式で以下を返してください（日本語で）:
     }
   });
 
+  // Admin: GSC OAuth
+  app.get("/api/admin/gsc/status", requireAdmin, async (req, res) => {
+    try {
+      const { isGscConnected } = await import("./gsc-client");
+      const connected = await isGscConnected();
+      const lastSync = await storage.getAdminSetting("gsc_last_sync");
+      const siteUrl = process.env.SITE_URL || "https://keimatch-sinjapan.com";
+      res.json({ connected, lastSync: lastSync || null, siteUrl });
+    } catch (error) {
+      res.status(500).json({ connected: false, error: "GSCステータスの取得に失敗しました" });
+    }
+  });
+
+  app.get("/api/admin/gsc/connect", requireAdmin, async (req, res) => {
+    try {
+      const { getGscAuthUrl } = await import("./gsc-client");
+      const url = getGscAuthUrl();
+      res.redirect(url);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "OAuth URLの生成に失敗しました" });
+    }
+  });
+
+  app.get("/api/admin/gsc/callback", async (req, res) => {
+    const code = req.query.code as string;
+    if (!code) return res.status(400).send("認証コードが見つかりません");
+    try {
+      const { exchangeCodeForToken } = await import("./gsc-client");
+      const refreshToken = await exchangeCodeForToken(code);
+      await storage.setAdminSetting("gsc_refresh_token", refreshToken);
+      await storage.setAdminSetting("gsc_connected_at", new Date().toISOString());
+      res.redirect("/admin/seo?gsc=connected");
+    } catch (error: any) {
+      console.error("[GSC OAuth] callback error:", error);
+      res.redirect("/admin/seo?gsc=error");
+    }
+  });
+
+  app.delete("/api/admin/gsc/disconnect", requireAdmin, async (req, res) => {
+    try {
+      await storage.setAdminSetting("gsc_refresh_token", "");
+      res.json({ message: "Search Console の接続を解除しました" });
+    } catch (error) {
+      res.status(500).json({ message: "切断に失敗しました" });
+    }
+  });
+
+  app.get("/api/admin/gsc/keywords", requireAdmin, async (req, res) => {
+    try {
+      const { getOpportunityKeywords } = await import("./gsc-client");
+      const keywords = await getOpportunityKeywords(30);
+      await storage.setAdminSetting("gsc_last_sync", new Date().toISOString());
+      res.json(keywords);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "キーワード取得に失敗しました" });
+    }
+  });
+
+  app.post("/api/admin/gsc/run-pipeline", requireAdmin, async (req, res) => {
+    try {
+      const { runGscPoweredGeneration } = await import("./seo-pipeline");
+      res.json({ message: "パイプライン実行を開始しました" });
+      runGscPoweredGeneration(5).catch((e) => console.error("[GSC Pipeline] error:", e));
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "パイプライン実行に失敗しました" });
+    }
+  });
+
+  app.post("/api/admin/gsc/run-rewrite", requireAdmin, async (req, res) => {
+    try {
+      const { runWeeklyRewrite } = await import("./seo-pipeline");
+      res.json({ message: "リライト実行を開始しました" });
+      runWeeklyRewrite().catch((e) => console.error("[GSC Rewrite] error:", e));
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "リライト実行に失敗しました" });
+    }
+  });
+
+  app.get("/api/admin/gsc/performance", requireAdmin, async (req, res) => {
+    try {
+      const { getPagePerformance } = await import("./gsc-client");
+      const data = await getPagePerformance();
+      res.json(data);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "パフォーマンスデータの取得に失敗しました" });
+    }
+  });
+
   // Admin: Settings
   app.get("/api/admin/settings", requireAdmin, async (req, res) => {
     try {

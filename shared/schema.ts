@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, integer, timestamp, boolean, doublePrecision } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -258,6 +258,14 @@ export const seoArticles = pgTable("seo_articles", {
   viewCount: integer("view_count").default(0),
   wordCount: integer("word_count").default(0),
   faq: text("faq"),
+  gscPosition: doublePrecision("gsc_position"),
+  gscCtr: doublePrecision("gsc_ctr"),
+  gscImpressions: integer("gsc_impressions").default(0),
+  gscClicks: integer("gsc_clicks").default(0),
+  gscLastUpdated: timestamp("gsc_last_updated"),
+  rewriteCount: integer("rewrite_count").default(0),
+  lastRewrittenAt: timestamp("last_rewritten_at"),
+  gscKeyword: text("gsc_keyword"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
