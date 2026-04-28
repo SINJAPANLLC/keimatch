@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Sparkles, FileText, PenTool, Trash2, ChevronDown, ChevronUp,
   Loader2, Globe, Eye, EyeOff, Bot, ExternalLink, Clock, AlertTriangle,
-  Link2, Link2Off, TrendingUp, RefreshCw, Play, Search, BarChart2, Pencil, Copy, Check
+  Link2, Link2Off, TrendingUp, RefreshCw, Play, Search, BarChart2, Pencil, Copy, Check, Key
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -50,6 +50,8 @@ export default function AdminSeo() {
   const [pipelineRunning, setPipelineRunning] = useState(false);
   const [rewriteRunning, setRewriteRunning] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
+  const [manualToken, setManualToken] = useState("");
+  const [showManualInput, setShowManualInput] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -125,6 +127,21 @@ export default function AdminSeo() {
       toast({ title: "Search Console を切断しました" });
       refetchGsc();
     },
+  });
+
+  const setTokenMutation = useMutation({
+    mutationFn: async (token: string) => {
+      const res = await apiRequest("POST", "/api/admin/gsc/set-token", { token });
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({ title: "リフレッシュトークンを保存しました。接続完了！" });
+      setManualToken("");
+      setShowManualInput(false);
+      refetchGsc();
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/gsc/status"] });
+    },
+    onError: (e: any) => toast({ title: e.message || "保存に失敗しました", variant: "destructive" }),
   });
 
   const handleRunPipeline = async () => {
@@ -267,15 +284,60 @@ export default function AdminSeo() {
                       切断
                     </Button>
                   ) : (
-                    <a href="/api/admin/gsc/connect">
-                      <Button size="sm" data-testid="button-gsc-connect">
-                        <Link2 className="w-3.5 h-3.5 mr-1" />
-                        Search Console に接続
+                    <div className="flex items-center gap-2">
+                      <a href="/api/admin/gsc/connect">
+                        <Button size="sm" variant="outline" data-testid="button-gsc-connect">
+                          <Link2 className="w-3.5 h-3.5 mr-1" />
+                          OAuth接続
+                        </Button>
+                      </a>
+                      <Button
+                        size="sm"
+                        onClick={() => setShowManualInput((v) => !v)}
+                        data-testid="button-gsc-manual-toggle"
+                      >
+                        <Key className="w-3.5 h-3.5 mr-1" />
+                        トークンを直接入力
                       </Button>
-                    </a>
+                    </div>
                   )}
                 </div>
               </div>
+
+              {/* Manual token input */}
+              {!gscStatus?.connected && showManualInput && (
+                <div className="mt-4 pt-4 border-t space-y-3">
+                  <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 p-3 space-y-2 text-xs text-blue-800 dark:text-blue-200">
+                    <p className="font-bold">OAuth Playgroundでリフレッシュトークンを取得する方法:</p>
+                    <ol className="list-decimal list-inside space-y-1">
+                      <li><a href="https://developers.google.com/oauthplayground" target="_blank" rel="noopener noreferrer" className="underline font-medium">OAuth Playground</a> を開く</li>
+                      <li>右上の歯車アイコン → 「Use your own OAuth credentials」をON</li>
+                      <li>Client ID と Client Secret を入力（GCPのOAuth 2.0クライアントID）</li>
+                      <li>左の一覧から「Search Console API v3」→ <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">https://www.googleapis.com/auth/webmasters.readonly</code> を選択して「Authorize APIs」</li>
+                      <li>Googleアカウントでログインして許可</li>
+                      <li>「Exchange authorization code for tokens」をクリック</li>
+                      <li>表示された <strong>Refresh token</strong> をコピーして下に貼り付ける</li>
+                    </ol>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="リフレッシュトークンをここに貼り付け..."
+                      value={manualToken}
+                      onChange={(e) => setManualToken(e.target.value)}
+                      className="text-xs font-mono"
+                      data-testid="input-manual-token"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={() => setTokenMutation.mutate(manualToken)}
+                      disabled={setTokenMutation.isPending || !manualToken.trim()}
+                      data-testid="button-save-token"
+                    >
+                      {setTokenMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "保存"}
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               {gscStatus?.connected && (
                 <div className="mt-4 pt-4 border-t flex flex-wrap gap-2">

@@ -81,7 +81,7 @@ function generateSlug(title: string): string {
   return `${dateStr}-${rand}-${base || "article"}`;
 }
 
-const DAILY_ARTICLE_COUNT = 5;
+const DAILY_ARTICLE_COUNT = 10;
 
 async function generateSingleArticle(selectedTopic: { topic: string; keywords: string; category: string }, articleIndex: number) {
   try {

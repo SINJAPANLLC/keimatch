@@ -95,11 +95,11 @@ app.use((req, res, next) => {
     setTimeout(async () => {
       try {
         const { runGscPoweredGeneration, scheduleWeeklyRewrite } = await import("./seo-pipeline");
-        runGscPoweredGeneration(5).catch((e) => console.error("[SEO Pipeline] init error:", e));
+        runGscPoweredGeneration(10).catch((e) => console.error("[SEO Pipeline] init error:", e));
         setInterval(() => {
           const now = new Date();
           if (now.getHours() === 6 && now.getMinutes() === 0) {
-            runGscPoweredGeneration(5).catch((e) => console.error("[SEO Pipeline] daily error:", e));
+            runGscPoweredGeneration(10).catch((e) => console.error("[SEO Pipeline] daily error:", e));
           }
         }, 60 * 1000);
         scheduleWeeklyRewrite();

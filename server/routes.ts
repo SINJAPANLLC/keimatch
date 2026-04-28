@@ -4590,6 +4590,34 @@ JSON形式で以下を返してください（日本語で）:
     }
   });
 
+  // 代替: リフレッシュトークンを直接設定
+  app.post("/api/admin/gsc/set-token", requireAdmin, async (req, res) => {
+    try {
+      const { token } = req.body;
+      if (!token || typeof token !== "string" || token.trim().length < 10) {
+        return res.status(400).json({ message: "有効なリフレッシュトークンを入力してください" });
+      }
+      await storage.setAdminSetting("gsc_refresh_token", token.trim());
+      await storage.setAdminSetting("gsc_connected_at", new Date().toISOString());
+      res.json({ message: "リフレッシュトークンを保存しました" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "保存に失敗しました" });
+    }
+  });
+
+  // OAuth Playground用: 本番URLで認証URLを生成
+  app.get("/api/admin/gsc/prod-auth-url", requireAdmin, async (req, res) => {
+    try {
+      const { getGscAuthUrl } = await import("./gsc-client");
+      const prodBaseUrl = "https://keimatch-sinjapan.com";
+      await storage.setAdminSetting("gsc_callback_base_url", prodBaseUrl);
+      const url = getGscAuthUrl(prodBaseUrl);
+      res.json({ url, callbackUrl: `${prodBaseUrl}/api/admin/gsc/callback` });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message || "URL生成に失敗しました" });
+    }
+  });
+
   app.get("/api/admin/gsc/keywords", requireAdmin, async (req, res) => {
     try {
       const { getOpportunityKeywords } = await import("./gsc-client");
