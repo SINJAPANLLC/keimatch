@@ -5,7 +5,7 @@ const GSC_SCOPES = [
   "https://www.googleapis.com/auth/webmasters.readonly",
   "https://www.googleapis.com/auth/webmasters",
 ];
-export const SITE_URL = process.env.SITE_URL || "sc-domain:keimatch-sinjapan.com";
+export const SITE_URL = process.env.SITE_URL || "https://keimatch-sinjapan.com/";
 
 function getOAuth2Client(redirectUri: string, refreshToken?: string) {
   const clientId = process.env.YOUTUBE_OAUTH_CLIENT_ID;
