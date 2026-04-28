@@ -2,15 +2,14 @@ import { google } from "googleapis";
 import { storage } from "./storage";
 
 const GSC_SCOPE = "https://www.googleapis.com/auth/webmasters.readonly";
-const SITE_URL = process.env.SITE_URL || "https://keimatch-sinjapan.com";
+export const SITE_URL = process.env.SITE_URL || "https://keimatch-sinjapan.com";
 
-function getOAuth2Client(refreshToken?: string) {
+function getOAuth2Client(redirectUri: string, refreshToken?: string) {
   const clientId = process.env.YOUTUBE_OAUTH_CLIENT_ID;
   const clientSecret = process.env.YOUTUBE_OAUTH_CLIENT_SECRET;
   if (!clientId || !clientSecret) {
     throw new Error("OAuth credentials not configured (YOUTUBE_OAUTH_CLIENT_ID / YOUTUBE_OAUTH_CLIENT_SECRET)");
   }
-  const redirectUri = `${SITE_URL}/api/admin/gsc/callback`;
   const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
   if (refreshToken) {
     oauth2Client.setCredentials({ refresh_token: refreshToken });
@@ -18,8 +17,13 @@ function getOAuth2Client(refreshToken?: string) {
   return oauth2Client;
 }
 
-export function getGscAuthUrl(): string {
-  const oauth2Client = getOAuth2Client();
+export function buildRedirectUri(baseUrl: string): string {
+  return `${baseUrl}/api/admin/gsc/callback`;
+}
+
+export function getGscAuthUrl(baseUrl: string): string {
+  const redirectUri = buildRedirectUri(baseUrl);
+  const oauth2Client = getOAuth2Client(redirectUri);
   return oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: GSC_SCOPE,
@@ -27,8 +31,9 @@ export function getGscAuthUrl(): string {
   });
 }
 
-export async function exchangeCodeForToken(code: string): Promise<string> {
-  const oauth2Client = getOAuth2Client();
+export async function exchangeCodeForToken(code: string, baseUrl: string): Promise<string> {
+  const redirectUri = buildRedirectUri(baseUrl);
+  const oauth2Client = getOAuth2Client(redirectUri);
   const { tokens } = await oauth2Client.getToken(code);
   if (!tokens.refresh_token) {
     throw new Error("リフレッシュトークンが取得できませんでした。Google OAuthの設定でaccess_type=offlineが必要です。");
@@ -53,7 +58,8 @@ export async function isGscConnected(): Promise<boolean> {
 
 async function getGscApi() {
   const token = await getRefreshToken();
-  const oauth2Client = getOAuth2Client(token);
+  const dummyRedirectUri = buildRedirectUri(SITE_URL);
+  const oauth2Client = getOAuth2Client(dummyRedirectUri, token);
   return google.webmasters({ version: "v3", auth: oauth2Client });
 }
 

@@ -4539,7 +4539,9 @@ JSON形式で以下を返してください（日本語で）:
   app.get("/api/admin/gsc/connect", requireAdmin, async (req, res) => {
     try {
       const { getGscAuthUrl } = await import("./gsc-client");
-      const url = getGscAuthUrl();
+      const baseUrl = `${req.protocol}://${req.get("host")}`;
+      await storage.setAdminSetting("gsc_callback_base_url", baseUrl);
+      const url = getGscAuthUrl(baseUrl);
       res.redirect(url);
     } catch (error: any) {
       res.status(500).json({ message: error.message || "OAuth URLの生成に失敗しました" });
@@ -4551,7 +4553,9 @@ JSON形式で以下を返してください（日本語で）:
     if (!code) return res.status(400).send("認証コードが見つかりません");
     try {
       const { exchangeCodeForToken } = await import("./gsc-client");
-      const refreshToken = await exchangeCodeForToken(code);
+      const storedBaseUrl = await storage.getAdminSetting("gsc_callback_base_url");
+      const baseUrl = storedBaseUrl || `${req.protocol}://${req.get("host")}`;
+      const refreshToken = await exchangeCodeForToken(code, baseUrl);
       await storage.setAdminSetting("gsc_refresh_token", refreshToken);
       await storage.setAdminSetting("gsc_connected_at", new Date().toISOString());
       res.redirect("/admin/seo?gsc=connected");
