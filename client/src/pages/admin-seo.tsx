@@ -241,12 +241,12 @@ export default function AdminSeo() {
                     </div>
                   )}
                   <div>
-                    <p className="text-sm font-bold text-foreground">
-                      Google Search Console
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-foreground">Google Search Console</span>
                       {gscStatus?.connected && (
-                        <Badge variant="default" className="ml-2 text-xs bg-green-600">接続済み</Badge>
+                        <Badge variant="default" className="text-xs bg-green-600">接続済み</Badge>
                       )}
-                    </p>
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       {gscStatus?.connected
                         ? `${gscStatus.siteUrl} | 最終同期: ${gscStatus.lastSync ? new Date(gscStatus.lastSync).toLocaleString("ja-JP") : "未実行"}`

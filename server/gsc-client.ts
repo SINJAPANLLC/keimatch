@@ -1,7 +1,10 @@
 import { google } from "googleapis";
 import { storage } from "./storage";
 
-const GSC_SCOPE = "https://www.googleapis.com/auth/webmasters.readonly";
+const GSC_SCOPES = [
+  "https://www.googleapis.com/auth/webmasters.readonly",
+  "https://www.googleapis.com/auth/webmasters",
+];
 export const SITE_URL = process.env.SITE_URL || "https://keimatch-sinjapan.com";
 
 function getOAuth2Client(redirectUri: string, refreshToken?: string) {
@@ -26,7 +29,7 @@ export function getGscAuthUrl(baseUrl: string): string {
   const oauth2Client = getOAuth2Client(redirectUri);
   return oauth2Client.generateAuthUrl({
     access_type: "offline",
-    scope: GSC_SCOPE,
+    scope: GSC_SCOPES,
     prompt: "consent",
   });
 }
