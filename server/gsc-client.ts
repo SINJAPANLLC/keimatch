@@ -72,13 +72,16 @@ export interface GscKeyword {
   clicks: number;
   position: number;
   ctr: number;
+  type?: "opportunity" | "top" | "lowctr";
 }
 
-export async function getOpportunityKeywords(limit = 20): Promise<GscKeyword[]> {
+export async function getOpportunityKeywords(limit = 50): Promise<GscKeyword[]> {
   const gsc = await getGscApi();
   const endDate = new Date();
+
+  // 90日分取得（サイトが新しいため長めに）
   const startDate = new Date();
-  startDate.setDate(endDate.getDate() - 30);
+  startDate.setDate(endDate.getDate() - 90);
 
   const response = await gsc.searchanalytics.query({
     siteUrl: SITE_URL,
@@ -86,22 +89,52 @@ export async function getOpportunityKeywords(limit = 20): Promise<GscKeyword[]> 
       startDate: startDate.toISOString().split("T")[0],
       endDate: endDate.toISOString().split("T")[0],
       dimensions: ["query"],
-      rowLimit: 200,
+      rowLimit: 1000,
     },
   });
 
   const rows = response.data.rows || [];
-  return rows
-    .filter((row) => (row.impressions || 0) >= 5 && (row.position || 0) > 5)
+
+  const toKw = (row: any): GscKeyword => ({
+    keyword: (row.keys?.[0] || "").replace(/\+/g, " "),
+    impressions: Math.round(row.impressions || 0),
+    clicks: Math.round(row.clicks || 0),
+    position: Math.round((row.position || 0) * 10) / 10,
+    ctr: Math.round((row.ctr || 0) * 1000) / 10,
+  });
+
+  // 1) 機会キーワード: 表示があり順位6位以下（改善余地あり）
+  const opportunityRows = rows
+    .filter((r) => (r.impressions || 0) >= 1 && (r.position || 0) > 5)
     .sort((a, b) => (b.impressions || 0) - (a.impressions || 0))
-    .slice(0, limit)
-    .map((row) => ({
-      keyword: (row.keys?.[0] || "").replace(/\+/g, " "),
-      impressions: Math.round(row.impressions || 0),
-      clicks: Math.round(row.clicks || 0),
-      position: Math.round((row.position || 0) * 10) / 10,
-      ctr: Math.round((row.ctr || 0) * 1000) / 10,
-    }));
+    .slice(0, Math.ceil(limit * 0.5))
+    .map((r) => ({ ...toKw(r), type: "opportunity" as const }));
+
+  // 2) 上位表示キーワード: 1〜5位（既に上位）
+  const topRows = rows
+    .filter((r) => (r.impressions || 0) >= 1 && (r.position || 0) >= 1 && (r.position || 0) <= 5)
+    .sort((a, b) => (a.position || 0) - (b.position || 0))
+    .slice(0, Math.ceil(limit * 0.25))
+    .map((r) => ({ ...toKw(r), type: "top" as const }));
+
+  // 3) 低CTRキーワード: 表示はあるがクリックが少ない（タイトル改善余地）
+  const lowCtrRows = rows
+    .filter((r) => (r.impressions || 0) >= 2 && (r.clicks || 0) === 0 && (r.position || 0) <= 20)
+    .sort((a, b) => (b.impressions || 0) - (a.impressions || 0))
+    .slice(0, Math.ceil(limit * 0.25))
+    .map((r) => ({ ...toKw(r), type: "lowctr" as const }));
+
+  // 重複を除いてマージ
+  const seen = new Set<string>();
+  const merged: GscKeyword[] = [];
+  for (const kw of [...opportunityRows, ...topRows, ...lowCtrRows]) {
+    if (!seen.has(kw.keyword)) {
+      seen.add(kw.keyword);
+      merged.push(kw);
+    }
+  }
+
+  return merged.slice(0, limit);
 }
 
 export interface GscPagePerformance {

@@ -36,7 +36,7 @@ const CATEGORY_OPTIONS = [
 ];
 
 interface GscStatus { connected: boolean; lastSync: string | null; siteUrl: string; callbackUrl: string; }
-interface GscKeyword { keyword: string; impressions: number; clicks: number; position: number; ctr: number; }
+interface GscKeyword { keyword: string; impressions: number; clicks: number; position: number; ctr: number; type?: "opportunity" | "top" | "lowctr"; }
 
 export default function AdminSeo() {
   const { toast } = useToast();
@@ -476,44 +476,59 @@ export default function AdminSeo() {
           )}
 
           {/* GSC Keywords Table */}
-          {gscKeywords && gscKeywords.length > 0 && (
-            <Card>
-              <CardContent className="p-4">
-                <h2 className="text-sm font-bold text-foreground mb-3 flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-primary" />
-                  GSC 機会キーワード（表示多・クリック少）
-                </h2>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-xs">
-                    <thead>
-                      <tr className="border-b text-muted-foreground">
-                        <th className="text-left py-1.5 pr-3">キーワード</th>
-                        <th className="text-right py-1.5 px-2">表示</th>
-                        <th className="text-right py-1.5 px-2">クリック</th>
-                        <th className="text-right py-1.5 px-2">順位</th>
-                        <th className="text-right py-1.5 pl-2">CTR%</th>
+          {gscKeywords && gscKeywords.length > 0 && (() => {
+            const opportunityKws = gscKeywords.filter(k => k.type === "opportunity" || !k.type);
+            const topKws = gscKeywords.filter(k => k.type === "top");
+            const lowCtrKws = gscKeywords.filter(k => k.type === "lowctr");
+
+            const KwTable = ({ rows, label, labelColor }: { rows: GscKeyword[]; label: string; labelColor: string }) => (
+              <div>
+                <p className={`text-xs font-semibold mb-1.5 ${labelColor}`}>{label}（{rows.length}件）</p>
+                <table className="w-full text-xs mb-4">
+                  <thead>
+                    <tr className="border-b text-muted-foreground">
+                      <th className="text-left py-1.5 pr-3">キーワード</th>
+                      <th className="text-right py-1.5 px-2">表示</th>
+                      <th className="text-right py-1.5 px-2">クリック</th>
+                      <th className="text-right py-1.5 px-2">順位</th>
+                      <th className="text-right py-1.5 pl-2">CTR%</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((kw, i) => (
+                      <tr key={i} className="border-b last:border-0 hover:bg-muted/30">
+                        <td className="py-1.5 pr-3 font-medium text-foreground max-w-[200px] truncate">{kw.keyword}</td>
+                        <td className="text-right py-1.5 px-2 text-muted-foreground">{kw.impressions.toLocaleString()}</td>
+                        <td className="text-right py-1.5 px-2 text-muted-foreground">{kw.clicks}</td>
+                        <td className="text-right py-1.5 px-2">
+                          <span className={kw.position <= 5 ? "text-green-600" : kw.position <= 10 ? "text-yellow-600" : kw.position <= 20 ? "text-orange-500" : "text-red-500"}>
+                            {kw.position}位
+                          </span>
+                        </td>
+                        <td className="text-right py-1.5 pl-2 text-muted-foreground">{kw.ctr}%</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {gscKeywords.slice(0, 15).map((kw, i) => (
-                        <tr key={i} className="border-b last:border-0 hover:bg-muted/30">
-                          <td className="py-1.5 pr-3 font-medium text-foreground max-w-[200px] truncate">{kw.keyword}</td>
-                          <td className="text-right py-1.5 px-2 text-muted-foreground">{kw.impressions.toLocaleString()}</td>
-                          <td className="text-right py-1.5 px-2 text-muted-foreground">{kw.clicks}</td>
-                          <td className="text-right py-1.5 px-2">
-                            <span className={kw.position > 15 ? "text-red-500" : kw.position > 10 ? "text-yellow-600" : "text-green-600"}>
-                              {kw.position}位
-                            </span>
-                          </td>
-                          <td className="text-right py-1.5 pl-2 text-muted-foreground">{kw.ctr}%</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+
+            return (
+              <Card>
+                <CardContent className="p-4">
+                  <h2 className="text-sm font-bold text-foreground mb-4 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4 text-primary" />
+                    GSC キーワード分析（過去90日 · {gscKeywords.length}件）
+                  </h2>
+                  <div className="overflow-x-auto">
+                    {topKws.length > 0 && <KwTable rows={topKws} label="🟢 上位表示（1〜5位）" labelColor="text-green-700 dark:text-green-400" />}
+                    {opportunityKws.length > 0 && <KwTable rows={opportunityKws} label="🟡 改善チャンス（6位以下）" labelColor="text-yellow-700 dark:text-yellow-400" />}
+                    {lowCtrKws.length > 0 && <KwTable rows={lowCtrKws} label="🔴 低CTR（表示あり・クリックなし）" labelColor="text-red-700 dark:text-red-400" />}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })()}
 
           {/* Pipeline & Schedule Info */}
           <Card>
