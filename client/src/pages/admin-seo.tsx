@@ -52,6 +52,9 @@ export default function AdminSeo() {
   const [copiedUrl, setCopiedUrl] = useState(false);
   const [manualToken, setManualToken] = useState("");
   const [showManualInput, setShowManualInput] = useState(false);
+  const [authCode, setAuthCode] = useState("");
+  const [authUrl, setAuthUrl] = useState("");
+  const [showCodeInput, setShowCodeInput] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -143,6 +146,36 @@ export default function AdminSeo() {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/gsc/status"] });
     },
     onError: (e: any) => toast({ title: e.message || "保存に失敗しました", variant: "destructive" }),
+  });
+
+  const getAuthUrlMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest("GET", "/api/admin/gsc/prod-auth-url");
+      return res.json() as Promise<{ url: string; callbackUrl: string }>;
+    },
+    onSuccess: (data) => {
+      setAuthUrl(data.url);
+      setShowCodeInput(true);
+      window.open(data.url, "_blank");
+    },
+    onError: (e: any) => toast({ title: e.message || "URL生成に失敗しました", variant: "destructive" }),
+  });
+
+  const exchangeCodeMutation = useMutation({
+    mutationFn: async (code: string) => {
+      const res = await apiRequest("POST", "/api/admin/gsc/exchange-code", { code });
+      return res.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Search Console の接続が完了しました！" });
+      setAuthCode("");
+      setAuthUrl("");
+      setShowCodeInput(false);
+      setShowManualInput(false);
+      refetchGsc();
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/gsc/status"] });
+    },
+    onError: (e: any) => toast({ title: e.message || "コードの交換に失敗しました", variant: "destructive" }),
   });
 
   const handleRunPipeline = async () => {
@@ -307,35 +340,86 @@ export default function AdminSeo() {
 
               {/* Manual token input */}
               {!gscStatus?.connected && showManualInput && (
-                <div className="mt-4 pt-4 border-t space-y-3">
-                  <div className="rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900 p-3 space-y-2 text-xs text-blue-800 dark:text-blue-200">
-                    <p className="font-bold">OAuth Playgroundでリフレッシュトークンを取得する方法:</p>
-                    <ol className="list-decimal list-inside space-y-1">
-                      <li><a href="https://developers.google.com/oauthplayground" target="_blank" rel="noopener noreferrer" className="underline font-medium">OAuth Playground</a> を開く</li>
-                      <li>右上の歯車アイコン → 「Use your own OAuth credentials」をON</li>
-                      <li>Client ID と Client Secret を入力（GCPのOAuth 2.0クライアントID）</li>
-                      <li>左の一覧から「Search Console API v3」→ <code className="bg-blue-100 dark:bg-blue-900 px-1 rounded">https://www.googleapis.com/auth/webmasters.readonly</code> を選択して「Authorize APIs」</li>
-                      <li>Googleアカウントでログインして許可</li>
-                      <li>「Exchange authorization code for tokens」をクリック</li>
-                      <li>表示された <strong>Refresh token</strong> をコピーして下に貼り付ける</li>
-                    </ol>
-                  </div>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="リフレッシュトークンをここに貼り付け..."
-                      value={manualToken}
-                      onChange={(e) => setManualToken(e.target.value)}
-                      className="text-xs font-mono"
-                      data-testid="input-manual-token"
-                    />
+                <div className="mt-4 pt-4 border-t space-y-4">
+                  {/* Step 1: Get auth URL */}
+                  <div className="space-y-2">
+                    <p className="text-xs font-bold text-foreground">ステップ1 — 認証ページを開く</p>
                     <Button
                       size="sm"
-                      onClick={() => setTokenMutation.mutate(manualToken)}
-                      disabled={setTokenMutation.isPending || !manualToken.trim()}
-                      data-testid="button-save-token"
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => getAuthUrlMutation.mutate()}
+                      disabled={getAuthUrlMutation.isPending}
+                      data-testid="button-get-auth-url"
                     >
-                      {setTokenMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "保存"}
+                      {getAuthUrlMutation.isPending ? <Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" /> : <ExternalLink className="w-3.5 h-3.5 mr-2" />}
+                      Google認証ページを開く（新しいタブ）
                     </Button>
+                  </div>
+
+                  {showCodeInput && (
+                    <>
+                      {/* Step 2: Instructions */}
+                      <div className="rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 p-3 text-xs text-amber-800 dark:text-amber-200 space-y-1">
+                        <p className="font-bold">ステップ2 — 認証後のURLからコードをコピー</p>
+                        <p>Googleアカウントでログインして「許可」を押すと、<strong>keimatch-sinjapan.com</strong> にリダイレクトされます。</p>
+                        <p>ページが表示されなくてもOKです。ブラウザの <strong>アドレスバー</strong> を見て：</p>
+                        <code className="block bg-amber-100 dark:bg-amber-900 px-2 py-1 rounded break-all">
+                          https://keimatch-sinjapan.com/api/admin/gsc/callback?<strong>code=</strong>ここの値をコピー
+                        </code>
+                        <p><code className="bg-amber-100 dark:bg-amber-900 px-1 rounded">code=</code> の後ろの文字列（&amp;scope= の前まで）をコピーしてください。</p>
+                      </div>
+
+                      {/* Step 3: Paste code */}
+                      <div className="space-y-2">
+                        <p className="text-xs font-bold text-foreground">ステップ3 — コードを貼り付けて完了</p>
+                        <div className="flex gap-2">
+                          <Input
+                            placeholder="コードをここに貼り付け（4/0AeoWuM...）"
+                            value={authCode}
+                            onChange={(e) => setAuthCode(e.target.value)}
+                            className="text-xs font-mono"
+                            data-testid="input-auth-code"
+                          />
+                          <Button
+                            size="sm"
+                            onClick={() => exchangeCodeMutation.mutate(authCode)}
+                            disabled={exchangeCodeMutation.isPending || !authCode.trim()}
+                            data-testid="button-exchange-code"
+                          >
+                            {exchangeCodeMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "接続"}
+                          </Button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Divider */}
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <div className="flex-1 border-t" /><span>または</span><div className="flex-1 border-t" />
+                  </div>
+
+                  {/* Direct token input */}
+                  <div className="space-y-2">
+                    <p className="text-xs text-muted-foreground">リフレッシュトークンを直接入力する場合:</p>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="リフレッシュトークン（1//04...）"
+                        value={manualToken}
+                        onChange={(e) => setManualToken(e.target.value)}
+                        className="text-xs font-mono"
+                        data-testid="input-manual-token"
+                      />
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setTokenMutation.mutate(manualToken)}
+                        disabled={setTokenMutation.isPending || !manualToken.trim()}
+                        data-testid="button-save-token"
+                      >
+                        {setTokenMutation.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "保存"}
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}

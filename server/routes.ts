@@ -4605,7 +4605,7 @@ JSON形式で以下を返してください（日本語で）:
     }
   });
 
-  // OAuth Playground用: 本番URLで認証URLを生成
+  // 本番URLで認証URLを生成
   app.get("/api/admin/gsc/prod-auth-url", requireAdmin, async (req, res) => {
     try {
       const { getGscAuthUrl } = await import("./gsc-client");
@@ -4615,6 +4615,25 @@ JSON形式で以下を返してください（日本語で）:
       res.json({ url, callbackUrl: `${prodBaseUrl}/api/admin/gsc/callback` });
     } catch (error: any) {
       res.status(500).json({ message: error.message || "URL生成に失敗しました" });
+    }
+  });
+
+  // 認証コードをトークンに交換（本番URLで）
+  app.post("/api/admin/gsc/exchange-code", requireAdmin, async (req, res) => {
+    try {
+      const { code } = req.body;
+      if (!code || typeof code !== "string") {
+        return res.status(400).json({ message: "codeが必要です" });
+      }
+      const { exchangeCodeForToken } = await import("./gsc-client");
+      const prodBaseUrl = "https://keimatch-sinjapan.com";
+      const refreshToken = await exchangeCodeForToken(code.trim(), prodBaseUrl);
+      await storage.setAdminSetting("gsc_refresh_token", refreshToken);
+      await storage.setAdminSetting("gsc_connected_at", new Date().toISOString());
+      res.json({ message: "接続が完了しました" });
+    } catch (error: any) {
+      console.error("[GSC Exchange Code] Error:", error.message);
+      res.status(500).json({ message: error.message || "コードの交換に失敗しました" });
     }
   });
 
