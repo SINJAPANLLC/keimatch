@@ -114,6 +114,7 @@ export const cargoListings = pgTable("cargo_listings", {
   listingType: text("listing_type").notNull().default("own"),
   userId: varchar("user_id"),
   acceptedByUserId: varchar("accepted_by_user_id"),
+  acceptedAt: timestamp("accepted_at"),
   viewCount: integer("view_count").notNull().default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });

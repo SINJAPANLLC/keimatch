@@ -825,8 +825,9 @@ function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing:
     );
   }
 
+  const contractDate = new Date((listing as any).acceptedAt || listing.createdAt);
   const createdDate = new Date(listing.createdAt);
-  const changeLimitDate = new Date(createdDate);
+  const changeLimitDate = new Date(contractDate);
   changeLimitDate.setDate(changeLimitDate.getDate() + 5);
   changeLimitDate.setHours(23, 59, 0, 0);
 
@@ -865,7 +866,7 @@ function CargoDetailPanel({ listing, onClose, isContracted = false }: { listing:
         <div className="p-3 space-y-3">
           <div className="border border-border rounded-md overflow-hidden">
             <DetailRow label="成約番号" value={listing.cargoNumber ? String(listing.cargoNumber) : "-"} />
-            <DetailRow label="成約日時" value={createdDate.toLocaleString("ja-JP", { year: "numeric", month: "long", day: "numeric", weekday: "short", hour: "2-digit", minute: "2-digit" })} />
+            <DetailRow label="成約日時" value={contractDate.toLocaleString("ja-JP", { year: "numeric", month: "long", day: "numeric", weekday: "short", hour: "2-digit", minute: "2-digit" })} />
             <DetailRow label="変更期限">
               <span className="text-destructive font-bold text-xs">
                 {changeLimitDate.toLocaleString("ja-JP", { year: "numeric", month: "long", day: "numeric", weekday: "short", hour: "2-digit", minute: "2-digit" })}

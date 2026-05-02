@@ -422,9 +422,11 @@ export class DatabaseStorage implements IStorage {
     const setData: any = { status };
     if (acceptedByUserId) {
       setData.acceptedByUserId = acceptedByUserId;
+      setData.acceptedAt = new Date();
     }
     if (status !== "completed") {
       setData.acceptedByUserId = null;
+      setData.acceptedAt = null;
     }
     const [updated] = await db.update(cargoListings)
       .set(setData)
