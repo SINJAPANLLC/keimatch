@@ -647,6 +647,94 @@ export default function AdminUsers() {
   );
 }
 
+const SOURCE_OPTIONS = [
+  { value: "direct", label: "ダイレクト（直接アクセス）" },
+  { value: "google", label: "Google検索" },
+  { value: "yahoo", label: "Yahoo!検索" },
+  { value: "bing", label: "Bing検索" },
+  { value: "line", label: "LINE" },
+  { value: "social", label: "SNS（Facebook/Instagram等）" },
+  { value: "twitter", label: "X/Twitter" },
+  { value: "referral", label: "外部サイト参照" },
+  { value: "email", label: "メール" },
+  { value: "invite", label: "招待（ユーザー紹介）" },
+  { value: "ad", label: "広告" },
+  { value: "other", label: "その他" },
+];
+
+function SourceEditSection({ user, onSave }: { user: SafeUser; onSave: (source: string) => void }) {
+  const [editing, setEditing] = useState(false);
+  const [selected, setSelected] = useState(user.registrationSource || "direct");
+
+  useEffect(() => {
+    setSelected(user.registrationSource || "direct");
+    setEditing(false);
+  }, [user.id, user.registrationSource]);
+
+  return (
+    <div>
+      <h4 className="text-sm font-bold text-foreground flex items-center justify-between gap-1.5 mb-2">
+        <span className="flex items-center gap-1.5">
+          <MousePointerClick className="w-3.5 h-3.5" />
+          流入元情報
+        </span>
+        {!editing && (
+          <Button variant="ghost" size="sm" className="h-6 px-2 text-xs" onClick={() => setEditing(true)} data-testid="button-edit-source">
+            <Pencil className="w-3 h-3 mr-1" />
+            編集
+          </Button>
+        )}
+      </h4>
+      <div className="border border-border rounded-md overflow-hidden">
+        {editing ? (
+          <div className="p-3 space-y-3">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-bold text-muted-foreground">流入元を選択</Label>
+              <Select value={selected} onValueChange={setSelected}>
+                <SelectTrigger className="h-9 text-sm" data-testid="select-source">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {SOURCE_OPTIONS.map(o => (
+                    <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" className="flex-1 h-7 text-xs" onClick={() => { setSelected(user.registrationSource || "direct"); setEditing(false); }} data-testid="button-cancel-source">
+                キャンセル
+              </Button>
+              <Button size="sm" className="flex-1 h-7 text-xs" onClick={() => { onSave(selected); setEditing(false); }} data-testid="button-save-source">
+                <Save className="w-3 h-3 mr-1" />
+                保存
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <DetailRow label="流入元">
+              <SourceBadge source={user.registrationSource} utmSource={user.utmSource} utmMedium={user.utmMedium} />
+            </DetailRow>
+            {user.utmSource && <DetailRow label="utm_source" value={user.utmSource} />}
+            {user.utmMedium && <DetailRow label="utm_medium" value={user.utmMedium} />}
+            {user.utmCampaign && <DetailRow label="utm_campaign" value={user.utmCampaign} />}
+            {user.referrerUrl ? (
+              <DetailRow label="リファラー">
+                <span className="text-xs break-all text-muted-foreground">{user.referrerUrl}</span>
+              </DetailRow>
+            ) : (
+              !user.utmSource && !user.utmMedium && !user.utmCampaign && !user.registrationSource && (
+                <DetailRow label="-" value="未設定（旧登録ユーザー）— 編集で手動設定できます" />
+              )
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function EditField({ label, name, value, onChange, type = "text" }: { label: string; name: string; value: string; onChange: (name: string, value: string) => void; type?: "text" | "textarea" }) {
   return (
     <div className="space-y-1">
@@ -1049,27 +1137,7 @@ function UserDetailPanel({
               <DetailRow label="登録日" value={formatDate()} />
             </div>
 
-            <h4 className="text-sm font-bold text-foreground flex items-center gap-1.5">
-              <MousePointerClick className="w-3.5 h-3.5" />
-              流入元情報
-            </h4>
-            <div className="border border-border rounded-md overflow-hidden">
-              <DetailRow label="流入元">
-                <SourceBadge source={user.registrationSource} utmSource={user.utmSource} utmMedium={user.utmMedium} />
-              </DetailRow>
-              {user.utmSource && <DetailRow label="utm_source" value={user.utmSource} />}
-              {user.utmMedium && <DetailRow label="utm_medium" value={user.utmMedium} />}
-              {user.utmCampaign && <DetailRow label="utm_campaign" value={user.utmCampaign} />}
-              {user.referrerUrl ? (
-                <DetailRow label="リファラー">
-                  <span className="text-xs break-all text-muted-foreground">{user.referrerUrl}</span>
-                </DetailRow>
-              ) : (
-                !user.utmSource && !user.utmMedium && !user.utmCampaign && (
-                  <DetailRow label="-" value="流入元データなし（旧登録ユーザー）" />
-                )
-              )}
-            </div>
+            <SourceEditSection user={user} onSave={(source) => onEditUser(user.id, { registrationSource: source })} />
 
             <h4 className="text-sm font-bold text-foreground">企業詳細</h4>
             <div className="border border-border rounded-md overflow-hidden">

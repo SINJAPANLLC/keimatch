@@ -291,7 +291,8 @@ export class DatabaseStorage implements IStorage {
       "accountHolderKana", "plan",
       "accountingContactName", "accountingContactEmail", "accountingContactPhone", "accountingContactFax",
       "lineUserId", "notifySystem", "notifyEmail", "notifyLine", "role",
-      "adminMemo", "lastLoginAt", "lastLoginIp", "lastLoginLocation"
+      "adminMemo", "lastLoginAt", "lastLoginIp", "lastLoginLocation",
+      "registrationSource", "referrerUrl", "utmSource", "utmMedium", "utmCampaign"
     ] as const;
     const updateData: Record<string, string | boolean | null> = {};
     for (const field of allowedFields) {
