@@ -31,6 +31,30 @@ export default function Register() {
     truckCount: "",
   });
 
+  const referralData = (() => {
+    const params = new URLSearchParams(window.location.search);
+    const utmSource = params.get("utm_source") || "";
+    const utmMedium = params.get("utm_medium") || "";
+    const utmCampaign = params.get("utm_campaign") || "";
+    const referrerUrl = document.referrer || "";
+    let registrationSource = "direct";
+    if (utmSource) {
+      registrationSource = utmSource;
+    } else if (referrerUrl) {
+      try {
+        const refHost = new URL(referrerUrl).hostname;
+        if (refHost.includes("google")) registrationSource = "google";
+        else if (refHost.includes("yahoo")) registrationSource = "yahoo";
+        else if (refHost.includes("bing")) registrationSource = "bing";
+        else if (refHost.includes("line.me") || refHost.includes("line.naver")) registrationSource = "line";
+        else if (refHost.includes("facebook") || refHost.includes("instagram")) registrationSource = "social";
+        else if (refHost.includes("twitter") || refHost.includes("x.com")) registrationSource = "twitter";
+        else registrationSource = "referral";
+      } catch {}
+    }
+    return { utmSource, utmMedium, utmCampaign, referrerUrl, registrationSource };
+  })();
+
   const { data: lineConfig } = useQuery<{ basicId: string; configured: boolean }>({
     queryKey: ["/api/public/line-config"],
   });
@@ -74,7 +98,7 @@ export default function Register() {
       return;
     }
     try {
-      await register.mutateAsync({ ...form, permitFile: permitFile?.filePath || "" });
+      await register.mutateAsync({ ...form, permitFile: permitFile?.filePath || "", ...referralData });
       setRegistered(true);
     } catch (error: any) {
       toast({

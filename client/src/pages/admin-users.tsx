@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Trash2, Search, FileText, CheckCircle, Crown, Users, Building2, Phone, Mail, MapPin, Truck, User, UserPlus, Shield, X, ExternalLink, ChevronDown, ChevronUp, Globe, Hash, Briefcase, Clock, UserCheck, UserX, Pencil, Save, Plus, ShieldCheck, ShieldOff, Eye, EyeOff, StickyNote } from "lucide-react";
+import { Trash2, Search, FileText, CheckCircle, Crown, Users, Building2, Phone, Mail, MapPin, Truck, User, UserPlus, Shield, X, ExternalLink, ChevronDown, ChevronUp, Globe, Hash, Briefcase, Clock, UserCheck, UserX, Pencil, Save, Plus, ShieldCheck, ShieldOff, Eye, EyeOff, StickyNote, MousePointerClick, Link2 } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -75,6 +75,11 @@ type SafeUser = {
   lastLoginIp?: string | null;
   lastLoginLocation?: string | null;
   addedByUserId?: string | null;
+  registrationSource?: string | null;
+  referrerUrl?: string | null;
+  utmSource?: string | null;
+  utmMedium?: string | null;
+  utmCampaign?: string | null;
 };
 
 function isImageFile(path: string): boolean {
@@ -87,6 +92,43 @@ function DetailRow({ label, value, children }: { label: string; value?: string |
     <div className="flex border-b border-border last:border-b-0">
       <div className="w-[100px] shrink-0 bg-muted/30 px-3 py-2.5 text-xs font-bold text-muted-foreground">{label}</div>
       <div className="flex-1 px-3 py-2.5 text-sm font-bold text-foreground whitespace-pre-wrap break-all">{children || value || "-"}</div>
+    </div>
+  );
+}
+
+function SourceBadge({ source, utmSource, utmMedium }: { source?: string | null; utmSource?: string | null; utmMedium?: string | null }) {
+  const s = source || "";
+  const label = (() => {
+    if (!s || s === "direct") return "ダイレクト";
+    if (s === "google") return "Google";
+    if (s === "yahoo") return "Yahoo!";
+    if (s === "bing") return "Bing";
+    if (s === "line") return "LINE";
+    if (s === "social") return "SNS";
+    if (s === "twitter") return "X/Twitter";
+    if (s === "referral") return "参照元";
+    if (s === "email") return "メール";
+    return s;
+  })();
+  const colorClass = (() => {
+    if (!s || s === "direct") return "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300";
+    if (s === "google") return "bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400";
+    if (s === "yahoo") return "bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400";
+    if (s === "line") return "bg-green-50 text-green-600 dark:bg-green-950/40 dark:text-green-400";
+    if (s === "social") return "bg-pink-50 text-pink-600 dark:bg-pink-950/40 dark:text-pink-400";
+    if (s === "twitter") return "bg-sky-50 text-sky-600 dark:bg-sky-950/40 dark:text-sky-400";
+    if (s === "referral") return "bg-purple-50 text-purple-600 dark:bg-purple-950/40 dark:text-purple-400";
+    if (s === "email") return "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400";
+    return "bg-teal-50 text-teal-600 dark:bg-teal-950/40 dark:text-teal-400";
+  })();
+  const medium = utmMedium || utmSource;
+  return (
+    <div className="flex flex-col items-start gap-0.5">
+      <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold ${colorClass}`}>
+        <MousePointerClick className="w-2.5 h-2.5" />
+        {label}
+      </span>
+      {medium && <span className="text-[9px] text-muted-foreground">{medium}</span>}
     </div>
   );
 }
@@ -481,6 +523,7 @@ export default function AdminUsers() {
                         <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">企業名</th>
                         <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">担当者</th>
                         <th className="text-left px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">連絡先</th>
+                        <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">流入元</th>
                         <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">状態</th>
                         <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">ステータス</th>
                         <th className="text-center px-3 py-2.5 text-[11px] font-semibold text-muted-foreground whitespace-nowrap">プラン</th>
@@ -522,6 +565,9 @@ export default function AdminUsers() {
                             <td className="px-3 py-3 align-top">
                               <div className="text-[12px] text-foreground font-bold truncate max-w-[180px]">{u.email}</div>
                               {u.phone && <div className="text-[11px] text-muted-foreground font-bold mt-0.5">{u.phone}</div>}
+                            </td>
+                            <td className="px-3 py-3 text-center align-top">
+                              <SourceBadge source={u.registrationSource} utmSource={u.utmSource} utmMedium={u.utmMedium} />
                             </td>
                             <td className="px-3 py-3 text-center align-top">
                               {activeSessionUserIds?.includes(u.id) ? (
@@ -1001,6 +1047,28 @@ function UserDetailPanel({
               <DetailRow label="ユーザー種別" value={user.userType === "shipper" ? "荷主" : user.userType === "carrier" ? "軽貨物会社" : user.userType === "both" ? "荷主・軽貨物会社" : user.userType} />
               {user.truckCount && <DetailRow label="保有台数" value={`${user.truckCount}台`} />}
               <DetailRow label="登録日" value={formatDate()} />
+            </div>
+
+            <h4 className="text-sm font-bold text-foreground flex items-center gap-1.5">
+              <MousePointerClick className="w-3.5 h-3.5" />
+              流入元情報
+            </h4>
+            <div className="border border-border rounded-md overflow-hidden">
+              <DetailRow label="流入元">
+                <SourceBadge source={user.registrationSource} utmSource={user.utmSource} utmMedium={user.utmMedium} />
+              </DetailRow>
+              {user.utmSource && <DetailRow label="utm_source" value={user.utmSource} />}
+              {user.utmMedium && <DetailRow label="utm_medium" value={user.utmMedium} />}
+              {user.utmCampaign && <DetailRow label="utm_campaign" value={user.utmCampaign} />}
+              {user.referrerUrl ? (
+                <DetailRow label="リファラー">
+                  <span className="text-xs break-all text-muted-foreground">{user.referrerUrl}</span>
+                </DetailRow>
+              ) : (
+                !user.utmSource && !user.utmMedium && !user.utmCampaign && (
+                  <DetailRow label="-" value="流入元データなし（旧登録ユーザー）" />
+                )
+              )}
             </div>
 
             <h4 className="text-sm font-bold text-foreground">企業詳細</h4>

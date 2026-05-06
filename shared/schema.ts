@@ -68,6 +68,11 @@ export const users = pgTable("users", {
   lastLoginIp: text("last_login_ip"),
   lastLoginLocation: text("last_login_location"),
   addedByUserId: varchar("added_by_user_id"),
+  registrationSource: text("registration_source"),
+  referrerUrl: text("referrer_url"),
+  utmSource: text("utm_source"),
+  utmMedium: text("utm_medium"),
+  utmCampaign: text("utm_campaign"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
