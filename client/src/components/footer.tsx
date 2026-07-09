@@ -56,6 +56,7 @@ export default function Footer() {
               <ul className="space-y-2 text-base text-primary-foreground">
                 <li><a href="https://keisaiyou-sinjapan.com" target="_blank" rel="noopener noreferrer" className="hover:underline" data-testid="link-keisaiyou">KEI SAIYOU</a></li>
                 <li><a href="https://tramatch-sinjapan.com" target="_blank" rel="noopener noreferrer" className="hover:underline" data-testid="link-tramatch">TRA MATCH</a></li>
+                <li><a href="https://www.fan.salon/keischool" target="_blank" rel="noopener noreferrer" className="hover:underline" data-testid="link-keischool">KEI SCHOOL</a></li>
               </ul>
             </div>
           </div>
