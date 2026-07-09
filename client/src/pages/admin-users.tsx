@@ -596,7 +596,7 @@ export default function AdminUsers() {
                                 <span className="text-[11px] text-muted-foreground font-bold">-</span>
                               ) : (
                                 <Badge variant={u.plan === "premium" || u.plan === "premium_full" ? "default" : "outline"} className="text-[10px]">
-                                  {u.plan === "premium" ? "β版プレミアム" : u.plan === "premium_full" ? "プレミアム" : "フリー"}
+                                  {(u.plan === "premium" || u.plan === "premium_full") ? "プレミアム" : "フリー"}
                                 </Badge>
                               )}
                             </td>
@@ -969,7 +969,7 @@ function UserDetailPanel({
                   </Badge>
                   <Badge variant={user.plan === "premium" || user.plan === "premium_full" ? "default" : "outline"} className="text-xs">
                     <Crown className="w-3 h-3 mr-1" />
-                    {user.plan === "premium" ? "β版プレミアム" : user.plan === "premium_full" ? "プレミアム" : "フリー"}
+                    {(user.plan === "premium" || user.plan === "premium_full") ? "プレミアム" : "フリー"}
                   </Badge>
                   {user.addedByUserId && (
                     <Badge variant="outline" className="text-xs text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800">
@@ -1064,7 +1064,7 @@ function UserDetailPanel({
                       value={user.plan}
                       onValueChange={(value) => {
                         if (value !== user.plan) {
-                          const planLabels: Record<string, string> = { free: "フリー", premium: "β版プレミアム", premium_full: "プレミアム" };
+                          const planLabels: Record<string, string> = { free: "フリー", premium: "プレミアム", premium_full: "プレミアム" };
                           if (confirm(`${user.companyName} のプランを「${planLabels[value]}」に変更しますか？`)) {
                             onChangePlan(user.id, value);
                           }
@@ -1077,8 +1077,8 @@ function UserDetailPanel({
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="free">フリー</SelectItem>
-                        <SelectItem value="premium">β版プレミアム</SelectItem>
-                        <SelectItem value="premium_full">プレミアム</SelectItem>
+                        <SelectItem value="premium">プレミアム</SelectItem>
+                        <SelectItem value="premium_full">プレミアム（複数アカウント）</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

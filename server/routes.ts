@@ -1045,9 +1045,6 @@ export async function registerRoutes(
   app.post("/api/cargo", requireAuth, async (req, res) => {
     try {
       const currentUser = await storage.getUser(req.session.userId as string);
-      if (currentUser && currentUser.plan !== "premium" && currentUser.plan !== "premium_full" && currentUser.role !== "admin") {
-        return res.status(403).json({ message: "AI案件登録にはβ版プレミアムプランへの加入が必要です" });
-      }
       const bodyWithDefaults = {
         ...req.body,
         companyName: req.body.companyName || currentUser?.companyName || "",
@@ -1157,15 +1154,29 @@ export async function registerRoutes(
       if (status !== "completed" && listing.userId !== req.session.userId) {
         return res.status(403).json({ message: "この操作を行う権限がありません" });
       }
-      if (status === "completed") {
-        const currentUser = await storage.getUser(req.session.userId as string);
-        if (currentUser && currentUser.plan !== "premium" && currentUser.plan !== "premium_full" && currentUser.role !== "admin") {
-          return res.status(403).json({ message: "荷物の成約にはβ版プレミアムプランへの加入が必要です" });
-        }
-      }
       const acceptedByUserId = status === "completed" ? req.session.userId as string : undefined;
       const updated = await storage.updateCargoStatus(cargoId, status, acceptedByUserId);
       res.json(updated);
+
+      if (status === "completed") {
+        setImmediate(async () => {
+          try {
+            const billableUserIds = [listing.userId, acceptedByUserId].filter(Boolean) as string[];
+            for (const uid of billableUserIds) {
+              const u = await storage.getUser(uid);
+              if (u && u.role !== "admin" && !u.billingStartedAt) {
+                await storage.updateUserProfile(uid, {
+                  plan: "premium",
+                  billingStartedAt: new Date(),
+                } as any);
+                console.log(`[Billing] Started monthly billing (¥5,000) for user ${uid} after 成約`);
+              }
+            }
+          } catch (billingErr) {
+            console.error("Failed to start billing after 成約:", billingErr);
+          }
+        });
+      }
 
       // 成約時メール通知（バックグラウンド）
       if (status === "completed") {
@@ -3869,7 +3880,7 @@ JSON形式で以下を返してください（日本語で）:
       const premiumParentUsers = nonAdminUsers.filter(u => u.plan === "premium_full" && !u.addedByUserId && u.approved);
       const expectedMonthlyRevenue = premiumParentUsers.reduce((sum, parent) => {
         const childCount = nonAdminUsers.filter(u => u.addedByUserId === parent.id && u.approved).length;
-        return sum + 5500 + (childCount * 2750);
+        return sum + 5000 + (childCount * 2500);
       }, 0);
 
       const completedPayments = allPayments.filter(p => p.status === "completed");
@@ -4999,8 +5010,8 @@ JSON形式で以下を返してください（日本語で）:
   });
 
   const PLAN_PRICES: Record<string, number> = {
-    premium: 5500,
-    premium_full: 5500,
+    premium: 5000,
+    premium_full: 5000,
   };
 
   app.post("/api/payments/square", requireAuth, async (req, res) => {
@@ -5012,7 +5023,7 @@ JSON形式で以下を返してください（日本語で）:
 
       const { sourceId, planType } = parsed.data;
       const amount = PLAN_PRICES[planType];
-      const description = "β版プレミアムプラン月額料金";
+      const description = "KEI MATCH月額利用料";
 
       const accessToken = process.env.SQUARE_ACCESS_TOKEN;
       const locationId = process.env.SQUARE_LOCATION_ID;
@@ -5127,12 +5138,12 @@ JSON形式で以下を返してください（日本語で）:
 
       const generated: any[] = [];
       for (const user of targetUsers) {
-        const accountAmount = user.plan === "premium_full" ? 5500 : 0;
+        const accountAmount = (user.plan === "premium_full" || user.plan === "premium") ? 5000 : 0;
         if (accountAmount === 0) continue;
 
         const addedUsers = allUsers.filter((u: any) => u.addedByUserId === user.id && u.approved);
         const addedUserCount = addedUsers.length;
-        const addedUserAmount = addedUserCount * 2750;
+        const addedUserAmount = addedUserCount * 2500;
         const totalAmount = accountAmount + addedUserAmount;
         const tax = totalAmount - Math.floor(totalAmount / 1.1);
         const baseAmount = totalAmount - tax;

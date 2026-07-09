@@ -292,7 +292,7 @@ export class DatabaseStorage implements IStorage {
       "accountingContactName", "accountingContactEmail", "accountingContactPhone", "accountingContactFax",
       "lineUserId", "notifySystem", "notifyEmail", "notifyLine", "role",
       "adminMemo", "lastLoginAt", "lastLoginIp", "lastLoginLocation",
-      "registrationSource", "referrerUrl", "utmSource", "utmMedium", "utmCampaign"
+      "registrationSource", "referrerUrl", "utmSource", "utmMedium", "utmCampaign", "billingStartedAt"
     ] as const;
     const updateData: Record<string, string | boolean | null> = {};
     for (const field of allowedFields) {

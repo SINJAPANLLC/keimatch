@@ -70,12 +70,12 @@ export default function Payment() {
 
               <div className="space-y-3 flex-1">
                 <div className="flex items-start gap-2">
-                  <X className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-                  <span className="text-sm text-muted-foreground">案件成約 不可</span>
+                  <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <span className="text-sm text-foreground">初回成約まで無料で利用可</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <X className="w-4 h-4 text-muted-foreground shrink-0 mt-0.5" />
-                  <span className="text-sm text-muted-foreground">案件登録 不可</span>
+                  <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <span className="text-sm text-foreground">案件登録・成約 可能</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
@@ -121,12 +121,11 @@ export default function Payment() {
               <div className="text-center mb-6">
                 <h3 className="font-bold text-foreground text-lg h-7 flex items-center justify-center gap-1.5">
                   <Crown className="w-5 h-5 text-primary" />
-                  β版プレミアムプラン
+                  プレミアムプラン
                 </h3>
                 <div className="mt-2 flex flex-col items-center h-[72px] justify-center">
-                  <span className="text-lg text-muted-foreground line-through">¥5,500</span>
-                  <span className="text-3xl font-bold text-foreground">¥0</span>
-                  <span className="text-sm text-muted-foreground">/月（税込）</span>
+                  <span className="text-3xl font-bold text-foreground">¥5,000</span>
+                  <span className="text-sm text-muted-foreground">/月（税込・初回成約まで無料）</span>
                 </div>
               </div>
 
@@ -167,7 +166,7 @@ export default function Payment() {
                 onClick={() => handleChangePlan("premium")}
                 data-testid="button-select-beta-premium"
               >
-                {currentPlan === "premium" ? "現在のプラン" : planMutation.isPending ? "変更中..." : "β版プレミアムプランに変更"}
+                {currentPlan === "premium" ? "現在のプラン" : planMutation.isPending ? "変更中..." : "プレミアムプランに変更"}
               </Button>
             </CardContent>
           </Card>
@@ -193,7 +192,7 @@ export default function Payment() {
                   プレミアムプラン
                 </h3>
                 <div className="mt-2 flex flex-col items-center h-[72px] justify-center">
-                  <span className="text-3xl font-bold text-foreground">¥5,500</span>
+                  <span className="text-3xl font-bold text-foreground">¥5,000</span>
                   <span className="text-sm text-muted-foreground">/月（税込）</span>
                 </div>
               </div>

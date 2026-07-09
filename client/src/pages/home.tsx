@@ -478,7 +478,7 @@ export default function Home() {
                 <div>
                   <p className="text-base text-primary mb-1">月額費用</p>
                   <p className="text-3xl font-bold text-primary">5,000円</p>
-                  <p className="text-sm font-bold text-primary mt-1 bg-primary/10 rounded-md py-1 px-2 inline-block">β版は月額費用も0円</p>
+                  <p className="text-sm font-bold text-primary mt-1 bg-primary/10 rounded-md py-1 px-2 inline-block">初回成約まで無料</p>
                 </div>
               </div>
             </div>
@@ -731,14 +731,14 @@ function PromoBanner() {
             <div className="px-4 py-3">
               <div className="flex items-center gap-1.5 mb-1.5">
                 <span className="bg-primary text-primary-foreground text-[10px] font-bold px-1.5 py-0.5 rounded">
-                  β版プレミアムプラン
+                  今すぐ利用開始
                 </span>
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-sm font-bold text-foreground">成約し放題</span>
+                <span className="text-sm font-bold text-foreground">初回成約まで</span>
                 <span className="text-3xl font-extrabold text-primary leading-none">¥0</span>
               </div>
-              <p className="text-[10px] text-muted-foreground mt-1">今だけ無料でプレミアム機能が使える</p>
+              <p className="text-[10px] text-muted-foreground mt-1">成約したら月額5,000円スタート</p>
             </div>
             <div className="bg-primary text-primary-foreground text-center py-2 text-xs font-bold rounded-b-md">
               新規登録はこちら <ChevronRight className="w-3.5 h-3.5 inline-block" />

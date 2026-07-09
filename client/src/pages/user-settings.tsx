@@ -161,7 +161,7 @@ function SquareCardPayment() {
             処理中...
           </span>
         ) : (
-          "5,500円を支払う（税込）"
+          "5,000円を支払う（税込）"
         )}
       </Button>
     </div>
@@ -300,7 +300,7 @@ function CompanyMembersSection({ user }: { user: any }) {
       </div>
       {members.length > 0 && (
         <p className="text-xs text-muted-foreground mt-2" data-testid="text-added-user-count">
-          追加ユーザー: {members.length}名（月額 {(members.length * 2750).toLocaleString()}円 税込）
+          追加ユーザー: {members.length}名（月額 {(members.length * 2500).toLocaleString()}円 税込）
         </p>
       )}
     </div>
@@ -1293,10 +1293,10 @@ export default function UserSettings() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <Crown className="w-4 h-4 text-primary" />
                           <span className="text-sm font-medium text-foreground">
-                            {currentPlan === "premium" ? "β版プレミアムプラン" : currentPlan === "premium_full" ? "プレミアムプラン" : "フリープラン"}
+                            {(currentPlan === "premium" || currentPlan === "premium_full") ? "プレミアムプラン" : "フリープラン"}
                           </span>
                           {(currentPlan === "premium" || currentPlan === "premium_full") && (
-                            <span className="text-sm text-muted-foreground">1ヶ月：5,500円</span>
+                            <span className="text-sm text-muted-foreground">1ヶ月：5,000円</span>
                           )}
                         </div>
                         {(currentPlan === "premium" || currentPlan === "premium_full") && (
@@ -1311,7 +1311,7 @@ export default function UserSettings() {
                               })()}
                             </p>
                             <p className="text-xs text-muted-foreground">
-                              ベータ期間中は無料でご利用いただけます。
+                              成約が成立すると翌月から月額料金が発生します。
                             </p>
                           </>
                         )}

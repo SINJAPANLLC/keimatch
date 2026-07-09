@@ -73,6 +73,7 @@ export const users = pgTable("users", {
   utmSource: text("utm_source"),
   utmMedium: text("utm_medium"),
   utmCampaign: text("utm_campaign"),
+  billingStartedAt: timestamp("billing_started_at"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
