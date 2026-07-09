@@ -1169,7 +1169,7 @@ export async function registerRoutes(
                   plan: "premium",
                   billingStartedAt: new Date(),
                 } as any);
-                console.log(`[Billing] Started monthly billing (¥5,000) for user ${uid} after 成約`);
+                console.log(`[Billing] Started monthly billing (¥5,500) for user ${uid} after 成約`);
               }
             }
           } catch (billingErr) {
@@ -3880,7 +3880,7 @@ JSON形式で以下を返してください（日本語で）:
       const premiumParentUsers = nonAdminUsers.filter(u => u.plan === "premium_full" && !u.addedByUserId && u.approved);
       const expectedMonthlyRevenue = premiumParentUsers.reduce((sum, parent) => {
         const childCount = nonAdminUsers.filter(u => u.addedByUserId === parent.id && u.approved).length;
-        return sum + 5000 + (childCount * 2500);
+        return sum + 5500 + (childCount * 2750);
       }, 0);
 
       const completedPayments = allPayments.filter(p => p.status === "completed");
@@ -5010,8 +5010,8 @@ JSON形式で以下を返してください（日本語で）:
   });
 
   const PLAN_PRICES: Record<string, number> = {
-    premium: 5000,
-    premium_full: 5000,
+    premium: 5500,
+    premium_full: 5500,
   };
 
   app.post("/api/payments/square", requireAuth, async (req, res) => {
@@ -5138,12 +5138,12 @@ JSON形式で以下を返してください（日本語で）:
 
       const generated: any[] = [];
       for (const user of targetUsers) {
-        const accountAmount = (user.plan === "premium_full" || user.plan === "premium") ? 5000 : 0;
+        const accountAmount = (user.plan === "premium_full" || user.plan === "premium") ? 5500 : 0;
         if (accountAmount === 0) continue;
 
         const addedUsers = allUsers.filter((u: any) => u.addedByUserId === user.id && u.approved);
         const addedUserCount = addedUsers.length;
-        const addedUserAmount = addedUserCount * 2500;
+        const addedUserAmount = addedUserCount * 2750;
         const totalAmount = accountAmount + addedUserAmount;
         const tax = totalAmount - Math.floor(totalAmount / 1.1);
         const baseAmount = totalAmount - tax;

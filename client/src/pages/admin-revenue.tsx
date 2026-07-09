@@ -194,7 +194,7 @@ export default function AdminRevenue() {
                     <p className="text-xs text-muted-foreground mb-1">予想月額収益（税込）</p>
                     <p className="text-xl font-bold text-foreground" data-testid="text-expected-revenue">{formatYen(stats?.expectedMonthlyRevenue ?? 0)}</p>
                     <p className="text-[11px] text-muted-foreground mt-0.5">
-                      プレミアム {stats?.premiumUsers ?? 0}社 × ¥5,000 + 追加ユーザー {stats?.addedUsers ?? 0}名 × ¥2,500
+                      プレミアム {stats?.premiumUsers ?? 0}社 × ¥5,500 + 追加ユーザー {stats?.addedUsers ?? 0}名 × ¥2,750
                     </p>
                   </div>
                 </div>

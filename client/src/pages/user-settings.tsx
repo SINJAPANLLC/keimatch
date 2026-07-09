@@ -161,7 +161,7 @@ function SquareCardPayment() {
             処理中...
           </span>
         ) : (
-          "5,000円を支払う（税込）"
+          "5,500円を支払う（税込）"
         )}
       </Button>
     </div>
@@ -1296,7 +1296,7 @@ export default function UserSettings() {
                             {(currentPlan === "premium" || currentPlan === "premium_full") ? "プレミアムプラン" : "フリープラン"}
                           </span>
                           {(currentPlan === "premium" || currentPlan === "premium_full") && (
-                            <span className="text-sm text-muted-foreground">1ヶ月：5,000円</span>
+                            <span className="text-sm text-muted-foreground">1ヶ月：5,500円</span>
                           )}
                         </div>
                         {(currentPlan === "premium" || currentPlan === "premium_full") && (

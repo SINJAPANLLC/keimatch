@@ -69,8 +69,8 @@ type PlanChangeRequestItem = {
 const planLabel = (plan: string) => {
   switch (plan) {
     case "free": return "フリー";
-    case "premium": return "プレミアム（¥5,000/月）";
-    case "premium_full": return "プレミアム（¥5,000/月）";
+    case "premium": return "プレミアム（¥5,500/月）";
+    case "premium_full": return "プレミアム（¥5,500/月）";
     default: return plan;
   }
 };

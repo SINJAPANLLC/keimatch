@@ -124,7 +124,7 @@ export default function Payment() {
                   プレミアムプラン
                 </h3>
                 <div className="mt-2 flex flex-col items-center h-[72px] justify-center">
-                  <span className="text-3xl font-bold text-foreground">¥5,000</span>
+                  <span className="text-3xl font-bold text-foreground">¥5,500</span>
                   <span className="text-sm text-muted-foreground">/月（税込・初回成約まで無料）</span>
                 </div>
               </div>
@@ -192,7 +192,7 @@ export default function Payment() {
                   プレミアムプラン
                 </h3>
                 <div className="mt-2 flex flex-col items-center h-[72px] justify-center">
-                  <span className="text-3xl font-bold text-foreground">¥5,000</span>
+                  <span className="text-3xl font-bold text-foreground">¥5,500</span>
                   <span className="text-sm text-muted-foreground">/月（税込）</span>
                 </div>
               </div>
